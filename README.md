@@ -11,5 +11,5 @@ cordova + vuetify admin template
 
 # Build for Android studio's emulator
 1. cordova build android --debug
-2. avm emulator 실행
+2. AVD emulator 실행
 3. cordova run android
