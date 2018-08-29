@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="F:\Project\swing_mobile\_swing_mobile\_test\platforms\android\app\src\main\shaders"/></dataSet><dataSet config="debug"><source path="F:\Project\swing_mobile\_swing_mobile\_test\platforms\android\app\src\debug\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\shaders"/></dataSet><dataSet config="debug"><source path="F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\debug\shaders"/></dataSet></merger>
