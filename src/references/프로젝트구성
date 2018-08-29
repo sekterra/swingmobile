@@ -1,0 +1,4 @@
+- mobile 구성 : vue-cordova-device
+- ui 구성 : vuetify
+- chart 컴포넌트 : echart
+- echart 확장 컴포넌트 : echarts-stat (https://github.com/ecomfe/echarts-stat)
