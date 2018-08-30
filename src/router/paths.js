@@ -1,6 +1,7 @@
 /**
  * TODO : 
  * 실제 route를 담당하는 js파일
+ * Rule : name과 vue파일명은 동일해야 하며, paths.js에서도 name은 동일해야 함
  */
 export default [
   {
@@ -76,6 +77,17 @@ export default [
       /* webpackChunkName: "routes" */
       /* webpackMode: "lazy-once" */
       `@/pages/Dashboard.vue`
+    )
+  },
+  {
+    path: '/woCreate',
+    meta: { },
+    name: 'woCreate',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/wo/woCreate.vue`
     )
   },
   {
