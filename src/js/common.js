@@ -1,6 +1,7 @@
 var comm = {
   baseDeviceSize : 600,
-  getFixedSizeByDevice: null
+  getFixedSizeByDevice: null,
+  movePage: null
 };
 
 /**
@@ -16,6 +17,10 @@ comm.getFixedSizeByDevice = function (_baseSize, _breakpoint) {
     var ratio = window.screen.width / comm.baseDeviceSize;
     return Math.floor(_baseSize * ratio);
   }
+}
+
+comm.movePage = function (_$router, _path) {
+  _$router.push({'path': _path})
 }
 
 export default comm;

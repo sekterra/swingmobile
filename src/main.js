@@ -15,12 +15,17 @@ import VueNumberInput from '@chenfengyuan/vue-number-input';
 import VeeValidate from 'vee-validate';
 import VueCordovaDevice from 'vue-cordova-device'
 import Truncate from 'lodash.truncate';
-
+import Datepicker from '@/components/Datepicker'
+import Ybutton from '@/components/Ybutton'
 import 'font-awesome/css/font-awesome.css';
+
+// TODO : global javascript 
+import rules from '@/js/rules.js'
+import ajax from '@/js/ajax.js'
+import 'expose-loader?$!expose-loader?jQuery!jquery'
 
 // Vue.use(Vuetify)
 Vue.config.productionTip = false
-
 
 Vue.use(VueNumeric)
 Vue.component(VueNumberInput.name, VueNumberInput);
@@ -30,9 +35,14 @@ Vue.use(VueCordovaDevice)
 
 console.log(Vue.cordova.device);
 
-// TODO : EDIT
-// Global filters
+// TODO : Global filters
 Vue.filter('truncate', Truncate);
+
+// TODO: Global Component
+Vue.component(Datepicker.name, Datepicker);
+Vue.component(Ybutton.name, Ybutton);
+
+// TODO : Global
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' });
 Vue.use(Vuetify, {
   // theme: {
@@ -55,6 +65,10 @@ Vue.use(Vuetify, {
   }
 });
 // Bootstrap application components
+
+// 전역 js 변수 추가
+Vue.prototype.$rules = rules
+Vue.prototype.$ajax = ajax
 
 // Import App Custom Styles
 //import AppStyles from './assets/sass/main.scss'

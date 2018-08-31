@@ -17,15 +17,21 @@
       prepend-icon="event"
       readonly>
     </v-text-field>
-    <v-date-picker v-model="date" @input="input" locale="kr-ko"></v-date-picker>
+    <v-date-picker v-model="date" @input="input" :locale="locale"></v-date-picker>
   </v-menu>
 </template>
+
 <script>
 export default {
+  name: 'Datepicker',
   props: {
     label: {
       type: String,
       default: '날짜를 선택하세요.'
+    },
+    locale: {
+      type: String,
+      default: 'kr-ko'
     }
   },
   data() {
