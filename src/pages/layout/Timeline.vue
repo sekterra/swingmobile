@@ -100,7 +100,7 @@
                 </li>
               </ol>              
             </div>
-          </v-widget>          
+          </v-widget>
         </v-flex>
       </v-layout>
     </v-container>

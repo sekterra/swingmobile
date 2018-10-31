@@ -1,6 +1,6 @@
 
 <template>
-  <v-card>
+  <v-card flat>
     <v-card-text>
       <div class="layout row ma-0 align-center justify-space-between">
         <div class="text-box">

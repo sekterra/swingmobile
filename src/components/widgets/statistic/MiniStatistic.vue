@@ -6,6 +6,7 @@
           <div class="sm6 xs6 flex">
             <div class="layout column ma-0 justify-center align-center">
               <v-icon size="56px" :color="color">{{icon}}</v-icon>
+              <span class="caption font-weight-black" :color="color">{{iconTitle}}</span>
             </div>
           </div>
           <div class="sm6 xs6 flex text-sm-center py-3 white--text" :class="color">
@@ -22,9 +23,10 @@
 export default {
   props: {
     icon: String,
-    title: String,
-    subTitle: String,
-    color: String
+    title: [String, Number],
+    subTitle: [String, Number],
+    color: String,
+    iconTitle: [String, Number],
   }
 };
 </script>

@@ -9,6 +9,7 @@ CleanPlugin = require('clean-webpack-plugin'),
 ExtractTextPlugin = require("extract-text-webpack-plugin"),
 
 entryFile = path.join(__dirname, 'src/main.js'),
+// TODO : 의미가 없다고 생각됨, 실제는 hooker.js 에서 포트가 변경됨
 devServerPort = 8081
 
 let config = function (env) {
@@ -21,6 +22,7 @@ let config = function (env) {
       alias: {
         'vue$': 'vue/dist/vue.common.js',
         'src': path.resolve(__dirname, 'src/'),
+        'static': path.resolve(__dirname, 'static/'),
         'assets': path.resolve(__dirname, 'src/assets/'),
         'pages': path.resolve(__dirname, 'src/assets/vue/pages/'),
         'components': path.resolve(__dirname, 'src/assets/vue/components/'),
@@ -38,7 +40,7 @@ let config = function (env) {
     
     module: {
       rules: [
-        {test: /\.(png|jpe?g|gif|svg)$/, loader: 'url-loader', options: {name: '[name].[ext]?[hash]'}},
+        {test: /\.(png|jpe?g|gif|svg|jpg)$/, loader: 'url-loader', options: {name: './static/[name].[ext]?[hash]'}},
         {test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/, loader: 'file-loader', options: {name: '[name].[ext]?[hash]'}},
         {test: /\.svg$/, loader: 'url-loader'},
         {test: /\.scss$/, loader: [ 'vue-style-loader', 'css-loader', 'sass-loader']},
@@ -79,6 +81,11 @@ let config = function (env) {
         use: "css-loader"
       })
     })
+    // TODO : .styl 파일 로딩 가능하도록 추가
+    // 참고 사이트 : https://github.com/shama/stylus-loader
+    returner.module.rules.push({
+      test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader'
+    })
   }
   
   if (env) {
@@ -86,11 +93,16 @@ let config = function (env) {
       returner.module.rules.push({
         test: /\.css$/, loader: ['style-loader', 'css-loader']
       })
+      // TODO : .styl 파일 로딩 가능하도록 추가
+    // 참고 사이트 : https://github.com/shama/stylus-loader
+      returner.module.rules.push({
+        test: /\.styl$/, loader: 'style-loader!css-loader!stylus-loader'
+      })
       returner.entry = [
         entryFile,
         path.resolve(__dirname, "webpack/dev_helpers/CordovaDeviceRouter.js")
       ]
-      returner.output.publicPath = "/"
+      returner.output.publicPath = "/"  
       returner.devtool = "eval"
       returner.devServer = {
         contentBase: path.join(__dirname, "www"),

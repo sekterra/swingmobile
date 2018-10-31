@@ -189,6 +189,9 @@ export default {
           _object.set(this.$data._defaultOption, p[0], p[1]);
         });
       }
+
+      console.log('init chart option:' + JSON.stringify(this.option))
+
       this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
       window.addEventListener('optimizedResize', (e) => {
@@ -209,6 +212,21 @@ export default {
   },
   mounted () {
     this.init();
+  },
+  watch: {
+    // TODO : chart 데이터가 변경 되었을 때 처리가 누락되어 있었음
+    pathOption() {
+      if (this.pathOption) {
+        this.pathOption.forEach((p) => {
+          _object.set(this.$data._defaultOption, p[0], p[1]);
+        });
+      }
+      this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
+    },
+    option() {
+      this.chartInstance.setOption(this.option)
+      console.log('chart option:' + JSON.stringify(this.option))
+    }
   },
 
   beforeDestroy () {

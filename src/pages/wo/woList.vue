@@ -1,186 +1,192 @@
 <template>
-  <div id="media" class="media">
-    <v-toolbar class="elevation-0 transparent media-toolbar">
-      <v-btn-toggle>
-        <v-btn flat>
-          <v-icon color="primary">cloud_upload</v-icon>
-          &nbsp;Upload
-        </v-btn>
-        <v-btn flat>
-          <v-icon color="primary">folder</v-icon>
-          &nbsp; Add Folder
-        </v-btn>
-      </v-btn-toggle>
-      <v-spacer></v-spacer>
-      <v-btn-toggle v-model="view">
-        <v-btn flat value="list">
-          <v-icon color="primary">view_headline</v-icon>
-        </v-btn>
-        <v-btn flat value="grid">
-          <v-icon color="primary">view_list</v-icon>
-        </v-btn>
-      </v-btn-toggle>
-    </v-toolbar>
-    <v-divider></v-divider>
-    <div class="layout row media-layout">
-      <div class="media-content flex transparent">
-        <vue-perfect-scrollbar class="media-content--warp">
-          <v-container fluid v-if="view ==='grid'">
-            <v-layout row wrap class="x-grid-lg">
-              <v-flex
-                lg4
-                sm12
-                xs12
-                class="pa-2"
-                v-for="(item,index) in folders"
-                :key="'folder'+ index"
-              >
-                <v-card flat tile>
-                  <v-card-media height="150px">
-                    <v-icon size="135" class="mx-auto" color="indigo">folder</v-icon>  
-                  </v-card-media>
-                  <v-divider></v-divider>
-                  <v-card-title>
-                    {{item.name}}
-                  </v-card-title>
-                </v-card>
-              </v-flex>          
-              <v-flex
-                lg4
-                sm12
-                xs12                
-                class="pa-2"
-                v-for="(item,index) in files"
-                :key="index"
-              >
-                <a @click="showDetail(item)" class="d-flex">
-                  <v-card flat tile>
-                    <v-card-media
-                      height="150px"
-                      width="150px"
-                    >
-                      <img :src="item.path" alt="" v-if="isImage(item)">
-                      <v-icon class="mx-auto" size="135" v-else>insert_drive_file</v-icon>  
-                    </v-card-media>
-                    <v-divider></v-divider>
-                    <v-card-title>
-                      {{item.fileName}}
-                    </v-card-title>
-                  </v-card>
-                </a>
+  <div id="page-forms">
+    <v-container grid-list-xl fluid class="mt-0 pt-0">
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-card>
+            <v-toolbar color="primary darken-1" dark="" flat dense cad>
+              <v-toolbar-title class="subheading">{{$t('menu.woList')}}</v-toolbar-title>
+              <v-spacer></v-spacer>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-card-text class="">
+              <v-flex id="content">
+                <v-slide-y-transition mode="out-in">
+                  <!-- 기본 검색 영역 -->
+                  <v-layout column align-center>
+                    <v-container fluid grid-list-xs  class="pa-0">
+                      <v-layout row wrap>
+                          <v-flex sm6 class="py-0">
+                              <v-text-field
+                                :label="$t('title.woNo')" 
+                                class="mr-2"
+                                clearable
+                                v-model="searchData.workOrderNo"
+                                @input="onSearch">
+                              </v-text-field>
+                          </v-flex>
+                          <v-flex sm6 class="py-0">
+                              <v-text-field
+                                :label="$t('message.woSearchInfo')" 
+                                class="mr-2"
+                                clearable
+                                v-model="searchData.searchText"
+                                @input="onSearch">
+                              </v-text-field>
+                          </v-flex>
+                      </v-layout>
+                      
+                      <!-- 확장 검색 영역-->
+                      <y-expand-search 
+                        :title="$t('message.moreSearch')"
+                        :search-option="expandSearchOption"
+                        :given-search-data="searchData"
+                        @searchDataChanged="actionSearch"
+                        >
+                      </y-expand-search>
+                      <!--/확장 검색 영역-->
+                    </v-container>
+                  </v-layout>
+                </v-slide-y-transition>
               </v-flex>
-            </v-layout>
-          </v-container>
-          <v-layout column v-else>
-            <v-list dense class="transparent">
-              <v-list-tile avatar @click="showDetail(item)" 
-              v-for="(item,index) in files"
-              :key="'list-file-'+index"
-              >
-                <v-list-tile-avatar>
-                  <v-icon>{{ mimeIcons(item) }}</v-icon>  
-                </v-list-tile-avatar>            
-                <v-list-tile-content>
-                  <div class="container pl-0" >
-                    <div class="layout row">
-                      <div class="flex"> {{item.fileName}}</div>
-                      <v-spacer></v-spacer>
-                      <div class="caption">{{item ? formateDate(item.ctime) : ''}}</div>
-                    </div>
-                  </div>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
-          </v-layout>
-        </vue-perfect-scrollbar>
-      </div>
-    </div>
+            </v-card-text>       
+          </v-card>
+        </v-flex>           
+      </v-layout>
+      <v-layout>
+        <!-- 그리드 영역 -->
+        <v-flex xs12>
+          <y-data-table 
+            :title="$t('title.woRequestList')"
+            ref="dataTable"
+            :headers="gridHeaderOptions"
+            create-url="/woCreate"
+            :items="gridData"
+            :loading="gridLoading"
+            :editable="isGridEditable"
+            :search-type="searchType"
+            @selectedData="selectedData"
+            @editItem="editItem"
+          >
+          </y-data-table>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </div>
 </template>
 
 <script>
-import Bytes from 'bytes';
-import { getFileMenu, getFile } from '@/api/file';
-import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import selectConfig from '@/js/selectConfig'
+
 export default {
-  components: {
-    VuePerfectScrollbar
-  },  
+  /* attributes: name, components, props, data */
   props: {
-    type: {
+    // 그리드 수정 가능여부를 부모로 부터 받아 옴(예. 팝업)
+    isGridEditableByParent: {
+      type: Boolean,
+      default: true
+    },
+    searchType: {
       type: String,
-      default: 'image'
-    },
-  },
-  data: () => ({
-    size: 'lg',
-    view: 'grid',
-    selectedFile: {
-      path: '/static/icon/empty_file.svg'
-    },
-    imageMime: [
-      'image/jpeg',
-      'image/png',
-      'image/svg+xml'
-    ],
-
-    folders: [
-      {
-        name: 'bg',
-        lastModified: '2018-03-03'
-      },
-      {
-        name: 'cards',
-        lastModified: '2018-03-03'
-      },
-      {
-        name: 'avatar',
-        lastModified: '2018-03-03'
-      }
-    ],
-  }),
-  computed: {
-    mediaMenu () {
-      return getFileMenu;
-    },
-    files () {
-      return getFile();
+      default: ''
     }
   },
-
-
-
+  data() {
+    return {
+      msg: '컨트롤',
+      expandSearchOption: [ 
+        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '3m'},
+        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
+        {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
+        {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
+      ],
+      isGridEditable: false,  // 그리드 수정 가능여부(권한에 따라 변경됨)
+      date: null,
+      menu2: null,
+      landscape: false,
+      imgData: null,
+      imgLog: '',
+      debug: '',
+      price: 1000,
+      search: '',
+      check: true,
+      pagination: {},
+      selected: [],
+      offsetTop: 0,
+      gridUrl: selectConfig.woList[0].url,
+      searchData: this.$comm.clone(selectConfig.woList[0].searchData),
+      gridLoading: false,
+      gridData: [],
+      gridHeaderOptions: [
+        { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
+        { text: this.$t('title.woNo'), align: 'center', name: 'workOrderNo', width: '15%', columnAlign: 'right' },
+        { text: this.$t('title.woTitle'), name: 'workTitle', width: '20%', align: 'center' },
+        { text: this.$t('title.equipmentCode'), name: 'equipCd', width: '15%', align: 'center' },
+        { text: this.$t('title.equipmentName'), name: 'equipNm', width: '20%', align: 'center' },
+        { text: this.$t('title.woRequestDate'), name: 'rqstDt', width: '10%', align: 'center', columnAlign: 'center' },
+        { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' }
+      ]
+    }
+  },
+  /* Vue lifecycle: created, mounted, destroyed, etc */
+  created() {
+    console.log('selectConfig.woList:' + JSON.stringify(selectConfig.woList[0]))
+    this.onSearch()
+    this.isGridEditable = this.isGridEditableByParent
+    // popup 여부에 따라 그리드 헤더 옵션변경
+    this.gridHeaderOptions[0].type = this.searchType ? this.searchType : 'edit'
+  },
+  /* methods */
   methods: {
-    isImage (file) {
-      return this.imageMime.includes(file.fileType);
+    init() {
     },
-    mimeIcons (file) {
-      return this.imageMime.includes(file.fileType) ? 'image' : 'insert_drive_file';
+    dateChanged(_date) {
+      this.debug = '[parent datepicker]:' + _date;
     },
-    showDetail (file) {
-      this.selectedFile = file;
+    rowDblClick() {
+      console.log('row double click');
     },
-    fileSize (number) {
-      return Bytes.format(number);
+    editItem(_item) {
+      this.$comm.movePage(this.$router, '/woCreate?pk=' + _item.workOrderPk)
+      console.log('::::::::::::: datatable item :' + JSON.stringify(_item))
     },
-    formateDate (string) {
-      return (string) ? new Date(string).toLocaleDateString() : '';
+    actionSearch(_searchData) {
+      this.searchData = _searchData
+      this.onSearch()
     },
-    computeFileImage (file) {
-      return this.isImage(file) ? file.path : '/static/icon/file_empty.svg';
+    onSearch() {
+      let self = this
+      this.$ajax.url = this.gridUrl
+      this.$ajax.param = this.searchData
+      this.$ajax.param.startDate = this.$comm.getPrevDate('3m')
+      this.$ajax.param.endDate = this.$comm.getToday()
+      this.gridLoading = true
+      this.$ajax.requestGet((_result) => {
+        self.gridData = typeof _result.content !== 'undefined' ? _result.content : _result
+        self.$refs.dataTable.hideLoading()
+      }, (_error) => {
+        self.gridLoading = false
+        self.$refs.dataTable.hideLoading()
+      })
+    },
+    /**
+     * eventBus로 선택된 정보를 부모로 넘긴다.
+     */
+    selectedData(_item) {
+      console.log(':::::::::::: [woList] select item ::::::::::::' + JSON.stringify(_item))
+      this.$emit('selectedData', _item)
     }
-  },  
-};
+  }
+}
 </script>
-<style lang="stylus" scoped>
-.media
-  &-cotent--wrap
 
-  &-menu 
-    min-width: 260px
-    border-right: 1px solid #eee
-    min-height: calc(100vh - 50px - 64px);
-  &-detail 
-    min-width:300px
-    border-left:1px solid #eee
+<style>
+.border {
+  border: 1px dashed #0000ff;
+}
+.fab-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
 </style>

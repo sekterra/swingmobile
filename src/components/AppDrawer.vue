@@ -15,7 +15,7 @@
     <v-toolbar color="primary darken-1" dark>
       <!-- <img v-bind:src="computeLogo" height="36" alt="Vue Material Admin Template"> -->
       <v-toolbar-title class="ml-0 pl-3">
-        <span class="hidden-sm-and-down">swing cmms</span>
+        <span class="hidden-sm-and-down">swing</span>
       </v-toolbar-title>
     </v-toolbar>
     <vue-perfect-scrollbar class="drawer-menu--scroll" :settings="scrollSettings">
@@ -33,19 +33,19 @@
                 <v-list-group v-if="subItem.items" :key="subItem.menuPk" :group="subItem.group" sub-group="sub-group">
                   <v-list-tile slot="activator" ripple="ripple">
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
+                      <v-list-tile-title>{{ subItem.title }}2</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile v-for="(grand, i) in subItem.children" :key="i" :to="genChildTarget(item, grand)" :href="grand.href" ripple="ripple">
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ grand.title }}</v-list-tile-title>
+                      <v-list-tile-title>{{ grand.title }}3</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-list-group>
                 <!--child item-->
                 <v-list-tile v-else :key="i" :to="genChildTarget(item, subItem)" :href="subItem.href" :disabled="subItem.disabled" :target="subItem.target" ripple="ripple">
                   <v-list-tile-content>
-                    <v-list-tile-title><span>{{ subItem.title }}</span></v-list-tile-title>
+                    <v-list-tile-title><span>{{ subItem.title }}4</span></v-list-tile-title>
                   </v-list-tile-content>
                   <v-list-tile-action v-if="subItem.action">
                     <v-icon :class="[subItem.actionClass || 'success--text']">{{ subItem.action }}</v-icon>
@@ -56,12 +56,14 @@
             <v-subheader v-else-if="item.header" :key="i">{{ item.header }}</v-subheader>
             <v-divider v-else-if="item.divider" :key="i"></v-divider>
             <!--top-level link-->
-            <v-list-tile v-else :to="!item.href ? { name: item.name } : null" :href="item.href" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="item.menuPk">
+            <v-list-tile v-else :to="!item.href ? { name: item.name } : null" :href="item.href" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="item.name">
               <v-list-tile-action v-if="item.icon">
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                <v-list-tile-title>
+                  {{$t('menu.' + item.name)}}
+                </v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action v-if="item.subAction">
                 <v-icon class="success--text">{{ item.subAction }}</v-icon>
@@ -88,7 +90,7 @@ export default {
   },
   data: () => ({
     mini: false,
-    drawer: true,
+    drawer: false,  // left menu 오픈여부
     menus: menu,
     scrollSettings: {
       maxScrollbarLength: 160
@@ -111,8 +113,6 @@ export default {
       this.drawer = (!this.drawer);
     });
   },
-  
-
   methods: {
     genChildTarget (item, subItem) {
       if (subItem.href) return;
@@ -136,5 +136,4 @@ export default {
   .drawer-menu--scroll
     height: calc(100vh - 48px)
     overflow: auto
-
 </style>

@@ -13,3 +13,6 @@ cordova + vuetify admin template
 1. cordova build android --debug
 2. AVD emulator 실행
 3. cordova run android
+
+# cordova port 변경
+hooks/hookers.js startWebpackDevServer()에서 변경가능

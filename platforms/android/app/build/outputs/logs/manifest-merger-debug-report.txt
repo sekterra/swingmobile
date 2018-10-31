@@ -21,7 +21,7 @@ INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\sr
 INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
 INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:1-18:12
 	package
-		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:102-133
+		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:102-128
 		INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml
 		INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml
 	android:versionName
@@ -31,7 +31,7 @@ INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\sr
 	android:hardwareAccelerated
 		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:11-45
 	xmlns:android
-		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:134-192
+		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:129-187
 	android:versionCode
 		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:2:46-73
 		INJECTED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml
@@ -66,7 +66,7 @@ MERGED from [com.android.support:support-v4:24.1.1] C:\Users\tommy\.gradle\cache
 		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:5:18-52
 	android:icon
 		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:5:53-80
-activity#com.yullin.helloWorld.MainActivity
+activity#com.yullin.swing.MainActivity
 ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:6:9-11:20
 	android:label
 		ADDED from F:\Project\swing_mobile\swing\swingmobile\platforms\android\app\src\main\AndroidManifest.xml:6:97-134

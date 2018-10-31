@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yullin.helloWorld"
+    package="com.yullin.swing"
     android:hardwareAccelerated="true"
     android:versionCode="10000"
     android:versionName="1.0.0" >
@@ -27,7 +27,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true" >
         <activity
-            android:name="com.yullin.helloWorld.MainActivity"
+            android:name="com.yullin.swing.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:label="@string/activity_name"
             android:launchMode="singleTop"
@@ -42,7 +42,7 @@
 
         <provider
             android:name="org.apache.cordova.camera.FileProvider"
-            android:authorities="com.yullin.helloWorld.provider"
+            android:authorities="com.yullin.swing.provider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data

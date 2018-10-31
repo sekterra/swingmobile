@@ -1,5 +1,5 @@
 
-// import './VCircle.styl';
+import './VCircle.styl';
 import Colorable from  'vuetify/es5/mixins/colorable';
 export default {
 

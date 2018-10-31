@@ -1,7 +1,7 @@
 /**
  * TODO : 
  * 실제 route를 담당하는 js파일
- * Rule : name과 vue파일명은 동일해야 하며, paths.js에서도 name은 동일해야 함
+ * Rule : name과 vue파일명은 동일해야 하며, paths.js에서도 name은 동일해야 함(@/api/menu.js의 name과 동일해야 함)
  */
 export default [
   {
@@ -66,7 +66,7 @@ export default [
     meta: { },
     name: 'Root',
     redirect: {
-      name: 'Dashboard'
+      name: 'Login'
     }
   },
   {
@@ -81,15 +81,83 @@ export default [
   },
   {
     path: '/woCreate',
-    meta: { },
+    title: 'WO 요청목록',
+    meta: { breadcrumb: true },
     name: 'woCreate',
-    props: (route) => ({ type: route.query.type }),
+    props: (route) => ({ query: route.query.pk }),
     component: () => import(
       /* webpackChunkName: "routes" */
       /* webpackMode: "lazy-once" */
       `@/pages/wo/woCreate.vue`
     )
   },
+  {
+    path: '/woList',
+    meta: { breadcrumb: true },
+    name: 'woList',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/wo/woList.vue`
+    )
+  },
+  {
+    path: '/woCompleteList',
+    meta: { breadcrumb: true },
+    name: 'woCompleteList',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/wo/woCompleteList.vue`
+    )
+  },
+  {
+    path: '/inspectionList',
+    meta: { breadcrumb: true },
+    name: 'inspectionList',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/inspection/inspectionList.vue`
+    )
+  },
+  {
+    path: '/inspectionResult',
+    meta: { breadcrumb: true },
+    name: 'inspectionResult',
+    props: (route) => ({ query: route.query.pk }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/inspection/inspectionResult.vue`
+    )
+  },
+  {
+    path: '/inspectionCalendar',
+    meta: { breadcrumb: true },
+    name: 'inspectionCalendar',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/inspection/inspectionCalendar.vue`
+    )
+  },
+  {
+    path: '/woStatistics',
+    meta: { breadcrumb: true },
+    name: 'woStatistics',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/statistics/woStatistics.vue`
+    )
+  },
+
   {
     path: '/calendar',
     meta: { breadcrumb: true },

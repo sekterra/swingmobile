@@ -1,27 +1,17 @@
 <template>
-  <v-layout row wrap class="align-center layout px-4 pt-4 app--page-header">
-    <v-flex xs12 sm4>
+  <v-layout row class="align-center layout px-4 pt-1 app--page-header">
     <div class="page-header-left">
-      <h3 class="pr-3">{{title}}</h3>
+      <h3 class="pr-3 breadcrumb" color="deep-purple lighten-4">{{title}}</h3>
     </div>
-    </v-flex>
-    <v-flex xs12 sm8>
-      <v-breadcrumbs divider="-">
-        <v-breadcrumbs-item>
-        <v-icon larg>home</v-icon>
-        </v-breadcrumbs-item>
-        <v-breadcrumbs-item v-for="(item,key) in breadcrumbs" :key="key">
-        {{ item }}
-        </v-breadcrumbs-item>
-      </v-breadcrumbs>
-      <!-- <v-spacer></v-spacer> -->
-      <!-- <div class="page-header-right">
-        <v-btn icon>
-          <v-icon class="text--secondary">refresh</v-icon>
-        </v-btn>
-      </div> -->
-    </v-flex>
-  </v-layout>
+    <v-breadcrumbs divider="/" class="py-2">
+      <v-breadcrumbs-item>
+      <v-icon larg color="grey darken-1">home</v-icon>
+      </v-breadcrumbs-item>
+      <v-breadcrumbs-item v-for="(item,key) in breadcrumbs" :key="key" class="breadcrumb" color="grey darken-1">
+      {{ item }}
+      </v-breadcrumbs-item>
+    </v-breadcrumbs>
+  </v-layout>  
 </template>
 
 <script>
@@ -41,14 +31,26 @@ export default {
             return i.component === this.$route.name;
           });
           if (child) {
-            breadcrumbs.push(item.title);
-            breadcrumbs.push(child.title);
-            this.title = child.title;
+            // breadcrumbs.push(item.title);
+            // breadcrumbs.push(child.title);
+            // this.title = child.title;
+            var title = this.$t('menu.' + item.name)
+            var childTitle = this.$t('menu.' + child.name)
+            breadcrumbs.push(title);
+            breadcrumbs.push(childTitle);
+            this.title = childTitle;
+
+            console.log('::::::::: item:' + item.name + this.$t('menu.' + item.name))
+            console.log('::::::::: child item:' + item.name + this.$t('menu.' + child.name))
           }
         } else {
           if (item.name === this.$route.name) {
-            this.title = item.title;
-            breadcrumbs.push(item.title);
+            // this.title = item.title;
+            // breadcrumbs.push(item.title);
+            var title = this.$t('menu.' + item.name)
+            this.title = title;
+            breadcrumbs.push(title);
+            console.log('::::::::: item:' + item.name + this.$t('menu.' + item.name))
           }
         }
       });
@@ -57,3 +59,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.border {
+  border: 1px solid #0000ff;
+}
+.breadcrumb {
+  color: #757575; /*grey darken-1*/
+}
+</style>

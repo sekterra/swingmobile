@@ -1,0 +1,12 @@
+{
+  "kr": {
+    "language": "kr",
+    "datepicker": "ko-KR",
+    "moment": "ko"
+  },
+  "us": {
+    "language": "us",
+    "datepicker": "en-us",
+    "moment": "en"
+  }
+}

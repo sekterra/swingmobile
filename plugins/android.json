@@ -6,10 +6,35 @@
   "config_munge": {
     "files": {}
   },
-  "installed_plugins": {},
+  "installed_plugins": {
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-save-image": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-screen-orientation": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    }
+  },
   "dependent_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
     "es6-promise-plugin": {
-      "PACKAGE_NAME": "com.yullin.helloWorld"
+      "PACKAGE_NAME": "com.yullin.swing"
     }
   }
 }

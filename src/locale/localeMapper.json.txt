@@ -1,0 +1,19 @@
+localeMapper.json 설명
+- 1 key : 국가 코드(http://flag-icon-css.lip.is/?continent=North+America 참고) 
+- 1-1 language : locale폴더에 있는 언어.json 파일
+- 1-2 datepicker : vuetify datepicker의 국가코드
+- 1-3 moment : moment.js에서 사용하는 국가코드
+
+※ 사용예
+{
+  "kr": {
+    "language": "kr",
+    "datepicker": "ko-KR",
+    "moment": "ko"
+  },
+  "us": {
+    "language": "us",
+    "datepicker": "en-US",
+    "moment": "en"
+  }
+}

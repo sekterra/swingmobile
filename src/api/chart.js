@@ -3,6 +3,7 @@ const range = (start, end) => new Array(end - start).fill(start).map((el, i) => 
 const shortMonth = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
+
 const monthVisitData = shortMonth.map(m => {
   return {
     'month': m,
@@ -34,29 +35,38 @@ const campaignData = [
   }
 ];
 const locationData = [
+  // {
+  //   value: 50,
+  //   name: 'China'
+  // },
+  // {
+  //   value: 35,
+  //   name: 'USA'
+  // },
+  // {
+  //   value: 25,
+  //   name: 'EU'
+  // },
+  // {
+  //   value: 10,
+  //   name: 'Russia'
+  // },
+  // {
+  //   value: 10,
+  //   name: 'Other'
+  // }
   {
-    value: 50,
-    name: 'China'
+    value: 80,
+    name: 'ON'
   },
   {
-    value: 35,
-    name: 'USA'
+    value: 3,
+    name: 'Break down'
   },
-  {
-    value: 25,
-    name: 'EU'
-  },
-  {
-    value: 10,
-    name: 'Russia'
-  },
-  {
-    value: 10,
-    name: 'Other'
-  }
 ];
 
-const StackMainData = [220, 182, 191, 234, 290, 330, 310, 123, 442, 321, 90, 149, 210, 122, 133, 334, 198, 123, 125, 220];
+// const StackMainData = [220, 182, 191, 234, 290, 330, 310, 123, 442, 321, 90, 149, 210, 122, 133, 334, 198, 123, 125, 220];
+const StackMainData = [220, 182, 191, 234, 290, 330, 310];
 const StackData = StackMainData.map((item, key) => {
   return {
     'label': key + 'D',

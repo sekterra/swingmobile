@@ -1,15 +1,31 @@
+<!--
+목적 : TOP 메뉴에서 설정 우측 팝업
+Detail :
+ * 
+examples: 
+ *  
+-->
 <template>
 <div id="themeSetting">
-  <v-toolbar color="blue" dark>
+  <v-toolbar color="primary" dark>
     <v-toolbar-title>
-      Theme Settings
+      {{$t('title.themeTitle')}}
     </v-toolbar-title>
   </v-toolbar>
   <v-container>
     <v-layout column>
       <v-flex>
+        <div class="theme-options">
+          <v-subheader class="px-1 my-2">
+            {{$t('title.languageSetting')}}
+          </v-subheader>
+          <v-divider></v-divider>
+          <div class="my-0">
+            <y-i18n></y-i18n>
+          </div>
+        </div>
         <v-subheader class="px-1 my-2">
-          Color Option
+          {{$t('title.colorSetting')}}
         </v-subheader>
         <div class="color-option">
           <v-layout wrap>
@@ -26,7 +42,7 @@
             </label>
           </v-layout>
         </div>
-        <div class="theme-options">
+        <!-- <div class="theme-options">
           <v-subheader class="px-1 my-2">
             Sidebar Option
           </v-subheader>
@@ -41,7 +57,7 @@
               </v-btn>
             </v-btn-toggle>   
           </div>
-        </div>        
+        </div>        -->
       </v-flex>
     </v-layout>
   </v-container>
@@ -50,7 +66,11 @@
 
 <script>
 import colors from 'vuetify/es5/util/colors';
+import YI18n from '@/components/widgets/YI18n';
 export default {
+  components: {
+    'y-i18n': YI18n
+  },
   data () {
     return {
       themeColor: 'indigo',

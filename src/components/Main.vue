@@ -29,7 +29,7 @@
                 <v-icon>menu</v-icon>
             </v-btn>
         </v-toolbar>
-        <v-content>
+        <v-content color="#FAFBFE">
             <router-view></router-view>
         </v-content>
         <v-navigation-drawer temporary :right="right" v-model="rightDrawer" fixed>
