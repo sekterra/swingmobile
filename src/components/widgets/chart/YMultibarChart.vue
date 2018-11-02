@@ -6,7 +6,7 @@ examples:
  *  
 -->
 <template>
-  <v-card class="ma-0 pa-0">
+  <v-card class="ma-0 pa-0" :color="backgroundColor">
       <v-card-title>
         <div class="layout row ma-0 justify-space-between">
           <div class="subheading">{{title}}</div>
@@ -19,6 +19,7 @@ examples:
         <div class="justify-center row layout">
           <e-chart 
           :option="option"
+          :optionString="optionString"
           width="100%"
           >
           </e-chart>
@@ -133,9 +134,12 @@ var defaultOption = {
           type: 'value',
           axisLabel: {
             show: true,
-            formatter: '{value}'
+            formatter: '{value}%'
           },
-          name: ''
+          name: '',
+          min: 0,
+          max: 100,
+          interval: 10,
       }
     ],
     series: []
@@ -185,12 +189,19 @@ export default {
     dataList: Array,
     icon: String,
     color: String,
+    chartColor: {
+      type: Array,
+      default: null
+    },
     unit: {
-      type: Number
-    }
+      type: Number,
+      default: null
+    },
+    backgroundColor: ''
   },
   data: () => ({
-    option: null
+    option: null,
+    optionString: null
   }),
   watch: {
     series() {
@@ -201,13 +212,23 @@ export default {
       defaultOption.xAxis[0].data = this.xAxisLabels
       var dataList = this.dataList
 
-      if (this.unit) defaultOption.yAxis[0].name = this.$t('title.unit') + '(' + this.unit + ')'
+      if (this.unit) {
+        defaultOption.yAxis[0].name = this.$t('title.unit') + '\n(' + this.unit + ')'
+        console.log('this.unit setting:' + this.unit)
+      } else defaultOption.yAxis[0].name = ''
+        
+      
 
       $.each(this.series, (_i, _item) => {
         var thisSeries = self.$comm.clone(seriesTemplate)
         thisSeries.name = _item.name
         thisSeries.type = _item.type
-        if (_item.hasOwnProperty('yAxisIndex')) thisSeries.yAxisIndex = _item.yAxisIndex
+        if (_item.hasOwnProperty('yAxisIndex')) {
+          thisSeries.yAxisIndex = _item.yAxisIndex
+          thisSeries.label.normal.formatter = '{c}%'
+          thisSeries.label.normal.rotate = 0
+          console.log('thisSeries:' + JSON.stringify(thisSeries))
+        }
         thisSeries.data = dataList[_i]
         var normalGradient = [
           {offset: 0, color: gradients[_i].start},
@@ -225,14 +246,12 @@ export default {
         // thisSeries.itemStyle.emphasis.color = new echarts.graphic.LinearGradient(0, 0, 0, 1, emphasisGradient);
         defaultOption.series.push(thisSeries)
         legendNames.push(_item.name)
-        console.log('thisSeries:' + JSON.stringify(thisSeries))
       });
 
       defaultOption.legend.data = legendNames
       this.option = defaultOption
-      console.log('this.option.legend.data:' + JSON.stringify(self.option.legend.data))
-      console.log('dataList:' + JSON.stringify(dataList))
-      // console.log('xAxisLabels:' + JSON.stringify(self.xAxisLabels))
+      if (this.chartColor) this.option.color = this.chartColor
+      this.optionString = JSON.stringify(defaultOption)
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */

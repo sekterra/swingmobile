@@ -157,7 +157,39 @@ export default [
       `@/pages/statistics/woStatistics.vue`
     )
   },
-
+  {
+    path: '/pmStatistics',
+    meta: { breadcrumb: true },
+    name: 'pmStatistics',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/statistics/pmStatistics.vue`
+    )
+  },
+  {
+    path: '/inspectionStatistics',
+    meta: { breadcrumb: true },
+    name: 'inspectionStatistics',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/statistics/inspectionStatistics.vue`
+    )
+  },
+  {
+    path: '/equipmentStatistics',
+    meta: { breadcrumb: true },
+    name: 'equipmentStatistics',
+    props: (route) => ({ type: route.query.type }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/statistics/equipmentStatistics.vue`
+    )
+  },
   {
     path: '/calendar',
     meta: { breadcrumb: true },

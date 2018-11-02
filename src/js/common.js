@@ -13,7 +13,12 @@ var comm = {
   getLastDayThisYear: null,
   getThisMonth: null,
   getPrevMonth: null,
+  getThisYear: null,
+  getPrevYear: null,
   getFormatDate: null,
+  getCalculatedDate: null,
+  getLocaleYearMon: null,
+  getLastDayOfMonth:  null,
   convertStringToDate: null,
   dateCompare: null,
   getDatediff: null,
@@ -22,7 +27,9 @@ var comm = {
   trim: null,
   moment: moment,
   setNumberSeperator: null,
-  getPercentage: null
+  getPercentage: null,
+  getImgFileAsUrl: null,
+  getFileAsBlob: null
 };
 
 /**
@@ -206,14 +213,87 @@ comm.getPrevMonth = function (_prev, _format) {
   return moment().add(Math.abs(_prev) * -1, 'M').format(_format)
 }
 
+comm.getThisYear = function () {
+  return moment().format('YYYY')
+}
+
+comm.getPrevYear = function (_prev) {
+  return moment().add(Math.abs(_prev) * -1, 'y').format('YYYY')
+}
+
+/**
+ * 기준일자(_thisDate)에서 계산된 날짜(년, 월, 일)를 가져오는 함수
+ * 사용예) comm.getPrevDate('10d')
+ * @param {*String} _thisDateStr : 기준일자(년, 월, 일)
+ * @param {*String} _gapOfDate : 현재일 기준 이전 날짜, 기본값 : 1y (예) -10d - 10일전, 10m - 10개월 후, 10y - 10년후
+ * @param {*String} _givenFormat : 주어진 날짜의 형식
+ * @param {*String} _format : 리턴되는 날짜 형식(기본값은 ISO 표준 형식)
+ */
+comm.getCalculatedDate = function (_thisDateStr,  _gapOfDate, _givenFormat, _format) {
+  let gapOfDate = config.defaultGapOfDate
+  if (_gapOfDate) gapOfDate = _gapOfDate
+
+  let div = gapOfDate.substr(gapOfDate.length - 1, 1).toLowerCase()
+  let gap = Number(gapOfDate.substring(0, gapOfDate.length - 1))
+  let thisDate = comm.moment(_thisDateStr, _givenFormat)
+  // let define = _isAdd ? 1 : -1
+  let format = null
+  let typeOfDate = null // TODO : 계산되는 날짜 형식(https://momentjs.com/docs/ 페이지의 Add함수 참고)
+  if (div === 'd') {
+    format = _format ? _format : 'YYYY-MM-DD'
+    typeOfDate = 'd'  
+  }
+  else if (div === 'm') {
+    format = _format ? _format : 'YYYY-MM'
+    typeOfDate = 'M'
+  }
+  else if (div === 'y') {
+    format = _format ? _format : 'YYYY'
+    typeOfDate = 'y'
+  }
+
+  return thisDate.add(gap, typeOfDate).format(format)
+}
+
+/**
+ * locale 형식에 맞는 년월 날짜를 가져오는 함수
+ * @param {String} _thisDateStr 
+ * @param {String} _givenFormat 
+ */
+comm.getLocaleYearMon = function (_thisDateStr, _givenFormat) {
+  let formatL = moment.localeData().longDateFormat('L');
+  let format = formatL.replace(/D/g,'').replace(/^\W|\W$|\W\W/,'');
+  return comm.moment(_thisDateStr, _givenFormat).format(format);
+}
+
 comm.setNumberSeperator = (_number) => {
   if (isNaN(_number)) return null
   return _number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 comm.getPercentage = (_target, _devider) => {
-  _devider = _devider <= 0 ? 1 : _devider;
-  return Math.ceil((_target / _devider) * 100);
+  if (!_target) return 0;
+  _devider = !_devider ? 1 : _devider;
+  var value = Math.ceil((_target / _devider) * 100);
+  if (isNaN(value)) value = 0
+  return value
+}
+
+/**
+ * 이미지 파일을 url 정보로 조회
+ * @augments 서버에서 수신된 byte이미지
+ */
+comm.getImgFileAsUrl = (_imgData) => {
+  // var imgData = new Uint8Array(_imgData)
+  // var blob = new window.Blob([imgData], {type: 'image/png'})
+  var blob = comm.getFileAsBlob(true, _imgData)
+  return window.URL.createObjectURL(blob)
+}
+
+comm.getFileAsBlob = (_isImage, _fileData) => {
+  var type = _isImage ? 'image/png' : 'application/octet-stream'
+  var fileData = new Uint8Array(_fileData)
+  return new window.Blob([fileData], {type: type})
 }
 
 export default comm;

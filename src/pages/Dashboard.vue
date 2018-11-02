@@ -6,6 +6,7 @@
         <v-flex sm12>
           <h4>{{$t('title.summaryThisYear')}}</h4>
         </v-flex>
+        <!-- 설치된 설비수 -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="domain"
@@ -16,6 +17,8 @@
           >
           </mini-statistic>  
         </v-flex>
+        <!-- /설치된 설비수 -->
+        <!-- 고장 설비수 -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="domain"
@@ -26,16 +29,20 @@
           >
           </mini-statistic>  
         </v-flex>
+        <!-- /고장 설비수 -->
+        <!-- WO 비용 -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="description"
             iconTitle="WO"
             :title="dataset.wo.totalCosts"
-            :sub-title="$t('title.cost')"
+            :sub-title="$t('title.cost') + '(' + $t('title.unit') + ':' + costDivider + ')'"
             color="indigo"      
           >
           </mini-statistic>  
         </v-flex>
+        <!-- /WO 비용 -->
+        <!-- WO 작업시간 -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="description"
@@ -46,6 +53,8 @@
           >
           </mini-statistic>
         </v-flex>
+        <!-- /WO 작업시간 -->
+        <!-- 점검 완료율 -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="list_alt"
@@ -56,6 +65,8 @@
           >
           </mini-statistic>           
         </v-flex>          
+        <!-- /점검 완료율 -->
+        <!-- PM 완료율 -->
         <v-flex lg3 sm6 xs12>
           <mini-statistic
             icon="assignment"
@@ -66,16 +77,17 @@
           >
           </mini-statistic>            
         </v-flex>        
+        <!-- /PM 완료율 -->
       </v-layout>
       <!-- /TODO : summary -->
 
       <!-- TODO : 설비 관련 통계 -->
       <v-layout row wrap>
         <v-flex sm12>
-          <h4>{{$t('title.equipmentName')}}</h4>
+          <h4>{{$t('title.todayStatus')}}</h4>
         </v-flex>
-         <v-flex lg4 sm6 xs12>
-           <!-- TODO : 오늘의 설비현황 -->
+        <!-- TODO : 오늘의 설비현황 -->
+        <!-- <v-flex lg4 sm6 xs12>
           <y-dashboard-card 
             v-if="dataset.equipment.statusOfToday.data"
             :related-contents="dataset.equipment"
@@ -83,10 +95,21 @@
             @chartChanged="chartChanged"
           >
           </y-dashboard-card>
-          <!-- /TODO : 오늘의 설비현황 -->
+        </v-flex> -->
+        <!-- /TODO : 오늘의 설비현황 -->
+        <!-- 오늘의 설비가동율 -->
+        <v-flex lg4 sm6 xs12>
+          <y-gauge-chart
+            :title="$t('title.equipmentUtilizationRate')"
+            :icon="dataset.equipment.statusOfToday.icon.label"
+            :color="dataset.equipment.statusOfToday.color"
+            :data-list="dataset.equipment.statusOfToday.data"
+          >
+          </y-gauge-chart>
         </v-flex>
+        <!-- /오늘의 설비가동율 -->
+        <!-- TODO : 설비별 Downtime -->
         <v-flex lg8 sm6 xs12>
-          <!-- TODO : 설비별 Downtime -->
           <y-dashboard-card 
             v-if="dataset.equipment.breakdownTime.data"
             :related-contents="dataset.equipment"
@@ -94,8 +117,8 @@
             @chartChanged="chartChanged"
           >
           </y-dashboard-card>
-          <!-- /TODO : 설비별 Downtime -->
         </v-flex>
+        <!-- /TODO : 설비별 Downtime -->
       </v-layout>
       <!-- /TODO : 설비 관련 통계 -->
 
@@ -408,6 +431,7 @@ import BoxChart from '@/components/widgets/chart/BoxChart';
 import ChatWindow from '@/components/chat/ChatWindow';
 import CircleStatistic from '@/components/widgets/statistic/CircleStatistic';
 import LinearStatistic from '@/components/widgets/statistic/LinearStatistic';
+import YGaugeChart from '@/components/widgets/chart/YGaugeChart'
 import {
   StackData,
   SinData,
@@ -438,7 +462,8 @@ export default {
     LinearStatistic,
     PlainTable,
     PlainTableOrder,
-    YDashboardCard
+    YDashboardCard,
+    YGaugeChart
   },
   data: () => ({
     color: Material,
@@ -464,7 +489,11 @@ export default {
           data: null,
           key: 'statusOfToday',
           type: 'donut',
-          title: ''
+          title: '',
+          icon: {
+            label: 'domain',
+            color: 'info'
+          }
         },
         // WO 타입별 설비 고장 발생 건수
         breakdownTime: {
@@ -577,7 +606,8 @@ export default {
     //       color: 'info'
     //     }
     //   }
-    // ],    
+    // ],
+    costDivider: 1000
   }),
   computed: {
     activity () {
@@ -621,8 +651,9 @@ export default {
     getWoTotalCostAndHour() {
       this.$ajax.url = selectConfig.wo.totalCostAndHour.url;
       this.$ajax.param = selectConfig.wo.totalCostAndHour.searchData;
-      this.$ajax.param.startDate = this.$comm.getThisMonth()
-      this.$ajax.param.endDate = this.$comm.getThisMonth()
+      this.$ajax.param.dateType = 'YEAR'
+      this.$ajax.param.startDate = this.$comm.getThisYear()
+      this.$ajax.param.endDate = this.$comm.getThisYear()
 
       var sumHour = 0;  // 작업시간 합계
       var sumMaterialCosts = 0; // 자재비 합계
@@ -640,7 +671,7 @@ export default {
           sumEtcCosts += _item.etcCost;
         })
         self.dataset.wo.totalHours = this.$comm.setNumberSeperator(sumHour);
-        self.dataset.wo.totalCosts = this.$comm.setNumberSeperator(sumMaterialCosts + sumLaborCosts + sumOutSourcingCosts + sumEtcCosts);
+        self.dataset.wo.totalCosts = this.$comm.setNumberSeperator(Math.ceil((sumMaterialCosts + sumLaborCosts + sumOutSourcingCosts + sumEtcCosts) / this.costDivider));
       });
     },
     /**
@@ -705,8 +736,10 @@ export default {
           }
           self.dataset.equipment.totalCount++;
         })
-        self.dataset.equipment.statusOfToday.data = items
-        self.dataset.equipment.statusOfToday.title = self.$t('title.equipmentStatusOfToday')  // TODO : 오늘의 설비현황
+        // self.dataset.equipment.statusOfToday.data = items
+        // self.dataset.equipment.statusOfToday.title = self.$t('title.equipmentStatusOfToday')  // TODO : 오늘의 설비현황
+        self.dataset.equipment.statusOfToday.data = [{value: this.$comm.getPercentage(self.dataset.equipment.totalCount - self.dataset.equipment.totalBreakdownCount, self.dataset.equipment.totalCount), name: this.$t('title.equipmentUtilizationRate')}]
+        self.dataset.equipment.statusOfToday.title = this.$t('title.equipmentUtilizationRate')  // TODO : 오늘의 설비현황
       }, (_error) => {
         console.log('_error:' + JSON.stringify(_error))
       })
@@ -748,6 +781,7 @@ export default {
     getCauseStatus() {
       this.$ajax.url = selectConfig.woList[1].url
       this.$ajax.param = selectConfig.woList[1].searchData
+      this.$ajax.param.dateType = 'MON'
       this.$ajax.param.startDate = this.$comm.getPrevMonth(6)
       this.$ajax.param.endDate = this.$comm.getThisMonth()
       let self = this
@@ -775,7 +809,9 @@ export default {
       let self = this
       let woCauseStatusData = []
       this.$ajax.requestGet((_result) => {
-        this.woDelayData = _result
+        var filteredArray = _result
+        if (_result.length > 10) filteredArray = _result.splice(0, 9)
+        this.woDelayData = filteredArray
       }, (_error) => {
         console.log('_error:' + JSON.stringify(_error))
       })

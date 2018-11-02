@@ -73,7 +73,8 @@ export default {
     },
     // instace.setOption 
     pathOption: [Object, Array],
-    option: Object, 
+    option: Object,
+    optionString: String,
     // general config
     textStyle: Object,
     title: Object,
@@ -190,8 +191,6 @@ export default {
         });
       }
 
-      console.log('init chart option:' + JSON.stringify(this.option))
-
       this.chartInstance = ECharts.init(this.$refs.canvas, 'material');
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
       window.addEventListener('optimizedResize', (e) => {
@@ -221,11 +220,12 @@ export default {
           _object.set(this.$data._defaultOption, p[0], p[1]);
         });
       }
+      // console.log('this.pathOption changed in echart.js:' + JSON.stringify(this.pathOption))
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
     },
-    option() {
+    optionString() {
+      console.log('this.option changed in echart.js:' + JSON.stringify(this.option))
       this.chartInstance.setOption(this.option)
-      console.log('chart option:' + JSON.stringify(this.option))
     }
   },
 

@@ -14,46 +14,40 @@ examples:
               <v-icon>more</v-icon>
             </div>
             <div slot="widget-content">
-              <v-list 
-                v-for="item in equipInfo"
-                :key="item.content"
-                class="pa-0">
-                <template>     
-                  <v-list-tile avatar>
-                    <v-list-tile-avatar>
-                      <y-loading-button v-if="item.icon === 'on'"></y-loading-button>
-                      <v-icon v-else :color="equipment.color">{{item.icon}}</v-icon>
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      {{item.content}}
-                    </v-list-tile-content>
-                  </v-list-tile>
-                  <v-divider inset></v-divider>
-                </template>
-              </v-list>
-            </div>
-          </v-widget>
-          <v-widget :enable-header="false" content-bg="white">
-            <div slot="widget-content">
-              <!-- <e-chart 
-                v-if="woStatusData.length > 0"
-                ref="woChart"
-                :path-option="[
-                  ['dataset.source', woStatusData],
-                  ['legend.bottom', '0'],
-                  ['color', [chartColor.lightBlue.base, chartColor.indigo.base, chartColor.pink.base, chartColor.green.base, chartColor.cyan.base, chartColor.teal.base]],
-                  ['xAxis.show', false],
-                  ['yAxis.show', false],
-                  ['series[0].type', 'pie'],
-                  ['series[0].avoidLabelOverlap', true],
-                  ['series[0].labelLine.show', false],
-                  ['series[0].label.show', false],
-                  ['series[0].radius', ['50%', '70%']],
-                ]"
-                height="300px"
-                width="100%"
-              >
-              </e-chart>      -->
+              <v-card>
+                <v-img 
+                  height="200px"
+                  :class="equipmentTitleColor"
+                  :src="thumbnailUrl">
+                  <v-container fill-height fluid>
+                    <v-layout fill-height>
+                      <v-flex xs12 align-end flexbox>
+                        <div class="headline">{{equipment.equipCd}}</div>
+                        <div class="subheading">{{equipment.equipNm}}</div>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-img>
+                <v-card-text>
+                  <v-list 
+                    v-for="item in equipInfo"
+                    :key="item.content"
+                    class="pa-0">
+                    <template>
+                      <v-list-tile avatar>
+                        <v-list-tile-avatar>
+                          <y-loading-button v-if="item.icon === 'on'"></y-loading-button>
+                          <v-icon v-else :color="equipment.color">{{item.icon}}</v-icon>
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                          {{item.content}}
+                        </v-list-tile-content>
+                      </v-list-tile>
+                      <v-divider inset></v-divider>
+                    </template>
+                  </v-list>
+                </v-card-text>
+              </v-card>
             </div>
           </v-widget>
         </v-flex>
@@ -68,6 +62,7 @@ import EChart from '@/components/chart/echart';
 import color from 'vuetify/es5/util/colors';
 import selectConfig from '@/js/selectConfig'
 import $ from 'jquery'
+import ajaxFile from '@/js/ajaxFile'
 
 export default {
   /* attributes: name, components, props, data */
@@ -101,6 +96,8 @@ export default {
     chartColor: color,
     equipment: null,
     equipInfo: [],
+    thumbnailUrl: null,
+    equipmentTitleColor: 'white--text',
     equipStatusIcon: {
       'EQUIP_STATUS_O': 'on',
       'EQUIP_STATUS_B': 'build',
@@ -117,11 +114,15 @@ export default {
     pk() {
       this.equipInfo = []
       this.getEquipment()
+      this.getEquipmentImage()
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    if (this.pk) this.getEquipment()
+    if (this.pk) {
+      this.getEquipment()
+      this.getEquipmentImage()
+    }
   },
   /* methods */
   methods: {
@@ -203,6 +204,35 @@ export default {
         }, (_error) => {
           console.log('error:' + JSON.stringify(_error))
         })
+    },
+    getEquipmentImage() {
+      this.$ajax.url = selectConfig.img.fileList.url
+      this.$ajax.param = selectConfig.img.fileList.searchData
+      this.$ajax.param.attachType = 'EQUIP_PHOTO'
+      this.$ajax.param.attachPk = this.pk // 417
+
+      this.$ajax.requestGet((_result) => {
+        if (!_result.length) {
+          this.thumbnailUrl = 'static/no-image.png'
+          this.equipmentTitleColor = 'indigo--text'
+          return
+        }
+        this.getThumbnail(_result[0].filePk)
+      })
+    },
+    getThumbnail(_filePk) {
+      ajaxFile.url = selectConfig.img.thumbnail.url + '?filePk=' + _filePk     
+      
+      let self = this
+      ajaxFile.requestFileGet((_result) => {
+        self.$nextTick(() => {
+          // self.thumbnailUrl = self.$comm.getImgFileAsUrl(_result)
+          self.equipmentTitleColor = 'white--text'
+          self.thumbnailUrl = window.URL.createObjectURL(_result)
+        })       
+      }, (_error) => {
+        self.thumbnailUrl = null
+      })
     }
   }
 }

@@ -22,23 +22,23 @@ examples:
                 <v-flex sm12>
                   <h4>{{$t('title.summaryThisYear')}}</h4>
                 </v-flex>
-                <v-flex lg6 sm6 xs12>
+                <v-flex lg4 sm6 xs12>
                   <mini-statistic
-                    icon="description"
-                    iconTitle="WO"
-                    :title="totalCosts"
-                    :sub-title="$t('title.cost') + '(' + $t('title.unit') + ':' + costDivider + ')'"
-                    color="indigo"
+                    icon="list_alt"
+                    :iconTitle="$t('title.inspectionPerformanceStatus')"
+                    :title="dataset.inspection.completeRate"
+                    :sub-title="$t('title.complete')"
+                    color="purple"      
                   >
-                  </mini-statistic>  
+                  </mini-statistic>
                 </v-flex>
-                <v-flex lg6 sm6 xs12>
+                <v-flex lg4 sm6 xs12>
                   <mini-statistic
-                    icon="description"
-                    iconTitle="WO"
-                    :title="totalHours"
-                    :sub-title="$t('title.workHours')"
-                    color="purple"    
+                    icon="list_alt"
+                    :iconTitle="$t('title.detectedError')"
+                    :title="dataset.inspection.detectedErrorCount"
+                    :sub-title="$t('title.number')"
+                    color="red"    
                   >
                   </mini-statistic>
                 </v-flex>
@@ -50,18 +50,19 @@ examples:
                   <h4>{{$t('title.todayStatus')}}</h4>
                 </v-flex>
 
-                <!-- 오늘의 WO 완료율 -->
-                <v-flex lg4 sm6 xs12>
+                <!-- 오늘의 점검 완료율 -->
+                <v-flex xs12>
                   <circle-statistic
-                    :title="$t('title.woCompleteRate')"
-                    :sub-title="dataset.wo.todayCompleteStatus.headline"
+                    :title="$t('title.InspectionCompleteRate')"
+                    :sub-title="dataset.inspection.todayCompleteStatus.headline"
                     :caption="$t('title.complete')"
-                    :icon="dataset.wo.todayCompleteStatus.icon.label"
-                    :color="dataset.wo.todayCompleteStatus.color"
-                    :value="dataset.wo.todayCompleteStatus.value"
+                    :icon="dataset.inspection.todayCompleteStatus.icon.label"
+                    :color="dataset.inspection.todayCompleteStatus.color"
+                    :value="dataset.inspection.todayCompleteStatus.value"
                   >
                   </circle-statistic>
                 </v-flex>
+                <!-- /오늘의 점검 완료율 -->
               </v-layout>
               <!-- /오늘 통계 -->
               <!-- 월간 통계 -->
@@ -69,47 +70,25 @@ examples:
                 <v-flex sm12>
                   <h4>{{$t('title.monthlyStatus')}}</h4>
                 </v-flex>
-                <!-- 기간별 작업 준수율 -->
+                <!-- 점검 수행현황 -->
                 <v-flex lg6 sm12 xs12 >
-                    <y-line-chart 
-                      :title="$t('title.woCompleteRateMonths')" 
-                      :x-axis-labels="labelsMonths"
-                      :data="dataset.workCompleteRateMonths.data"
-                      :y-min="0"
-                      :y-max="100"
-                      icon="timeline"
-                      color="indigo"
-                      background-color="#F1F8E9">
-                    </y-line-chart>
-                </v-flex>
-                <!-- /기간별 작업 준수율 -->
-                <!-- wo 발생비용 -->
-                <v-flex lg6 sm12 xs12 >
-                    <y-multibar-chart
-                      :title="$t('title.woCosts6Month')" 
-                      :series="dataset.woCostsMonths.series"
-                      :x-axis-labels="dataset.woCostsMonths.xAxisLabels"
-                      :data-list="dataset.woCostsMonths.dataList"
-                      :unit="dataset.woCostsMonths.unit"
-                      icon="bar_chart"
-                      color="indigo"
-                      background-color="#F1F8E9">
-                    </y-multibar-chart>
-                </v-flex>
-                <!-- /wo 발생비용 -->
-                <!-- 원인별 WO 현황 -->
-                <v-flex lg6 sm12 xs12 >
-                  <y-pie-chart
-                    :title="$t('title.woCauseStatus6Month')"
-                    :data-list="dataset.woCauseMonths.data"
-                    :legend-data ="dataset.woCauseMonths.legendData"
-                    icon="pie_chart"
-                    color="indigo"
-                    background-color="#F1F8E9"
+                  <y-simple-datepicker
+                    type="month"
+                    v-model="dataset.completeStatusMonth.curDate"
+                    format="YYYYMM"
                   >
-                  </y-pie-chart>
+                  </y-simple-datepicker>
+                  <y-multibar-chart
+                    :title="$t('title.inspectionPerformanceStatus')" 
+                    :series="dataset.completeStatusMonth.series"
+                    :x-axis-labels="dataset.completeStatusMonth.xAxisLabels"
+                    :data-list="dataset.completeStatusMonth.dataList"
+                    icon="bar_chart"
+                    color="indigo"
+                    background-color="#F1F8E9">
+                  </y-multibar-chart>
                 </v-flex>
-                <!-- /원인별 WO 현황 -->
+                <!-- /점검 수행현황 -->
               </v-layout>
               <!-- /월간 통계 -->
               <!-- 연간 통계 -->
@@ -117,47 +96,25 @@ examples:
                 <v-flex sm12>
                   <h4>{{$t('title.yearlyStatus')}}</h4>
                 </v-flex>
-                <!-- 기간별 작업 준수율 -->
+                <!-- 점검 수행현황 -->
                 <v-flex lg6 sm12 xs12 >
-                    <y-line-chart 
-                      :title="$t('title.woComplianceRate')" 
-                      :x-axis-labels="labelsYears"
-                      :data="dataset.workCompleteRateYears.data"
-                      :y-min="0"
-                      :y-max="100"
-                      icon="timeline" 
-                      color="indigo"
-                      background-color="#F9FBE7">
-                    </y-line-chart>
-                </v-flex>
-                <!-- /기간별 작업 준수율 -->
-                <!-- wo 발생비용 -->
-                <v-flex lg6 sm12 xs12 >
-                    <y-multibar-chart
-                      :title="$t('title.woCosts')" 
-                      :series="dataset.woCostsYears.series"
-                      :x-axis-labels="dataset.woCostsYears.xAxisLabels"
-                      :data-list="dataset.woCostsYears.dataList"
-                      :unit="dataset.woCostsYears.unit"
-                      icon="bar_chart"
-                      color="indigo"
-                      background-color="#F9FBE7">
-                    </y-multibar-chart>
-                </v-flex>
-                <!-- /wo 발생비용 -->
-                <!-- 원인별 WO 현황 -->
-                <v-flex lg6 sm12 xs12 >
-                  <y-pie-chart
-                    :title="$t('title.woCosts')"
-                    :data-list="dataset.woCauseYears.data"
-                    :legend-data ="dataset.woCauseYears.legendData"
-                    icon="pie_chart"
-                    color="indigo"
-                    background-color="#F9FBE7"
+                  <y-simple-datepicker
+                    type="year"
+                    v-model="dataset.completeStatusYear.curDate"
+                    format="YYYY"
                   >
-                  </y-pie-chart>
+                  </y-simple-datepicker>
+                  <y-multibar-chart
+                    :title="$t('title.inspectionPerformanceStatus')" 
+                    :series="dataset.completeStatusYear.series"
+                    :x-axis-labels="dataset.completeStatusYear.xAxisLabels"
+                    :data-list="dataset.completeStatusYear.dataList"
+                    icon="bar_chart"
+                    color="indigo"
+                    background-color="#F9FBE7">
+                  </y-multibar-chart>
                 </v-flex>
-                <!-- /원인별 WO 현황 -->
+                <!-- /점검 수행현황 -->
                 </v-layout>
               <!-- /연간 통계 -->
             </v-card-text>       
@@ -195,6 +152,34 @@ export default {
   data: () => ({
     color: color,
     dataset: {
+      inspection: {
+        completeRate: 0,
+        detectedErrorCount: 0,
+        // 오늘의 점검 완료율
+        todayCompleteStatus: {
+          subheading: null,
+          headline: null,
+          caption: null,
+          value: 0,
+          color: 'success',
+          icon: {
+            label: 'list',
+            color: 'success'
+          }
+        }
+      },
+      completeStatusMonth: {
+        xAxisLabels: [],
+        series: [],
+        dataList: [],
+        curDate: null
+      },
+      completeStatusYear: {
+        xAxisLabels: [],
+        series: [],
+        dataList: [],
+        curDate: null
+      },
       wo: {
         // 원인별 현황
         causeStatus: {
@@ -247,8 +232,7 @@ export default {
     totalCosts: 0,
     totalHours: 0,
     months: 6,  // 월별 검색 기준일(지난 6개월간)
-    years: 3,  // 년도별 검색 기준일(지난 3년간)
-    costDivider: 1000
+    years: 3  // 년도별 검색 기준일(지난 3년간)
   }),
   computed: {
     labelsMonths() {
@@ -270,8 +254,25 @@ export default {
       return labels
     }
   },
+  watch: {
+    'dataset.completeStatusMonth.curDate': function () {
+      this.getPmPerformanceStatus('month')
+    },
+    'dataset.completeStatusYear.curDate': function () {
+      this.getPmPerformanceStatus('year')
+    }
+  },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   beforeMount() {
+    // 올해의 점검 수행률
+    this.getInspectionCompleteRate();
+    // 이상 발견 설비 개수
+    this.getDetectedErrorCount();
+    // 오늘의 점검완료 현황
+    this.getInspectionStatusOfToday();
+
+    this.dataset.completeStatusMonth.curDate = this.$comm.getThisMonth()
+    this.dataset.completeStatusYear.curDate = this.$comm.getThisYear()
     // 이달의 WO 비용
     this.getWoTotalCostAndHour();
     // 오늘의 WO완료 현황
@@ -292,15 +293,123 @@ export default {
   },
   /* methods */
   methods: {
+    /**
+     * 올해의 점검 수행률
+     */
+    getInspectionCompleteRate() {
+      this.$ajax.url = selectConfig.inspection.completeStatus.url;
+      this.$ajax.param = selectConfig.inspection.completeStatus.searchData;
+      this.$ajax.param.dateType = 'YEAR'
+      this.$ajax.param.startDate = this.$comm.getThisYear()
+      this.$ajax.param.endDate = this.$comm.getThisYear()
+      var self = this
+      var totalCount = 0;
+      var totalCompleteCount = 0;
+      this.$ajax.requestGet((_result) => {
+        $.each(_result, (_i, _item) => {
+          totalCount += _item.totCnt;
+          totalCompleteCount += _item.finishCnt;
+          console.log('getInspectionCompleteRate:' + _item.totCnt + ':' + _item.finishCnt)
+        })
+        self.dataset.inspection.completeRate = this.$comm.getPercentage(totalCompleteCount, totalCount).toString() + '%';
+      })
+    },
+    // 오늘의 점검완료 현황
+    getInspectionStatusOfToday() {
+      this.$ajax.url = selectConfig.inspectionList[0].url
+      this.$ajax.param = selectConfig.inspectionList[0].searchData
+      this.$ajax.param.startDate = this.$comm.getToday()
+      this.$ajax.param.endDate = this.$comm.getToday()
+      let self = this
+      this.$ajax.requestGet((_result) => {
+        var result = _result.content
+        var completeArray = result.filter((_item) => {
+          return _item.chkDt
+        })
+
+        self.dataset.inspection.todayCompleteStatus.value = this.$comm.getPercentage(completeArray.length, result.length);
+        self.dataset.inspection.todayCompleteStatus.headline = completeArray.length.toString() + '/' + result.length.toString() + ' ';
+      })
+    },
+    /**
+     * 월별/년도별 점검 수행 현황
+     */
+    getPmPerformanceStatus(_type) {
+      this.$ajax.url = selectConfig.inspection.completeStatus.url;
+      this.$ajax.param = selectConfig.inspection.completeStatus.searchData;
+      if (_type === 'year') {
+        this.$ajax.param.dateType = 'YEAR'
+        this.$ajax.param.startDate = this.dataset.completeStatusYear.curDate
+        this.$ajax.param.endDate = this.dataset.completeStatusYear.curDate
+      } else {
+        this.$ajax.param.dateType = 'MON'
+        this.$ajax.param.startDate = this.dataset.completeStatusMonth.curDate
+        this.$ajax.param.endDate = this.dataset.completeStatusMonth.curDate
+      }
+
+      var self = this
+      var totalCount = 0;
+      var totalCompleteCount = 0;
+      var xAxisLabels = []
+      var dataList = []
+      var series = [
+        {name: this.$t('title.inspectionCompleteCount'), type: 'bar'},
+        {name: this.$t('title.inspectionInompleteCount'), type: 'bar'},
+        {name: this.$t('title.InspectionCompleteRate'), type: 'line', yAxisIndex: 1},
+      ]
+      
+      var completeCount = 0;
+      var incompleteCount = 0;
+      var completeRate = 0;
+      this.$ajax.requestGet((_result) => {
+        if (_type === 'year') self.dataset.completeStatusYear.series = series
+        else self.dataset.completeStatusMonth.series = series
+        
+        $.each(series, (_i) => {
+          dataList.push(new Array())
+        })
+
+        $.each(_result, (_i, _item) => {
+          // 완료수
+          completeCount += _item.finishCnt
+          // 미완료수
+          incompleteCount += _item.notFinishCnt
+        })
+
+        dataList[0].unshift(completeCount)
+        dataList[1].unshift(incompleteCount)
+        dataList[2].unshift(this.$comm.getPercentage(completeCount / (completeCount + incompleteCount)))
+
+        if (_type === 'year') {
+          self.dataset.completeStatusYear.xAxisLabels = xAxisLabels
+          self.dataset.completeStatusYear.dataList = dataList
+        }
+        else {
+          self.dataset.completeStatusMonth.xAxisLabels = xAxisLabels
+          self.dataset.completeStatusMonth.dataList = dataList
+        }
+      })
+    },
+    getDetectedErrorCount() {
+      this.$ajax.url = selectConfig.inspection.detectedErrorStatus.url
+      this.$ajax.param = selectConfig.inspection.detectedErrorStatus.searchData
+      this.$ajax.param.dateType = 'YEAR'
+      this.$ajax.param.startDate = this.$comm.getThisYear()
+      this.$ajax.param.endDate = this.$comm.getThisYear()
+      let self = this
+      this.$ajax.requestGet((_result) => {
+        var result = _result.content        
+        self.dataset.inspection.detectedErrorCount = result.length;
+      })
+    },
      /**
      * 이달의 WO 비용
      */
     getWoTotalCostAndHour() {
       this.$ajax.url = selectConfig.wo.totalCostAndHour.url;
       this.$ajax.param = selectConfig.wo.totalCostAndHour.searchData;
-      this.$ajax.param.dateType = 'YEAR'
-      this.$ajax.param.startDate = this.$comm.getThisYear()
-      this.$ajax.param.endDate = this.$comm.getThisYear()
+      this.$ajax.param.startDate = this.$comm.getThisMonth()
+      this.$ajax.param.endDate = this.$comm.getThisMonth()
 
       var sumHour = 0;  // 작업시간 합계
       var sumMaterialCosts = 0; // 자재비 합계
@@ -318,7 +427,7 @@ export default {
           sumEtcCosts += _item.etcCost;
         })
         self.totalHours = this.$comm.setNumberSeperator(sumHour);
-        self.totalCosts = this.$comm.setNumberSeperator(Math.ceil((sumMaterialCosts + sumLaborCosts + sumOutSourcingCosts + sumEtcCosts) / this.costDivider));
+        self.totalCosts = this.$comm.setNumberSeperator(sumMaterialCosts + sumLaborCosts + sumOutSourcingCosts + sumEtcCosts);
       });
     },
     // 오늘의 WO완료 현황
@@ -404,7 +513,7 @@ export default {
           return _item.deptNm !== 'SUBSUM' && _item.deptNm !== 'TOTSUM'
         })
         var xAxisLabels = []
-        var dataList = [] // 월/년도별 항목 데이터
+        var dataList = []
         var totCost = 0
         var mtrlCost = 0
         var laborCost = 0
@@ -467,10 +576,14 @@ export default {
         if (_type === 'year') {
           self.dataset.woCostsYears.xAxisLabels = xAxisLabels
           self.dataset.woCostsYears.dataList = dataList
+          console.log('year xAxisLabels:' + JSON.stringify(xAxisLabels))
+          console.log('year dataList:' + JSON.stringify(dataList))
         }
         else {
           self.dataset.woCostsMonths.xAxisLabels = xAxisLabels
           self.dataset.woCostsMonths.dataList = dataList
+          console.log('month xAxisLabels:' + JSON.stringify(xAxisLabels))
+          console.log('month dataList:' + JSON.stringify(dataList))
         }
       })
     },

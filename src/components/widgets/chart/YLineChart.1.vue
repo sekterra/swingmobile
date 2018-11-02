@@ -1,5 +1,5 @@
 <template>
-    <v-card class="ma-0 pa-0">
+    <v-card class="ma-0 pa-0" :color="backgroundColor">
       <v-card-title>
         <div class="layout row ma-0 justify-space-between">
           <div class="subheading">{{title}}</div>
@@ -33,7 +33,7 @@
           </e-chart>
         </div>
       </v-card-text>
-    </v-card> 
+    </v-card>
 </template>
 
 <script>
@@ -42,7 +42,7 @@ export default {
   components: {
     EChart
   },
-  name: 'y-line-statistic',
+  name: 'y-line-chart',
   props: {
     icon: {
       type: String,
@@ -62,7 +62,8 @@ export default {
       required: true
     },
     yMin: Number,
-    yMax: Number
+    yMax: Number,
+    backgroundColor: ''
   },
   data: () => ({
   })

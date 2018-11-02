@@ -125,6 +125,9 @@ export default {
       this.changeLocale(_localeCode);
     });
   },
+  mounted() {
+    this.$vuetify.goTo(0);
+  },
   methods: {
     /**
      *  테마 설정용 right 팝업 오픈
@@ -158,7 +161,6 @@ export default {
       this.$comm.moment.locale(localJson.moment)
       // locale json 언어설정
       this.$i18n.locale = localJson.language
-      console.log(':::::::::::: LOCALE_CHANGE get : ' + _localeCode)
     },
     dialogResult(_result) {
       this.$emit('APP_CONFIRM_REPLY', _result);

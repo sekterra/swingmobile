@@ -17,9 +17,11 @@
                 </v-form>
               </v-card-text>
               <v-card-actions>
-                <y-i18n></y-i18n>
-                <v-spacer></v-spacer>
-                <v-btn block color="primary" @click="login" :loading="loading">Login</v-btn>
+                <v-layout align-center justify-space-between row fill-height>
+                  <y-i18n></y-i18n>
+                  <v-spacer></v-spacer>
+                  <v-btn block color="primary" @click="login" :loading="loading">Login</v-btn>
+                </v-layout>
               </v-card-actions>
             </v-card>
           </v-flex>

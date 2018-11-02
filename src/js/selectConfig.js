@@ -29,6 +29,41 @@ var selectConfig = {
       }
     }
   ],
+  equipment: {
+    maintenanceCost: {
+      url: 'stat/equipment/equip/workorder/cost/',
+      searchData: {
+        dateType: 'MON',
+        startDate: null,
+        endDate: null,
+        page: 0,
+        size: 0,
+        sort: null        // 정렬조건 [형식 &sort=menuNm,asc&sort=menuLevel,desc]
+      },
+    },
+    mttr: {
+      url: 'stat/equipment/equip/mttr',
+      searchData: {
+        dateType: 'MON',
+        startDate: null,
+        endDate: null,
+        page: 0,
+        size: 0,
+        sort: null        // 정렬조건 [형식 &sort=menuNm,asc&sort=menuLevel,desc]
+      },
+    },
+    mtbf: {
+      url: 'stat/equipment/equip/mtbf',
+      searchData: {
+        dateType: 'MON',
+        startDate: null,
+        endDate: null,
+        page: 0,
+        size: 0,
+        sort: null        // 정렬조건 [형식 &sort=menuNm,asc&sort=menuLevel,desc]
+      },
+    }
+  },
   wo: {
     // 비용/시간 총계
     totalCostAndHour: {
@@ -188,6 +223,17 @@ var selectConfig = {
         startDate: null,
         endDate: null
       }
+    },
+    detectedErrorStatus: {
+      url: 'stat/inspection/unfit',
+      searchData: {
+        page: 0,
+        size: 0,
+        sort: null,
+        dateType: 'MON',
+        startDate: null,
+        endDate: null
+      }
     }
   },
   pm: {
@@ -198,6 +244,31 @@ var selectConfig = {
         startDate: null,
         endDate: null
       },
+    },
+    completeStatusYear: {
+      url: 'stat/pm/finish/count/year',
+      searchData: {
+        dateType: 'YEAR',
+        startDate: null,
+        endDate: null
+      },
+    }
+  },
+  img: {
+    // 업무별 파일목록
+    fileList: {
+      url: 'file/',
+      searchData: {
+        attachType: null,   // 첨부유형 : EQUIP_PHOTO, MTRL_PHOTO, WO_PRE_PHOTO, WO_AFTER_PHOTO
+        attachPk: null,   // 업무 PK
+      }
+    },
+    // 썸네일 이미지 조회
+    thumbnail: {
+      url: 'file/image/down/thumbnail',
+      searchData: {
+        filePk: null    // 첨부pk
+      }
     }
   }
 }
