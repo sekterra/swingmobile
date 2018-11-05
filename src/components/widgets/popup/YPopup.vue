@@ -87,6 +87,10 @@ export default {
     searchItem: {
       type: String,
       required:  true
+    },
+    eventForReturn: {
+      type: String,
+      required:  true
     }
   },
   data: () => ({
@@ -122,9 +126,8 @@ export default {
      * 부모에게 선택된 정보 전달
      */
     sendDataToParent() {
-      console.log('sendDataToParent info')
       if (!this.selectedItems || this.selectedItems.length <= 0) return
-      this.$emit('bindEquipmentData', this.selectedItems)
+      this.$emit(this.eventForReturn, this.selectedItems)
       this.selectedItems = []
       this.dialog = false
     }

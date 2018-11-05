@@ -149,5 +149,10 @@ export default [
     callback: function (_reply) {
       _reply
     }
+  },
+  {
+    name: 'USER_LOGIN',
+    callback: function () {
+    }
   }
 ];

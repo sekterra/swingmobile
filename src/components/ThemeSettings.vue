@@ -17,12 +17,17 @@ examples:
       <v-flex>
         <div class="theme-options">
           <v-subheader class="px-1 my-2">
+            {{$t('title.userInfo')}}
+          </v-subheader>
+          <span v-if="userInfo">
+          {{userInfo.userNm}} / {{userInfo.deptNm}}
+          </span>
+          <v-divider></v-divider>
+          <v-subheader class="px-1 my-2">
             {{$t('title.languageSetting')}}
           </v-subheader>
+          <y-i18n></y-i18n>
           <v-divider></v-divider>
-          <div class="my-0">
-            <y-i18n></y-i18n>
-          </div>
         </div>
         <v-subheader class="px-1 my-2">
           {{$t('title.colorSetting')}}
@@ -75,7 +80,8 @@ export default {
     return {
       themeColor: 'indigo',
       sideBarOption: 'light',
-      colors: colors
+      colors: colors,
+      userInfo: window.getApp.getUserInfo()
     };
   },
   computed: {

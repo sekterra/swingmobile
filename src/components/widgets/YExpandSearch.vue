@@ -39,10 +39,8 @@ examples:
             :label="item.label"
             :name="item.name"
             :default-type="item.defaultType"
-            @input="value => {
-              searchData[item.name] = value
-              searchDataChanged()
-            }"
+            v-model="searchData[item.name]"
+            @input="searchDataChanged"
             >
           </y-datepicker>
         </v-flex>

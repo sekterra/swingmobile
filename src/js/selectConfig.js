@@ -269,8 +269,18 @@ var selectConfig = {
       searchData: {
         filePk: null    // 첨부pk
       }
-    }
-  }
+    },
+    // 썸네일 이미지 조회
+    imageDown: {
+      url: 'file/image/down/',
+      searchData: {
+        filePk: null    // 첨부pk
+      }
+    },
+  },
+  userInfo: {
+    url: 'member/userinfo/'
+  },
 }
 
 export default selectConfig

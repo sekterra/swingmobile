@@ -20,7 +20,7 @@
                 <v-layout align-center justify-space-between row fill-height>
                   <y-i18n></y-i18n>
                   <v-spacer></v-spacer>
-                  <v-btn block color="primary" @click="login" :loading="loading">Login</v-btn>
+                  <v-btn block color="success" @click="login" :loading="loading">Login</v-btn>
                 </v-layout>
               </v-card-actions>
             </v-card>
@@ -45,8 +45,12 @@ export default {
     userInfo: {
       username: 'cmms',
       password: 'cmms'
-    }
+    },
+    locale: null
   }),
+  mounted() {
+    this.locale = localStorage.locale
+  },
   methods: {
     login () {
       this.$ajax.isSetHeader = false
@@ -59,6 +63,16 @@ export default {
         try {
           this.$ajax.isSetHeader = true
           jwt.setJwtToken(_result.token)
+          jwt.checkValidToken((data) => {
+            if (data === '' || data === 'undefined') {
+              window.alert('jwt error')
+              comm.movePage('/')
+              return
+            }
+            localStorage.userPk = data.userpk
+            this.$emit('USER_LOGIN')
+            // window.getApp.setUserPk(data.userpk)
+          })
           setTimeout(() => { 
             this.loading = false
             this.$ajax.isAuthCheck = false
@@ -67,12 +81,12 @@ export default {
           }, 1000);
         } catch(e) {
           console.log('_success error:' + e.message)
-          window.alert(e.message)
+          // window.alert(e.message)
         }
       }, (_error) => {
         console.log('_error:' + JSON.stringify(_error))
         this.loading = false
-        window.alert(JSON.stringify(_error))
+        // window.alert(JSON.stringify(_error))
       })
       // this.loading = true;
       // setTimeout(() => {

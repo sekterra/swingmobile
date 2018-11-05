@@ -86,7 +86,7 @@ export default {
         this.items.unshift({'src': this.imgData});
         this.$forceUpdate()
       } catch (e) {
-        window.alert(e.message);
+        // window.alert(e.message);
       }
     },
     wtf(_error) {

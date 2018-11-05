@@ -106,7 +106,10 @@
       "inspectionPerformanceStatus": "Inspection performance status",
       "inspectionCompleteCount": "Checked count",
       "inspectionInompleteCount": "Unchecked count",
-      "detectedError": "Detected fault"
+      "detectedError": "Detected fault",
+      "woCompleteList": "WO Complete",
+      "inspectionCalendar": "Inspection's Calendar",
+      "userInfo": "User Information"
     },
     "message": {
       "woNo": "Will be automatically generated.",

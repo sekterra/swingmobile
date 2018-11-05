@@ -216,29 +216,29 @@ export default {
       window.getApp.$emit('APP_REQUEST_SUCCESS', 'init upload Info');
 
       // 업로드 실패한 파일이 있을 경우 다시 업로드 가능하도록 처리
-      var failedFileList = JSON.parse(localStorage.failedFileList)
-      if (this.upload.failedCount && failedFileList.length > 0) {
-        window.getApp.$emit('APP_CONFIRM', this.$t('message.retryFileUpload'));
-        window.getApp.$on('APP_CONFIRM_REPLY', (_retry) => {
-          if (_retry) {
-            var failedFileList = JSON.parse(localStorage.failedFileList)
-            this.uploadImages(failedFileList)
-          }
-          else {
-            localStorage.failedFileList = null
-            window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.uploadFailedFileRemoved'));
-          }
-        })
-      }
+      // var failedFileList = JSON.parse(localStorage.failedFileList)
+      // if (this.upload.failedCount && failedFileList.length > 0) {
+      //   window.getApp.$emit('APP_CONFIRM', this.$t('message.retryFileUpload'));
+      //   window.getApp.$on('APP_CONFIRM_REPLY', (_retry) => {
+      //     if (_retry) {
+      //       var failedFileList = JSON.parse(localStorage.failedFileList)
+      //       this.uploadImages(failedFileList)
+      //     }
+      //     else {
+      //       localStorage.failedFileList = null
+      //       window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.uploadFailedFileRemoved'));
+      //     }
+      //   })
+      // }
 
       // 업로드 정보 초기화
       this.upload = this.$comm.clone(this.initUpload)
     }
   },
   mounted() {
-    window.getApp.$on('APP_IMAGE_UPLOAD', (_fileList) => {
+    window.getApp.$on('APP_IMAGE_UPLOAD', (_fileInfo) => {
       window.getApp.$emit('APP_REQUEST_SUCCESS', 'upload Request');
-      this.uploadImages(_fileList);
+      this.uploadImages(_fileInfo);
     });
   },
   methods: {
@@ -259,19 +259,26 @@ export default {
       this.inspection.count = _count
       this.$forceUpdate()
     },
-    uploadImages(_fileList, _isRetry) {
+    uploadImages(_fileInfo, _isRetry) {
+      if (!_fileInfo || !_fileInfo.hasOwnProperty('pk')) {
+        window.getApp.$emit('APP_REQUEST_ERROR', 'No pk')
+        return
+      }
       this.initUpload = this.$comm.clone(this.upload)
-      if (!_fileList || _fileList.length <= 0) window.getApp.$emit('APP_REQUEST_ERROR', 'No files to upload');
-      else window.getApp.$emit('APP_REQUEST_SUCCESS', 'uploading:' + _fileList.length);
+      var fileList = _fileInfo.fileList
+      if (!fileList || fileList.length <= 0) window.getApp.$emit('APP_REQUEST_ERROR', 'No files to upload');
+      else window.getApp.$emit('APP_REQUEST_SUCCESS', 'uploading:' + fileList.length);
+
+      // window.alert(JSON.stringify(_fileInfo))
       try {
         var url = config.protocol + config.backEndFullUrl + 'file/image/upload/'
         var self = this
         // 1. 업로드 정보 초기화
-        self.upload.filePaths = _fileList;
-        self.upload.fileCount = _fileList.length;
+        self.upload.filePaths = fileList;
+        self.upload.fileCount = fileList.length;
 
-        var tempArray = new Array(_fileList.length)
-        var tempTotalArray = new Array(_fileList.length)
+        var tempArray = new Array(fileList.length)
+        var tempTotalArray = new Array(fileList.length)
         $.each(self.upload.filePaths, (_i, _filePath) => {
           self.upload.ftObjects.push(new FileTransfer());
           self.upload.transInfo.push({
@@ -299,14 +306,14 @@ export default {
         };
         options.headers = headers;
         options.params = {
-          attachType: 'WO_PRE_PHOTO',
-          attachPk: '2665'
+          attachType: _fileInfo.attachType,
+          attachPk: _fileInfo.pk
         }
         options.fileKey='file';
 
-        var failedFileList = localStorage.failedFileList;  // 파일 업로드 실패 목록
-        if (!localStorage.failedFileList) failedFileList = [];
-        else failedFileList = JSON.parse(localStorage.failedFileList)
+        // var failedFileList = localStorage.failedFileList;  // 파일 업로드 실패 목록
+        // if (!localStorage.failedFileList) failedFileList = [];
+        // else failedFileList = JSON.parse(localStorage.failedFileList)
 
         $.each(self.upload.ftObjects, (_i, _ft) => {
           var filePath = self.upload.filePaths[_i];
@@ -348,7 +355,7 @@ export default {
               transInfo.isSuccess = true;             
               transInfo.percent = 100;
               self.upload.isAllUploaded = self.upload.completedCount + self.upload.failedCount >= self.upload.fileCount;
-              window.getApp.$emit('APP_REQUEST_SUCCESS', "bytesSent = " + _result.bytesSent + ' : ' + _i);
+              // window.getApp.$emit('APP_REQUEST_SUCCESS', "bytesSent = " + _result.bytesSent + ' : ' + _i);
             // 파일 전송 실패시
             }, (error) => {
               transInfo.percent = 0;
@@ -358,9 +365,9 @@ export default {
               self.upload.isAllUploaded = self.upload.completedCount + self.upload.failedCount >= self.upload.fileCount;
 
               // 전송실패한 파일은 localStorage에 저장하고, 나중에 다시 처리한다.
-              failedFileList.push(filePath)
-              localStorage.failedFileList = JSON.stringify(failedFileList)
-              window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + JSON.stringify(error.response) + ' : ' + _i);
+              // failedFileList.push(filePath)
+              // localStorage.failedFileList = JSON.stringify(failedFileList)
+              window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + JSON.stringify(error) + ' : ' + _i);
             }, options);
             // 파일업로드 시작 / 완료
         });

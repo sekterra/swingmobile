@@ -52,6 +52,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
   // 참고 url : https://stackoverflow.com/questions/31152130/is-it-good-to-use-jquery-ajax-with-traditional-true/31152304#31152304
   var traditional = ajax.type.toUpperCase() === 'GET'
 
+  let appVue = window.getApp
   var ajaxOptions = {
     type: ajax.type,
     async: ajax.async,
@@ -90,6 +91,18 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         ajax[key] = orgAjax[key]
       }
 
+      // if (xhr.hasOwnProperty('token')) {
+      //   jwt.checkValidToken((data) => {
+      //     if (data === '' || data === 'undefined') {
+      //       window.alert('jwt error')
+      //       comm.movePage('/')
+      //       return
+      //     }
+      //     console.log('user info:' + JSON.stringify(data))
+      //     appVue.setUserPk(data.userpk)
+      //   })
+      // }
+
       if (typeof _callbackSuccess === 'function') _callbackSuccess(xhr, status, req)
       else return xhr
     },
@@ -109,7 +122,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
           console.log(':::::::::::: ajax :' + JSON.stringify(xhr))
         }
         
-        var appVue = window.getApp
+        
         // TODO : 전역 에러처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
         var message = appVue.$t('error.requestError')

@@ -8,14 +8,15 @@ examples:
 <template>
   <div id="page-alerts">
       <v-layout row wrap>
-        <v-flex xs12>
-          <v-widget :title="equipment ? equipment.equipNm : ''">
+        <v-flex xs12 v-if="equipment">
+          <v-widget :title="equipment.equipNm">
             <div slot="widget-header-action">
               <v-icon>more</v-icon>
             </div>
             <div slot="widget-content">
               <v-card>
                 <v-img 
+                  v-if="thumbnailUrl"
                   height="200px"
                   :class="equipmentTitleColor"
                   :src="thumbnailUrl">

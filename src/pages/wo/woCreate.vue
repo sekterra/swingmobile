@@ -11,7 +11,7 @@
                 <v-icon
                   slot="activator"
                   color="white"
-                  @click="copyWoPopup"
+                  @click="openWoPopup"
                 >
                 file_copy
                 </v-icon>
@@ -108,7 +108,7 @@
                         :editable="editable"
                         :label="$t('title.woPlanDate') + '*'"
                         name="planStartDt"
-                        v-model="saveData.workOrder.planStartDt" 
+                        v-model="saveData.workOrder.planStartDt"
                         default-type="today"
                         child-validate-type="required"
                         v-validate="'required'"
@@ -196,18 +196,7 @@
                     <v-flex xs12>
                       <v-subheader class="pa-0 mt-3">
                         {{$t('title.woImageFileUpload')}}
-                        <v-spacer></v-spacer>
-                        <v-btn 
-                          round 
-                          color="primary" 
-                          dark
-                          @click="takePicture"
-                          >
-                          <v-icon>
-                            camera
-                          </v-icon>
-                        </v-btn>
-                        <v-btn 
+                        <!-- <v-btn 
                           round 
                           color="primary" 
                           dark
@@ -216,12 +205,21 @@
                           <v-icon>
                             cloud_upload
                           </v-icon>
-                        </v-btn>
+                        </v-btn> -->
+                        <v-spacer></v-spacer>
+                        <v-btn 
+                        round
+                        color="black" 
+                        dark
+                        @click="takePicture"
+                      >
+                        <v-icon>
+                          camera
+                        </v-icon>
+                      </v-btn>
                       </v-subheader>
-                      <div>{{upload.uploadedImagesCount}}/{{upload.imageList.length}} ({{upload.loaded}})bytes</div>
                       <v-carousel
-                      :cycle="false"
-                      v-if="isShowCarousel"
+                        v-if="isShowCarousel"
                       >
                         <v-carousel-item
                           v-for="(item, i) in carouseImageList"
@@ -241,12 +239,33 @@
                       </v-img>
                     </v-card>
                     </v-flex>
-                  </v-layout>   
+                  </v-layout>
+                  <!-- <v-layout
+                    align-center 
+                    justify-center 
+                    row
+                    fill-height
+                  >
+                      <v-btn 
+                        round
+                        color="black" 
+                        dark
+                        @click="takePicture"
+                      >
+                        <v-icon>
+                          camera
+                        </v-icon>
+                      </v-btn>
+                  </v-layout> -->
+                  <!-- <v-flex xs6>
+                    <div>{{upload.uploadedImagesCount}}/{{upload.imageList.length}} ({{upload.loaded}})bytes</div>
+                    </v-flex> -->
                   <!-- /이미지 파일 업로드 -->
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center">
                     <y-btn
+                      v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
                       type="save"
                       :title="$t('button.save')"
                       :action-url="url"
@@ -258,22 +277,24 @@
                       @checkValidation="checkValidation"
                     ></y-btn>
                     <y-btn
+                      v-if="pk"
                       type="delete"
                       :title="$t('button.delete')"
                       @btnClicked="btnDeleteClicked" 
                       @btnClickedError="btnClickedError"
                     ></y-btn>
                     <y-btn
-                      type="cancel"
-                      :title="$t('button.cancel')"
-                      @btnClicked="btnCancelClicked" 
-                      @btnClickedError="btnClickedError"
-                    ></y-btn>
-                    <y-btn
+                      v-if="!pk"
                       type="clear"
                       :title="$t('button.clear')"
                       @btnClicked="btnClearClicked" 
                     ></y-btn>
+                    <!-- <y-btn
+                      type="cancel"
+                      :title="$t('button.cancel')"
+                      @btnClicked="btnCancelClicked" 
+                      @btnClickedError="btnClickedError"
+                    ></y-btn> -->
                   </div>
                   </v-flex>
             </v-card-text>     
@@ -292,8 +313,10 @@
         :search-item="popupSearchItem"
         :search-type="popupSearchType"
         :is-open-popup="isOpenPopup"
+        :event-for-return="eventForReturn"
         @closePopup="closePopup"
         @bindEquipmentData="bindEquipmentData"
+        @bindWoData="bindWoData"
       >
       </y-popup>
     </v-container>
@@ -305,9 +328,11 @@
 
 <script>
 import transactionConfig from '@/js/transactionConfig.js'
+import selectConfig from '@/js/selectConfig.js'
 import jwt from '@/js/jwtToken.js'
 import config from '@/js/config.js'
 import $ from 'jquery'
+import ajaxFile from '@/js/ajaxFile'
 
 let transaction = transactionConfig.wo.request
 export default {
@@ -342,7 +367,6 @@ export default {
     breakdownDate: null,
     breakdownTime: null,
     imagePath: '',
-    isShowCarousel: false,
     carouselIndex: 0,
     carouseImageList: [],
     upload: {
@@ -350,7 +374,12 @@ export default {
       loaded: 0,
       buffer: 0,
       uploadedImagesCount: 0  
-    }
+    },
+    attachType: 'WO_PRE_PHOTO',
+    isShowCarousel: false,
+    tmpImageList: [],
+    pk: null,  // TODO : 현재 WO PK
+    eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {
@@ -384,10 +413,12 @@ export default {
     // 참고 : @/router/path.js의 props 속성에서 설정된 방식으로 처리됨
     if (this.$attrs.query) {
       var pk = this.$attrs.query
+      this.pk = pk
       this.url = transaction.update.url + '/' + pk
       this.requestType = transaction.update.requestType // post
       this.saveData = transaction.update.param
       this.onSearch(pk)
+      this.getImagePks(pk)
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
 
@@ -413,9 +444,12 @@ export default {
       // console.log('error:' + JSON.stringify(_error))
     },
     btnSaveClicked(_result) {
-      console.log('success:' + JSON.stringify(_result))
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
+      if (!this.isValid) return
+      // window.alert(JSON.stringify(_result))
+      this.uploadImages(_result.returnResult.workOrderPk)
+      this.saveData = this.$comm.clone(this.defaultSaveData)
       window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
       this.$comm.movePage(this.$router, '/woList')
     },
@@ -432,15 +466,17 @@ export default {
       this.popupSearchItem = 'equipment'
       this.popupSearchType = 'radio'
       this.isOpenPopup = true
+      this.eventForReturn = 'bindEquipmentData'
     },
     equipmentNameChanged() {
       this.equipment.equipNm = null
       this.equipment.equipPk = null
     },
-    copyWoPopup() {
+    openWoPopup() {
       this.popupSearchItem = 'wo'
       this.popupSearchType = 'radio'
       this.isOpenPopup = true
+      this.eventForReturn = 'bindWoData'
     },
     closePopup() {
       this.popupSearchItem = ''
@@ -453,9 +489,10 @@ export default {
     checkValidation() {
       this.$validator.validateAll().then((_result) => {
         this.isValid = _result
+        console.log('_result:' + JSON.stringify(_result))
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
-        window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
+        if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
       }).catch(() => {
         this.isValid = false
       });
@@ -483,20 +520,31 @@ export default {
       this.isOpenPopup = false
       this.$forceUpdate()
     },
+    bindWoData(_items) {
+      this.isOpenPopup = false
+      if (_items.length <= 0) return
+      this.onSearch(_items[0].workOrderPk, true)
+    },
     // 단일 WO 검색
-    onSearch(_pk) {
+    onSearch(_pk, _isWorkCopy) {
       this.$ajax.url = 'workorder/request/' + _pk
       this.$ajax.requestGet((_result) => {
-        this.mappedWoData(_result)
+        this.mappedWoData(_result, _isWorkCopy)
       })
     },
     /**
      * WO의 조회된 데이터와 저장하는 데이터를 mapping 하는 함수
      */
-    mappedWoData(_woData) {
+    mappedWoData(_woData, _isWorkCopy) {
       var workOrder = {}
       for (var key in this.saveData.workOrder) {
-        if (_woData.hasOwnProperty(key)) workOrder[key] = _woData[key]
+        if (_woData.hasOwnProperty(key)) {
+          if (!_isWorkCopy) workOrder[key] = _woData[key]
+          else if (_isWorkCopy) {
+            if (key !== 'planStartDt') workOrder[key] = _woData[key]
+            else workOrder[key] = this.$comm.getToday()
+          }
+        }
       }
       this.equipment.equipPk = _woData.equipPk
       this.equipment.equipNm = '[' + _woData.equipCd + '] ' + _woData.equipNm
@@ -508,10 +556,13 @@ export default {
       workOrder.problem = _woData.problemPk
       workOrder.cause = _woData.causePk
       workOrder.workOrderApproval = {}
-      workOrder.workOrderApproval.rqstDt = _woData.workOrderApproval.rqstDt
-      workOrder.workOrderApproval.rqstUser = _woData.workOrderApproval.rqstUserPk
-
-      console.log(':::::::' + JSON.stringify(workOrder))
+      if (_isWorkCopy) {
+        workOrder.workOrderApproval.rqstDt =  this.$comm.getToday()
+        workOrder.workOrderApproval.rqstUser = window.getApp.getUserInfo().userPk
+      } else {
+        workOrder.workOrderApproval.rqstDt = _woData.workOrderApproval.rqstDt
+        workOrder.workOrderApproval.rqstUser = _woData.workOrderApproval.rqstUserPk
+      }
 
       if (workOrder.breakdownDt) {
         var tmpDate = workOrder.breakdownDt.substring(0, 8)
@@ -520,15 +571,15 @@ export default {
         var time = this.$comm.moment(tmpTime)
         this.breakdownDate = date.format('L')
         this.breakdownTime = time.format('HH:mm')
-        console.log('::::::' + this.breakdownDate + '   ' + this.breakdownTime)
         this.$forceUpdate()
       }
       
       this.$set(this.saveData, 'workOrder', workOrder)
+      // 팝업에서 전달된 값에 대한 유효성 재검사
+      this.$validator.validate('equipment', this.equipment.equipNm)
     },
     mappedBreakdownDt() {
       if (this.breakdownDate && this.breakdownTime) {
-        console.log('::::::: mappedBreakdownDt' + this.breakdownDate + ' ' + this.breakdownTime)
         var datetime = this.breakdownDate + ' ' + this.breakdownTime
         this.saveData.workOrder.breakdownDt = this.$comm.moment(datetime).format('YYYYMMDDHHmm')
       } else this.saveData.workOrder.breakdownDt = null
@@ -554,16 +605,17 @@ export default {
       this.isShowCarousel = false;
       this.upload.imageList.push(imagePath)
       this.carouseImageList.unshift(imagePath)
-      try {
-        // 사진이미지 local 저장
-        // window.cordova.plugins.imagesaver.saveImageToGallery(imagePath, (_result) => {
-        //   window.getApp.$emit('APP_REQUEST_SUCCESS', JSON.stringify(_result));
-        // }, (_error) => {
-        //   window.getApp.$emit('APP_REQUEST_ERROR', JSON.stringify(_error));
-        // });
-      } catch(e) {
-        window.getApp.$emit('APP_REQUEST_SUCCESS', 'error:' + e.message);
-      }
+      // TODO : 참고 소스
+      // try {
+      //   // 사진이미지 local 저장
+      //   window.cordova.plugins.imagesaver.saveImageToGallery(imagePath, (_result) => {
+      //     window.getApp.$emit('APP_REQUEST_SUCCESS', JSON.stringify(_result));
+      //   }, (_error) => {
+      //     window.getApp.$emit('APP_REQUEST_ERROR', JSON.stringify(_error));
+      //   });
+      // } catch(e) {
+      //   window.getApp.$emit('APP_REQUEST_SUCCESS', 'error:' + e.message);
+      // }
       this.$nextTick(() => {
         this.isShowCarousel = true
       })
@@ -572,59 +624,45 @@ export default {
       // navigator.notification.alert(this.$t("error"));
       window.getApp.$emit('APP_REQUEST_ERROR', this.$t("error"));
     },
-    uploadImages() {
-      window.getApp.$emit('APP_IMAGE_UPLOAD', this.upload.imageList);
-      // window.getApp.$emit('APP_REQUEST_SUCCESS', 'uploading');
-      // try{
-      //   var options = new FileUploadOptions();
-      //   var url = config.protocol + config.backEndFullUrl + 'file/image/upload/'
-      //   options.fileKey="file";
-      //   var fileUrl = this.imagePath
-      //   // options.fileName=fileUrl.substr(fileUrl.lastIndexOf('/')+1);
-      //   options.mimeType="image/jpeg";
-      //   var headers={
-      //     'X-Authorization': jwt.getJwtToken(),
-      //     'Access-Control-Allow-Origin': '*',
-      //     'X-TenantID': 'yullin'
-      //   };
-      //   options.headers = headers;
-      //   options.params = {
-      //     attachType: 'WO_PRE_PHOTO',
-      //     attachPk: '2665'
-      //   }
-      //   var self = this
-      //   $.each(this.upload.imageList, function (_i, _filePath){
-      //     options.fileName = _filePath.substr(_filePath.lastIndexOf('/')+1);
-      //     var ft = new FileTransfer();
-      //     ft.onprogress = function(progressEvent) {
-      //       if (progressEvent.lengthComputable) {
-      //         self.upload.loaded = progressEvent.loaded;
-      //         // self.buffer = progressEvent.total;
-      //         loadingStatus.setPercentage(progressEvent.loaded / progressEvent.total);
-      //       } else {
-      //         loadingStatus.increment();
-      //       }
-      //     };
-      //     ft.upload(fileUrl, url, (r) => {
-      //       console.log("Code = " + r.responseCode);
-      //       console.log("Response = " + r.response);
-      //       console.log("Sent = " + r.bytesSent);
-      //       self.upload.uploadedImagesCount++;
-      //       window.getApp.$emit('APP_REQUEST_SUCCESS', "bytesSent = " + r.bytesSent + ' : ' + _i);
-      //     }, (error) => {
-      //       console.log("upload error source " + error.source);
-      //       console.log("upload error target " + error.target);
-      //       window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + e.source);
-      //     }, options);
-      //   })
-      // } catch(e) {
-      //     // navigator.notification.alert(e.message);
-      //     window.getApp.$emit('APP_REQUEST_ERROR', 'error:' + e.message);
-      // } 
+    uploadImages(_pk) {
+      if (this.upload.imageList.length <= 0) return
+      var uploadInfo = {
+        pk: _pk,
+        attachType: this.attachType,
+        fileList: this.upload.imageList
+      }
+      window.getApp.$emit('APP_IMAGE_UPLOAD', uploadInfo);
     },
     completeImageUpload() {
       window.getApp.$emit('APP_REQUEST_SUCCESS', this.upload.uploadedImagesCount + ' files');
       this.upload.uploadedImagesCount = 0;
+    },
+    getImagePks(_pk) {
+      this.$ajax.url = selectConfig.img.fileList.url
+      this.$ajax.param = this.$comm.clone(selectConfig.img.fileList.searchData)
+      this.$ajax.param.attachType = this.attachType
+      this.$ajax.param.attachPk = _pk
+      let self = this
+      this.isShowCarousel = false
+      this.$ajax.requestGet((_result) => {
+        $.each(_result, (_i, _item) => {
+          self.getImageFile(_item.filePk)
+        })
+        self.carouseImageList = self.tmpImageList
+        self.$nextTick(() => {
+          self.isShowCarousel = true
+          self.carouselIndex = 0
+        })
+      })
+    },
+    getImageFile(_filePk) {
+      ajaxFile.url = selectConfig.img.imageDown.url + '?filePk=' + _filePk     
+      let self = this
+      ajaxFile.requestFileGet((_result) => {
+        self.$nextTick(() => {
+          self.tmpImageList.unshift(window.URL.createObjectURL(_result))
+        })   
+      })
     }
   }
 };

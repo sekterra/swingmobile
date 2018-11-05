@@ -106,7 +106,10 @@
       "inspectionPerformanceStatus": "점검 수행현황",
       "inspectionCompleteCount": "점검 수행 수",
       "inspectionInompleteCount": "점검 미수행 수",
-      "detectedError": "점검시 이상 발견 수"
+      "detectedError": "점검시 이상 발견 수",
+      "woCompleteList": "WO완료처리",
+      "inspectionCalendar": "점검일정 달력",
+      "userInfo": "사용자 정보"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
@@ -136,7 +139,7 @@
       "woCompleteList": "WO완료처리",
       "inspectionList": "점검목록",
       "inspectionResult": "점검결과",
-      "inspectionCalendar": "점검일정",
+      "inspectionCalendar": "점검일정 달력",
       "woStatistics": "WO 통계",
       "pmStatistics": "PM 통계",
       "equipmentStatistics": "설비 통계",

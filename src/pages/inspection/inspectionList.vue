@@ -132,7 +132,6 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
-    console.log('selectConfig.woList:' + JSON.stringify(selectConfig.woList[0]))
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
     // popup 여부에 따라 그리드 헤더 옵션변경

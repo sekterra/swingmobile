@@ -44,7 +44,7 @@ jwt.getNewToken = function () {
 jwt.checkValidToken = function (fnSuceess, fnFail) {
   ajax.isSetHeader = true
   ajax.isAuthCheck = true
-  ajax.url = 'auth/auth/valid'
+  ajax.url = 'auth/valid'
   ajax.requestGet(fnSuceess, fnFail)
 }
 

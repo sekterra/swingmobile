@@ -5,7 +5,7 @@
         <v-flex xs12>
           <v-card>
             <v-toolbar color="primary darken-1" dark="" flat dense cad>
-              <v-toolbar-title class="subheading">{{$route.name}}</v-toolbar-title>
+              <v-toolbar-title class="subheading">{{$t('title.inspectionCalendar')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-divider></v-divider>

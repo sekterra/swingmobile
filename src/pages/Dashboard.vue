@@ -221,8 +221,8 @@
           </y-dashboard-card>
           <!-- /TODO : 원인별 WO 현황 -->
         </v-flex>
-        <v-flex lg4 sm6 xs12>
-          <!-- TODO : 점검별 WO 발행건수 -->
+        <!-- TODO : 점검별 WO 발행건수 -->
+        <!-- <v-flex lg4 sm6 xs12>
           <v-flex lg4 sm12>
             <v-card color="blue darken-1" dark>
               <v-card-title>
@@ -274,8 +274,8 @@
               </v-card-text>                    
             </v-card>             
           </v-flex>
-          <!-- /TODO : 점검별 WO 발행건수 -->
-        </v-flex>
+        </v-flex> -->
+        <!-- /TODO : 점검별 WO 발행건수 -->
         <v-flex lg4 sm12 xs12>
           <!-- TODO : 지연 작업 -->
           <plain-table-order
@@ -289,7 +289,7 @@
       <!-- WO 관련 통계 -->
 
       <!-- TODO : 점검 통계 -->
-      <v-layout row wrap>
+      <!-- <v-layout row wrap>
         <v-flex sm12>
           <h4>PM / Inspection</h4>
           <v-card dark color="green">
@@ -393,22 +393,19 @@
             </v-card-text>
           </v-card>             
         </v-flex>
-      </v-layout>
+      </v-layout> -->
       <!-- /TODO : PM / 점검 통계 -->
 
       
 
-      <v-layout row wrap>
+      <!-- <v-layout row wrap>
         <v-flex sm12>
           <h4>MTTR / MTBF</h4>
         </v-flex>
         <v-flex lg6 sm12 xs12>
           <plain-table></plain-table>
         </v-flex>
-        <v-flex lg6 sm12 xs12>
-          <!-- <plain-table-order></plain-table-order> -->
-        </v-flex>               
-      </v-layout>
+      </v-layout> -->
     </v-container>
   </div>
 </template>
@@ -469,6 +466,7 @@ export default {
     color: Material,
     woDelayData: null,
     woDashboardData: {},
+    userInfo: null,
     sampleDataset: {
       sinData: SinData,
       monthVisit: monthVisitData,
@@ -624,6 +622,8 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
+  created() {
+  },
   beforeMount() {
     // TODO : 배포시에는 바로 아래 문장을 활성화 시켜야 함
     // this.loadDashboardSettings()
@@ -819,7 +819,7 @@ export default {
     // 오늘의 WO/PM 완료 현황
     getWoPmCompleteStatusOfToday() {
       this.$ajax.url = selectConfig.woList[0].url
-      this.$ajax.param = selectConfig.woList[0].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.woList[0].searchData)
       this.$ajax.param.woStatus = ['WO_STATUS_P', 'WO_STATUS_C']  // WO 승인, 완료만 조회
       this.$ajax.param.woStatusEx = ['WO_STATUS_X'] // WO 취소는 제외
       this.$ajax.param.dateConds = 'startdt'

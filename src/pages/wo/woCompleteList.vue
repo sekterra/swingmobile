@@ -64,7 +64,7 @@ examples:
         <!-- 그리드 영역 -->
         <v-flex xs12>
           <y-data-table 
-            :title="$t('title.woRequestList')"
+            :title="$t('title.woCompleteList')"
             ref="dataTable"
             :headers="gridHeaderOptions"
             :items="gridData"
@@ -118,8 +118,8 @@ export default {
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: selectConfig.woList[0].url,
-      searchData: this.$comm.clone(selectConfig.woList[0].searchData),
+      gridUrl: null,
+      searchData: null,
       gridLoading: false,
       gridData: [],
       gridHeaderOptions: [
@@ -134,7 +134,9 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
-  created() {
+  mounted() {
+    this.gridUrl = selectConfig.woList[0].url
+    this.searchData = this.$comm.clone(selectConfig.woList[0].searchData)
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
     // popup 여부에 따라 그리드 헤더 옵션변경
@@ -159,6 +161,7 @@ export default {
     },
     onSearch() {
       let self = this
+      this.searchData.woStatus = ['WO_STATUS_P']
       this.searchData.woStatusEx = ['WO_STATUS_X', 'WO_STATUS_C']
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData

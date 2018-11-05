@@ -260,7 +260,7 @@ export default {
     // 오늘의 PM 완료 현황
     getPmCompleteStatusOfToday() {
       this.$ajax.url = selectConfig.woList[0].url
-      this.$ajax.param = selectConfig.woList[0].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.woList[0].searchData)
       this.$ajax.param.woStatus = ['WO_STATUS_P', 'WO_STATUS_C']  // WO 승인, 완료만 조회
       this.$ajax.param.woStatusEx = ['WO_STATUS_X'] // WO 취소는 제외
       this.$ajax.param.dateConds = 'startdt'

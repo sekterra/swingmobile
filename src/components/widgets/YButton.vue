@@ -112,7 +112,7 @@ export default {
       // 부모vue에서 주어진 속성값이 잘못 되었으면 리턴 처리함
       if (this.hasButtonError) {
         window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
-        return
+        return false
       }
       // 저장일 경우 유효성 검사
       if (this.type.toLowerCase() === 'save') {

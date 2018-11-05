@@ -130,7 +130,6 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
-    console.log('selectConfig.woList:' + JSON.stringify(selectConfig.woList[0]))
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
     // popup 여부에 따라 그리드 헤더 옵션변경
@@ -148,7 +147,6 @@ export default {
     },
     editItem(_item) {
       this.$comm.movePage(this.$router, '/woCreate?pk=' + _item.workOrderPk)
-      console.log('::::::::::::: datatable item :' + JSON.stringify(_item))
     },
     actionSearch(_searchData) {
       this.searchData = _searchData
@@ -158,9 +156,10 @@ export default {
       let self = this
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
-      this.$ajax.param.startDate = this.$comm.getPrevDate('3m')
-      this.$ajax.param.endDate = this.$comm.getToday()
+      this.$ajax.param.startDate = this.searchData.startDate
+      this.$ajax.param.endDate = this.searchData.endDate
       this.gridLoading = true
+      if(!this.searchData.startDate || !this.searchData.endDate) return
       this.$ajax.requestGet((_result) => {
         self.gridData = typeof _result.content !== 'undefined' ? _result.content : _result
         self.$refs.dataTable.hideLoading()

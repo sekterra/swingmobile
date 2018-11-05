@@ -84,6 +84,7 @@ import menu from '@/api/menu';
 import ThemeSettings from '@/components/ThemeSettings';
 import AppEvents from  './event';
 import CountryFlag from 'vue-country-flag'
+import selectConfig from '@/js/selectConfig'
 let localeMapper = require('@/locale/localeMapper.json');
 
 export default {
@@ -99,6 +100,8 @@ export default {
     rightDrawer: false,  // right slide popup 오픈 여부
     isSearchPopup: false,  // rightDrawer 구분자, true : 검색용 팝업, false : Theme 설정
     locale: null, // 현재 설정된 언어 locale
+    userPk: null,
+    userInfo: null,
     snackbar: {
       show: false,
       text: '',
@@ -110,6 +113,11 @@ export default {
       type: ''
     }
   }),
+  watch: {
+    userPk() {
+      this.setUserInfo(this.userPk)
+    }
+  },
   computed: {
   },
   created () {
@@ -118,15 +126,22 @@ export default {
     });
     window.getApp = this;
     this.$ajax.isAuthCheck = false;
+    this.userPk = localStorage.userPk
   },
   beforeMount () {
     this.changeLocale(this.$i18n.locale);
     this.$on('LOCALE_CHANGE', (_localeCode) => {
       this.changeLocale(_localeCode);
     });
+    this.$on('USER_LOGIN', () => {
+      this.userPk = localStorage.userPk;
+    });
   },
   mounted() {
     this.$vuetify.goTo(0);
+    this.userPk = null;
+    this.userPk = localStorage.userPk;
+    console.log('mounted:' + this.userPk)
   },
   methods: {
     /**
@@ -167,6 +182,21 @@ export default {
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
       this.dialog.show = false
     },
+    setUserPk(_userPk) {
+      this.userPk = _userPk
+    },
+    setUserInfo() {
+      if (!this.userPk) return
+      this.$ajax.url = selectConfig.userInfo.url + this.userPk
+      let self = this
+      this.$ajax.requestGet((_result) => {
+        self.userInfo = _result
+        console.log('user info:' + JSON.stringify(self.userInfo))
+      })
+    },
+    getUserInfo() {
+      return this.userInfo
+    }
   },
 };
 </script>
