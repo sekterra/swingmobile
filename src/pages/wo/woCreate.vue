@@ -226,7 +226,6 @@
                           :key="i"
                           :src="item"
                           lazy
-                          :value="carouselIndex"
                         ></v-carousel-item>
                     </v-carousel>
                     <v-card

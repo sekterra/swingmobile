@@ -6,14 +6,14 @@ examples:
  *  
 -->
 <template>
-  <span>
+  <!-- <span>
     <span 
       v-for="item in nationList"
       :key="item"
       @click.prevent="changeLocale(item)" >
       <country-flag :country='item' :size='size' />
     </span>
-  </span>
+  </span> -->
   <!-- <v-flex xs4>
     <v-autocomplete
       append-icon=""
@@ -59,12 +59,11 @@ examples:
         </v-list-tile>
       </v-list>
     </v-menu> -->
-    <!-- <span>
+    <span>
       <v-menu 
         lazy
         transition="scale-transition"
         offset-y
-        class="border"
         v-model="isOpen">
         <country-flag slot="activator" :country="locale" :size='size' />
         <v-list>
@@ -73,14 +72,13 @@ examples:
             :key="item"
             class="ma-0 pa-0"
           >
-            <v-list-tile-action @click.prevent="changeLocale(item)">
+            <v-list-tile-content @click.prevent="changeLocale(item)">
               <country-flag :country="item" :size='size' />
-              test
-            </v-list-tile-action>
+            </v-list-tile-content>
           </v-list-tile>
       </v-list>
       </v-menu>
-    </span> -->
+    </span>
 </template>
 
 <script>

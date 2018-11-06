@@ -126,7 +126,7 @@
       "inspectionFail": "This equipment has been failed.",
       "retryFileUpload": "There are some failed files to upload. Do you want to try again?",
       "uploadFailedFileRemoved": "Upload failed files has been removed.",
-      "noDocumentUpload": "Does not support to upload files for document on mobile."
+      "noDocumentUpload": "Does not support to upload files for a document on a mobile."
     },
     "error": {
       "requestError": "An error occurred during data processing.",

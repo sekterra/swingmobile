@@ -46,7 +46,13 @@ export default {
       username: 'cmms',
       password: 'cmms'
     },
-    locale: null
+    locale: null,
+    items: [
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me' },
+        { title: 'Click Me 2' }
+      ]
   }),
   mounted() {
     this.locale = localStorage.locale
