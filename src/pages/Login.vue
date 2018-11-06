@@ -27,6 +27,23 @@
                     type="password" 
                     v-model="userInfo.password">
                   </v-text-field>
+                  <v-menu offset-y>
+      <v-btn
+        slot="activator"
+        color="primary"
+        dark
+      >
+        Dropdown
+      </v-btn>
+      <v-list>
+        <v-list-tile
+          v-for="(item, index) in items"
+          :key="index"
+        >
+          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
                 </v-form>
               </v-card-text>
               <v-card-actions>

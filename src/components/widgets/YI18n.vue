@@ -14,37 +14,7 @@ examples:
       <country-flag :country='item' :size='size' />
     </span>
   </span>
-  <!-- <v-flex xs4>
-    <v-autocomplete
-      append-icon=""
-      solo
-      flat
-      color="primary"
-      outline
-      v-model="locale"
-      :items="nationList"
-      type="select"
-    >
-      <template
-        slot="selection"
-        slot-scope="data"
-      >
-        <country-flag :country='data.item' :size='size' />
-      </template>
-      <template
-        slot="item"
-        slot-scope="data"
-      >
-        <template>
-          <v-list-tile class="pa-0 ma-0" style="border:1px solid #0000ff;">
-            <v-layout align-center justify-center>
-              <country-flag :country='data.item' :size='size' />
-            </v-layout>
-          </v-list-tile>
-        </template>
-      </template>
-    </v-autocomplete>
-  </v-flex> -->
+  <!-- 아래 소스는 메뉴 형식의 다국어 선택인데 ios에서 작동하지 않음 -->
   <!-- <v-menu 
     v-model="locale">
       <v-text-field></v-text-field>
