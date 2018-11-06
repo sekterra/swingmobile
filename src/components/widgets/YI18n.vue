@@ -41,13 +41,12 @@ examples:
         slot="activator"
         small
         dark
-        icon
-        outline
         color="indigo"
       >
           <v-icon>
             language
           </v-icon>
+          {{locale}}
         </v-btn>
         <v-list>
           <v-list-tile
