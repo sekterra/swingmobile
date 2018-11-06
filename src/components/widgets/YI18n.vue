@@ -32,19 +32,22 @@ examples:
     <span>
       <v-menu 
         lazy
+        bottom
+        origin="center center"
         transition="scale-transition"
-        offset-y
         v-model="isOpen">
         <!-- <country-flag slot="activator" :country="locale" :size='size' /> -->
         <v-btn
         slot="activator"
+        small
         dark
+        icon
+        color="indigo"
       >
-        <v-icon>
-          language
-        </v-icon>
-        {{locale}}
-      </v-btn>
+          <v-icon>
+            language
+          </v-icon>
+        </v-btn>
         <v-list>
           <v-list-tile
             v-for="item in nationList"
