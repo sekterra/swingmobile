@@ -16,6 +16,8 @@ examples:
       :placeholder="placeholder"
       append-outer-icon="info"
       clearable
+      :counter="counter"
+      :maxlength="maxlength"
       @input="input"
       :error="error"
       :error-messages="errorMsg"
@@ -68,6 +70,12 @@ export default {
     value: {
       type: [Number, String],
       default: null
+    },
+    counter: {
+      type: Number
+    },
+    maxlength: {
+      type: Number
     }
   },
   data() {

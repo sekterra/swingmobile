@@ -55,10 +55,13 @@
                       </y-equipment-card>
                     </v-flex>
                     <v-flex sm6 class="py-0">
+                      <!-- 작업 제목 -->
                       <y-text
                         :editable="editable"
                         :label="$t('title.woTitle') + '*'"
                         name="workTitle"
+                        counter="5"
+                        maxlength="5"
                         v-model="saveData.workOrder.workTitle"
                         v-validate="'required'"
                         :error-msg="errors.first('workTitle')"

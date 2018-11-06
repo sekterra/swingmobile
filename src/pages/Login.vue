@@ -12,8 +12,21 @@
                   <h1 class="flex my-4 primary--text">swing CMMS mobile</h1>
                 </div>                
                 <v-form>
-                  <v-text-field append-icon="person" name="login" :label="$t('title.id')" type="text" v-model="userInfo.username"></v-text-field>
-                  <v-text-field append-icon="lock" name="password" :label="$t('title.password')" id="password" type="password" v-model="userInfo.password"></v-text-field>
+                  <v-text-field 
+                    append-icon="person" 
+                    name="login" 
+                    :label="$t('title.id')" 
+                    type="text" 
+                    v-model="userInfo.username">
+                  </v-text-field>
+                  <v-text-field 
+                    append-icon="lock" 
+                    name="password" 
+                    :label="$t('title.password')" 
+                    id="password" 
+                    type="password" 
+                    v-model="userInfo.password">
+                  </v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
