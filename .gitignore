@@ -2,7 +2,6 @@
 *.lock
 *.flat
 node_modules/
-platforms/
 www/
 dist/
 npm-debug.log
