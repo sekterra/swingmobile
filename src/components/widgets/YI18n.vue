@@ -35,7 +35,14 @@ examples:
         transition="scale-transition"
         offset-y
         v-model="isOpen">
-        <country-flag slot="activator" :country="locale" :size='size' />
+        <!-- <country-flag slot="activator" :country="locale" :size='size' /> -->
+        <v-btn
+        slot="activator"
+        color="primary"
+        dark
+      >
+        {{locale}}
+      </v-btn>
         <v-list>
           <v-list-tile
             v-for="item in nationList"
