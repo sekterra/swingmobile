@@ -36,6 +36,7 @@ examples:
 
         <div class="text-xs-center">
           <y-btn
+            v-if="searchType !== 'radio'"
             type="select"
             title="confirm"
             @btnClicked="sendDataToParent"
@@ -119,7 +120,9 @@ export default {
       if (!_item) return
       if (this.searchType === 'radio') {
         this.selectedItems.push(_item)
+        this.sendDataToParent()
       }
+      // checkbox일 경우
       else this.$comm.getFilteredArray(this.selectedItems, _item)
     },
     /**

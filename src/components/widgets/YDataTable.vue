@@ -20,6 +20,7 @@ examples:
     <v-divider></v-divider>
       <v-card-text class="pa-0">
       <v-data-table
+        v-model="selected"
         :headers="headers"
         :items="items"
         :search="search"
@@ -44,25 +45,59 @@ examples:
           </tr>
         </template>
         <template slot="items" slot-scope="props">
+          <tr :active="props.selected">
           <td
             v-for="header in headers" :key="header.text"
             v-if="items.length > 0"
             :class="header.hasOwnProperty('columnAlign') ? 'text-xs-' + header.columnAlign : ''"
           >
-            <v-icon
-              small
-              class="mr-2"
-              @click="editItem(props.item)"
-              v-model="props.item[header.name]"
+            <v-btn
               v-if="header.type === 'edit' && editable"
+              small 
+              icon
+              outline
+              color="primary"
+              :loading="props.selected"
+              @click="editItem(props); props.selected = !props.selected"
             >
-            edit
-            </v-icon>
-            <input type="radio"
+              <v-icon
+                small
+                v-if="!props.selected"
+                v-model="props.item[header.name]"
+              >
+              edit
+              </v-icon>
+              <v-icon
+                v-else>
+                block
+              </v-icon>
+            </v-btn>
+            <v-btn
+              v-if="header.type === 'radio'"
+              small 
+              icon
+              outline
+              color="success"
+              @click="selectedData(props.item)"
+            >
+              <v-icon
+              small
+              >
+                done
+              </v-icon>
+            </v-btn>
+            <!-- <input type="radio"
               v-if="header.type === 'radio'"
               :name="header.name"
               @click.stop="selectedData(props.item, $event.target)"
-            />
+            /> -->
+            <!-- <v-radio-group
+              v-if="header.type === 'radio'"
+              v-model="radioGroup"
+              class="ma-0 pa-0"
+              name="rowSelector">
+              <v-radio v-if="header.type === 'radio'" :value="props.item.equipPk"/>
+            </v-radio-group> -->
             <span v-else-if="!header.columnEditable" class="shortened">
               {{props.item[header.name]}}
             </span>
@@ -76,6 +111,7 @@ examples:
             >
             </v-text-field>
           </td>
+          </tr>
         </template>
       </v-data-table>
       <div class="text-xs-center pt-2">
@@ -136,14 +172,18 @@ export default {
   data() {
     return {
       search: '',
-      selectedItems: [],
+      selected: [],
       loading: true,
       pagination: {
         // rowsPerPage: this.rowsPerPage
         sortBy: 'name'
       },
-      check: true
+      check: true,
+      radioGroup: 1,
     }
+  },
+  mounted() {
+    console.log('grid item changed:' + JSON.stringify(this.items))
   },
   activated() {
     console.log('grid item changed:' + JSON.stringify(this.pagination))
@@ -167,9 +207,9 @@ export default {
   /* Vue lifecycle: created, mounted, destroyed, etc */
   /* methods */
   methods: {
-    editItem(_item) {
-      console.log('edit Item')
-      this.$emit('editItem', _item);
+    editItem(_prop) {
+      this.$emit('editItem', _prop.item);
+      _prop.selected = !_prop.selected
     },
     hideLoading() {
       var self = this
@@ -192,9 +232,10 @@ export default {
      * datatable에서 선택된 정보를 eventBus로 부모로 넘긴다.
      *  - datatable.vue > list.vue > popup.vue > create.vue
      */
-    selectedData (_item, _obj) {
-      var $obj = $(_obj)
-      if ($obj.is(':checked')) this.$emit('selectedData', _item)
+    selectedData (_item) {
+      // var $obj = $(_obj)
+      // if ($obj.is(':checked')) this.$emit('selectedData', _item)
+      this.$emit('selectedData', _item)
     }
   }
 }

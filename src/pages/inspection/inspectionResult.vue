@@ -124,8 +124,13 @@ examples:
                         </v-flex>
                         <v-flex xs12 class="py-0">
                           <v-divider></v-divider>
-                          <v-subheader class="pa-0 mt-3">
-                            {{$t('title.inspectionFileUpload')}}
+                          <v-subheader class="pa-0 my-3">
+                            <v-alert
+                              :value="true"
+                              type="info"
+                            >
+                              {{$t('message.noDocumentUpload')}}
+                            </v-alert>
                           </v-subheader>
                         </v-flex>
                       </v-layout>                     
@@ -288,7 +293,12 @@ examples:
           <v-btn
               color="primary"
               @click="backToList" 
-            >{{$t('button.list')}}</v-btn>
+            >
+            <v-icon>
+              list
+            </v-icon>
+            {{$t('button.list')}}
+            </v-btn>
         </div>
       </v-flex>
     </v-layout>

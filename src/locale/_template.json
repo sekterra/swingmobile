@@ -127,7 +127,8 @@
       "inspectionFail": "",
       "retryFileUpload": "",
       "uploadFailedFileRemoved": "",
-      "todayStatus": ""
+      "todayStatus": "",
+      "noDocumentUpload": ""
     },
     "error": {
       "requestError": "",
