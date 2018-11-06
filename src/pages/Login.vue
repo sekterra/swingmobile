@@ -44,7 +44,7 @@
         </v-list-tile>
       </v-list>
     </v-menu> -->
-                test
+                locale: {{locale}}
                 </v-form>
               </v-card-text>
               <v-card-actions>
