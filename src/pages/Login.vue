@@ -27,7 +27,7 @@
                     type="password" 
                     v-model="userInfo.password">
                   </v-text-field>
-                  <v-menu offset-y>
+                  <!-- <v-menu offset-y>
       <v-btn
         slot="activator"
         color="primary"
@@ -43,7 +43,8 @@
           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
         </v-list-tile>
       </v-list>
-    </v-menu>
+    </v-menu> -->
+                test
                 </v-form>
               </v-card-text>
               <v-card-actions>

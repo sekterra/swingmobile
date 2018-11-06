@@ -42,9 +42,9 @@ examples:
             :key="item"
             class="ma-0 pa-0"
           >
-            <v-list-tile-content @click.prevent="changeLocale(item)">
+            <v-list-tile-text @click.prevent="changeLocale(item)">
               <country-flag :country="item" :size='size' />
-            </v-list-tile-content>
+            </v-list-tile-text>
           </v-list-tile>
       </v-list>
       </v-menu>
