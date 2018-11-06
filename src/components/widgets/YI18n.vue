@@ -6,14 +6,14 @@ examples:
  *  
 -->
 <template>
-  <span>
+  <!-- <span>
     <span 
       v-for="item in nationList"
       :key="item"
       @click.prevent="changeLocale(item)" >
       <country-flag :country='item' :size='size' />
     </span>
-  </span>
+  </span> -->
   <!-- 아래 소스는 메뉴 형식의 다국어 선택인데 ios에서 작동하지 않음 -->
   <!-- <v-menu 
     v-model="locale">
@@ -29,7 +29,7 @@ examples:
         </v-list-tile>
       </v-list>
     </v-menu> -->
-    <!-- <span>
+    <span>
       <v-menu 
         lazy
         transition="scale-transition"
@@ -48,7 +48,7 @@ examples:
           </v-list-tile>
       </v-list>
       </v-menu>
-    </span> -->
+    </span>
 </template>
 
 <script>
