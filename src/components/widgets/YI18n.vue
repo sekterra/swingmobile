@@ -42,6 +42,7 @@ examples:
         small
         dark
         icon
+        outline
         color="indigo"
       >
           <v-icon>
