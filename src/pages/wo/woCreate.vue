@@ -60,8 +60,8 @@
                         :editable="editable"
                         :label="$t('title.woTitle') + '*'"
                         name="workTitle"
-                        :counter="5"
-                        :maxlength="5"
+                        :counter="200"
+                        :maxlength="200"
                         v-model="saveData.workOrder.workTitle"
                         v-validate="'required'"
                         :error-msg="errors.first('workTitle')"
@@ -78,16 +78,11 @@
                       </y-select>
                     </v-flex>
                     <v-flex sm12 class="py-0">
-                      <!-- <v-textarea
-                        :label="$t('title.woDescription')"
-                        outline
-                        auto
-                        name="workText"
-                        v-model="saveData.workOrder.workText"
-                      ></v-textarea> -->
                       <y-textarea
                         :editable="editable"
                         :label="$t('title.woDescription')"
+                        :counter="2000"
+                        :maxlength="2000"
                         name="workText"
                         :error-msg="errors.first('workText')"
                         v-model="saveData.workOrder.workText"

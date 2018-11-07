@@ -13,6 +13,8 @@ examples:
       :name="name"
       v-model="vValue"
       :placeholder="placeholder"
+      :counter="counter"
+      :maxlength="maxlength"
       outline
       auto-grow
       clearable
@@ -70,6 +72,12 @@ export default {
     value: {
       type: [Number, String],
       default: null
+    },
+    counter: {
+      type: Number
+    },
+    maxlength: {
+      type: Number
     }
   },
   data() {
