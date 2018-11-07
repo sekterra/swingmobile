@@ -61,7 +61,7 @@ else {
   thisLocale = defaultLocale
   window.localStorage.setItem('locale', defaultLocale)
 }
-// var datepickerLocale = localeMapper[thisLocale]
+
 Vue.use(VueI18n)
 const i18n = new VueI18n({
   locale: thisLocale, // 기본언어는 ko로 유지하지만 브라우저 언어를 체크해서 변경
