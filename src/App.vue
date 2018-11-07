@@ -201,6 +201,7 @@ export default {
       return this.userInfo
     },
     hideKeyboard() {
+      // IOS, Android 둘 다 정상적으로 동작
       if (Keyboard && typeof Keyboard.hide === 'function') Keyboard.hide()
     }
   },

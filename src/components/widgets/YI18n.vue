@@ -39,9 +39,9 @@ examples:
             :key="item"
             class="ma-0 pa-0"
           >
-            <v-list-tile-text @click.prevent="changeLocale(item)">
+            <v-list-tile-content @click.prevent="changeLocale(item)">
               <country-flag :country="item" :size='size' />
-            </v-list-tile-text>
+            </v-list-tile-content>
           </v-list-tile>
       </v-list>
       </v-menu>
@@ -86,6 +86,7 @@ export default {
       window.getApp.$emit('LOCALE_CHANGE', _locale)
       localStorage.locale = _locale
       this.locale = _locale
+      window.localStorage.setItem('locale', _locale)
     }
   }
 }

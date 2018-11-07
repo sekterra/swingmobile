@@ -14,7 +14,7 @@ import VueI18n from 'vue-i18n';
 var krLanguages = require('@/locale/kr.json');
 var usLanguages = require('@/locale/us.json');
 // var localeMapper = require('@/locale/localeMapper.json');
-const i18nData = Object.assign({},krLanguages, usLanguages);
+const i18nData = Object.assign({}, krLanguages, usLanguages);
 
 // TODO : DELETE
 import VueNumeric from 'vue-numeric'
@@ -58,6 +58,8 @@ Vue.config.productionTip = false
 
 var thisLocale = window.localStorage.getItem('locale') ? window.localStorage.getItem('locale') : 'kr'
 // var datepickerLocale = localeMapper[thisLocale]
+
+console.log('thisLocale:' + thisLocale)
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
