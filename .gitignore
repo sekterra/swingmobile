@@ -1,14 +1,17 @@
 *.bin
 *.lock
 *.flat
+*.bat
+*.apk
 node_modules/
 dist/
 npm-debug.log
 test/unit/coverage
 test/e2e/reports
-platforms/
-/www/*.js
-/*.bat
+platforms/**
+www/**
+build/*
+plugins/**
 # platforms/android/app/build/outputs/apk/debug/app-debug.apk
 # platforms/android/app/build/intermediates/assets/debug/www/index.html
 # platforms/android/app/build/intermediates/incremental/mergeDebugAssets/merger.xml
@@ -28,4 +31,4 @@ platforms/
 # platforms/android/app/build/intermediates/incremental/packageDebug/debug/dex-renamer-state.txt
 # platforms/android/app/build/outputs/apk/debug/app-debug.apk
 # platforms/android/app/src/main/assets/www/index.html
-/index.html
+www/index.html
