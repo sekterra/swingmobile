@@ -15,20 +15,6 @@ examples:
     </span>
   </span> -->
   <!-- 아래 소스는 메뉴 형식의 다국어 선택인데 ios에서 작동하지 않음 -->
-  <!-- <v-menu 
-    v-model="locale">
-      <v-text-field></v-text-field>
-      <v-list>
-        <v-list-tile
-          v-for="item in nationList"
-          :key="item"
-        >
-          <v-list-tile>
-            <country-flag :country='item' :size='size' />
-          </v-list-tile>
-        </v-list-tile>
-      </v-list>
-    </v-menu> -->
     <span>
       <v-menu 
         lazy
@@ -36,17 +22,16 @@ examples:
         origin="center center"
         transition="scale-transition"
         v-model="isOpen">
-        <!-- <country-flag slot="activator" :country="locale" :size='size' /> -->
         <v-btn
-        slot="activator"
-        small
-        dark
-        color="indigo"
-      >
+          slot="activator"
+          small
+          dark
+          color="indigo"
+         >
           <v-icon>
             language
           </v-icon>
-          {{locale}}
+           {{locale}}
         </v-btn>
         <v-list>
           <v-list-tile
