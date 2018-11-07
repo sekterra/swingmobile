@@ -3,6 +3,7 @@
 *.flat
 *.bat
 *.apk
+*.html
 node_modules/
 dist/
 npm-debug.log
@@ -31,4 +32,4 @@ plugins/**
 # platforms/android/app/build/intermediates/incremental/packageDebug/debug/dex-renamer-state.txt
 # platforms/android/app/build/outputs/apk/debug/app-debug.apk
 # platforms/android/app/src/main/assets/www/index.html
-www/index.html
+
