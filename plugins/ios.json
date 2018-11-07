@@ -27,6 +27,9 @@
     },
     "cordova-plugin-save-image": {
       "PACKAGE_NAME": "com.yullin.helloWorld"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.yullin.swing"
     }
   },
   "dependent_plugins": {

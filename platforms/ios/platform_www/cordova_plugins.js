@@ -266,6 +266,14 @@ module.exports = [
     "clobbers": [
       "cordova.plugins.imagesaver"
     ]
+  },
+  {
+    "id": "cordova-plugin-keyboard.keyboard",
+    "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+    "pluginId": "cordova-plugin-keyboard",
+    "clobbers": [
+      "window.Keyboard"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -279,7 +287,8 @@ module.exports.metadata =
   "es6-promise-plugin": "4.2.2",
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-file-transfer": "1.7.1",
-  "cordova-plugin-save-image": "0.3.0"
+  "cordova-plugin-save-image": "0.3.0",
+  "cordova-plugin-keyboard": "1.2.0"
 };
 // BOTTOM OF METADATA
 });

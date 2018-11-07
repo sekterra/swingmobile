@@ -1,7 +1,7 @@
 <template>
   <div id="page-forms">
     <v-container grid-list-xl fluid class="mt-0 pt-0">
-      <v-layout row wrap>
+      <v-layout row wrap v-scroll="onScroll">
         <v-flex sm12>
           <v-card>
             <v-toolbar color="primary darken-1" dark="" flat dense cad>
@@ -60,8 +60,8 @@
                         :editable="editable"
                         :label="$t('title.woTitle') + '*'"
                         name="workTitle"
-                        counter="5"
-                        maxlength="5"
+                        :counter="5"
+                        :maxlength="5"
                         v-model="saveData.workOrder.workTitle"
                         v-validate="'required'"
                         :error-msg="errors.first('workTitle')"
@@ -199,16 +199,6 @@
                     <v-flex xs12>
                       <v-subheader class="pa-0 mt-3">
                         {{$t('title.woImageFileUpload')}}
-                        <!-- <v-btn 
-                          round 
-                          color="primary" 
-                          dark
-                          @click="uploadImages"
-                          >
-                          <v-icon>
-                            cloud_upload
-                          </v-icon>
-                        </v-btn> -->
                         <v-spacer></v-spacer>
                         <v-btn 
                         round
@@ -291,6 +281,7 @@
                       :title="$t('button.clear')"
                       @btnClicked="btnClearClicked" 
                     ></y-btn>
+                    
                     <!-- <y-btn
                       type="cancel"
                       :title="$t('button.cancel')"
@@ -597,7 +588,7 @@ export default {
         });
       }else{
         // If the navigator.camera is not available display generic error to the user.
-        this.error();
+        window.getApp.$emit('APP_REQUEST_ERROR', $t('error.noCamera'));
       }
     },
     // Set the picture path in the data of the vue
@@ -622,9 +613,8 @@ export default {
         this.isShowCarousel = true
       })
     },
-    error(){
-      // navigator.notification.alert(this.$t("error"));
-      window.getApp.$emit('APP_REQUEST_ERROR', this.$t("error"));
+    error(_msg){
+      window.getApp.$emit('APP_REQUEST_ERROR', _msg);
     },
     uploadImages(_pk) {
       if (this.upload.imageList.length <= 0) return
@@ -665,6 +655,9 @@ export default {
           self.tmpImageList.unshift(window.URL.createObjectURL(_result))
         })   
       })
+    },
+    onScroll(e) {
+      window.getApp.$emit('APP_KEYBOARD_HIDE')
     }
   }
 };

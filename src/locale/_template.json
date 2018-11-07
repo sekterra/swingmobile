@@ -132,7 +132,8 @@
     },
     "error": {
       "requestError": "",
-      "validError": ""
+      "validError": "",
+      "noCamera": ""
     },
     "menu": {
       "Dashboard": "",

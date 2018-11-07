@@ -39,6 +39,10 @@
             {
               "xml": "<feature name=\"SaveImage\"><param name=\"ios-package\" value=\"SaveImage\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"CDVKeyboard\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -72,6 +76,9 @@
     },
     "cordova-plugin-save-image": {
       "PACKAGE_NAME": "com.yullin.helloWorld"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.yullin.swing"
     }
   },
   "dependent_plugins": {},
@@ -342,6 +349,14 @@
       "clobbers": [
         "cordova.plugins.imagesaver"
       ]
+    },
+    {
+      "id": "cordova-plugin-keyboard.keyboard",
+      "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+      "pluginId": "cordova-plugin-keyboard",
+      "clobbers": [
+        "window.Keyboard"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -353,6 +368,7 @@
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-file-transfer": "1.7.1",
-    "cordova-plugin-save-image": "0.3.0"
+    "cordova-plugin-save-image": "0.3.0",
+    "cordova-plugin-keyboard": "1.2.0"
   }
 }

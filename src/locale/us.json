@@ -130,7 +130,8 @@
     },
     "error": {
       "requestError": "An error occurred during data processing.",
-      "validError": "There is an error in the value entered."
+      "validError": "There is an error in the value entered.",
+      "noCamera": "No camera available in this device."
     },
     "menu": {
       "Dashboard": "Dashboard",

@@ -291,9 +291,10 @@ export default {
     onScroll (e) {
       this.offsetTop = window.pageYOffset || document.documentElement.scrollTop
       this.btnHidden = this.offsetTop == 0
+      console.log('scroll event')
+      Keyboard.hide()
     },
     scrollToTop () {
-      console.log('scrollToTop')
       let container = document.getElementById('content');
       let event = new CustomEvent('scroll', {})
       container.pageYOffset = 0

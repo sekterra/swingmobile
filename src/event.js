@@ -154,5 +154,10 @@ export default [
     name: 'USER_LOGIN',
     callback: function () {
     }
+  },
+  {
+    name: 'APP_KEYBOARD_HIDE',
+    callback: function () {
+    }
   }
 ];

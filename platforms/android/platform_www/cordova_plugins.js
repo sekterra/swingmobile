@@ -266,6 +266,14 @@ module.exports = [
     "clobbers": [
       "cordova.plugins.screenorientation"
     ]
+  },
+  {
+    "id": "cordova-plugin-keyboard.keyboard",
+    "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+    "pluginId": "cordova-plugin-keyboard",
+    "clobbers": [
+      "window.Keyboard"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -279,7 +287,8 @@ module.exports.metadata =
   "cordova-plugin-save-image": "0.3.0",
   "es6-promise-plugin": "4.2.2",
   "cordova-plugin-screen-orientation": "3.0.1",
-  "cordova-plugin-whitelist": "1.3.3"
+  "cordova-plugin-whitelist": "1.3.3",
+  "cordova-plugin-keyboard": "1.2.0"
 };
 // BOTTOM OF METADATA
 });

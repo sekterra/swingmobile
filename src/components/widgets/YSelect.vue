@@ -10,6 +10,7 @@ examples:
   <div>
     <v-autocomplete
       v-if="editable"
+      ref="autocomplete"
       :label="label"
       :name="name"
       :items="items"
@@ -17,6 +18,7 @@ examples:
       :item-value="itemValue"
       v-model="vValue"
       @input="input"
+      
       :error="error"
       :error-messages="errorMsg"
     ></v-autocomplete>
@@ -128,6 +130,8 @@ export default {
     input() {
       // TODO : 부모에게 변경여부 전달
       this.$emit('input', this.vValue)
+      this.$refs.autocomplete.$refs.input.blur()
+      window.getApp.$emit('APP_KEYBOARD_HIDE')
     }
   }
 }

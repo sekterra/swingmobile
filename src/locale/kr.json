@@ -131,7 +131,8 @@
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",
-      "validError": "입력된 값에 오류가 있습니다."
+      "validError": "입력된 값에 오류가 있습니다.",
+      "noCamera": "카메라를 사용할 수 없습니다."
     },
     "menu": {
       "Dashboard": "대쉬보드",

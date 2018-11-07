@@ -136,6 +136,9 @@ export default {
     this.$on('USER_LOGIN', () => {
       this.userPk = localStorage.userPk;
     });
+    this.$on('APP_KEYBOARD_HIDE', () => {
+      this.hideKeyboard()
+    })
   },
   mounted() {
     this.$vuetify.goTo(0);
@@ -196,6 +199,9 @@ export default {
     },
     getUserInfo() {
       return this.userInfo
+    },
+    hideKeyboard() {
+      if (Keyboard && typeof Keyboard.hide === 'function') Keyboard.hide()
     }
   },
 };

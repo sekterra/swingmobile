@@ -21,11 +21,14 @@ import VueNumeric from 'vue-numeric'
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 
 import VeeValidate from 'vee-validate';
-import VueCordovaDevice from 'vue-cordova-device'
 import Truncate from 'lodash.truncate';
 import 'font-awesome/css/font-awesome.css';
 import fullCalendar from "vue-full-calendar";
 import "fullcalendar/dist/fullcalendar.min.css";
+
+// TODO : Cordova Extention module
+import VueCordovaDevice from 'vue-cordova-device'
+// import Keyboard from 'cordova-plugin-keyboard'
 
 // TODO : global components imports
 import YButton from '@/components/widgets/YButton'
@@ -71,6 +74,7 @@ Vue.use(fullCalendar);
 let component = App
 
 Vue.use(VueCordovaDevice)
+// Vue.use(Keyboard)
 
 console.log(Vue.cordova.device);
 
@@ -116,7 +120,6 @@ Vue.use(Vuetify, {
     }
   }
 });
-// Bootstrap application components
 
 // 전역 js 변수 추가
 Vue.prototype.$rules = rules

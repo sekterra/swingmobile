@@ -129,7 +129,8 @@ export default {
       //   this.$router.push('/dashboard');
       // }, 1000);
     }
-  }
+  },
+  
 
 };
 </script>
