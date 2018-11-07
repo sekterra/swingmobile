@@ -136,7 +136,8 @@
     "menu": {
       "Dashboard": "Dashboard",
       "woList": "WO List",
-      "woCreate": "WO Request",
+      "woRequest": "WO Request",
+      "woCreate": "WO Create",
       "woCompleteList": "WO Complete",
       "inspectionList": "Inspection List",
       "inspectionResult": "Inspection Result",

@@ -137,7 +137,8 @@
     "menu": {
       "Dashboard": "대쉬보드",
       "woList": "WO목록",
-      "woCreate": "WO요청",
+      "woRequest": "WO요청",
+      "woCreate": "WO작성",
       "woCompleteList": "WO완료처리",
       "inspectionList": "점검목록",
       "inspectionResult": "점검결과",

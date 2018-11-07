@@ -80,8 +80,18 @@ export default [
     )
   },
   {
+    path: '/woRequest',
+    meta: { breadcrumb: true },
+    name: 'woRequest',
+    props: (route) => ({ query: route.query.pk }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/wo/woRequest.vue`
+    )
+  },
+  {
     path: '/woCreate',
-    title: 'WO 요청목록',
     meta: { breadcrumb: true },
     name: 'woCreate',
     props: (route) => ({ query: route.query.pk }),
