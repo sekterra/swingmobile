@@ -657,6 +657,7 @@ export default {
       })
     },
     onScroll(e) {
+      // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김
       window.getApp.$emit('APP_KEYBOARD_HIDE')
     }
   }

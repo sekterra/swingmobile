@@ -155,6 +155,7 @@ export default [
     callback: function () {
     }
   },
+  // keyboard 숨김 이벤트
   {
     name: 'APP_KEYBOARD_HIDE',
     callback: function () {
