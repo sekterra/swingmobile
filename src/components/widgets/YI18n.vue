@@ -78,7 +78,8 @@ export default {
      for(var key in this.$i18n.messages) {
        this.nationList.push(key)
      }
-     this.locale = localStorage.locale
+    //  this.locale = localStorage.locale
+    this.locale = window.localStorage.getItem('locale')
   },
   /* methods */
   methods: {

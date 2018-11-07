@@ -30,6 +30,9 @@
     },
     "cordova-plugin-keyboard": {
       "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.yullin.swing"
     }
   },
   "dependent_plugins": {

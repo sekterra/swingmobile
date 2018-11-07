@@ -5,7 +5,6 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.css'
 
 import App from './App'
-import Login from '@/pages/Login'
 import router from './router'
 
 // TODO : global node_modules
@@ -55,12 +54,14 @@ import comm from '@/js/common.js'
 
 // Vue.use(Vuetify)
 Vue.config.productionTip = false
-
-var thisLocale = window.localStorage.getItem('locale') ? window.localStorage.getItem('locale') : 'kr'
+var defaultLocale = 'kr'
+var thisLocale = null
+if (window.localStorage.getItem('locale')) thisLocale = window.localStorage.getItem('locale')
+else {
+  thisLocale = defaultLocale
+  window.localStorage.setItem('locale', defaultLocale)
+}
 // var datepickerLocale = localeMapper[thisLocale]
-
-console.log('thisLocale:' + thisLocale)
-
 Vue.use(VueI18n)
 const i18n = new VueI18n({
   locale: thisLocale, // 기본언어는 ko로 유지하지만 브라우저 언어를 체크해서 변경
@@ -74,6 +75,19 @@ Vue.component(VueNumberInput.name, VueNumberInput);
 Vue.use(fullCalendar);
 // TODO : Set the first page
 let component = App
+
+if (navigator.notification) {
+  var globalization = 'No globalization'
+  navigator.globalization.getLocaleName(
+    function (language) {
+      navigator.notification.alert('language: ' + language.value + '\n', () => {
+      })
+    },
+    function () {
+      navigator.notification.alert('Error getting language\n');
+    }
+  );
+}
 
 Vue.use(VueCordovaDevice)
 // Vue.use(Keyboard)

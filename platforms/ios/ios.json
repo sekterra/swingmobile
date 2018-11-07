@@ -43,6 +43,10 @@
             {
               "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"CDVKeyboard\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -78,6 +82,9 @@
       "PACKAGE_NAME": "com.yullin.helloWorld"
     },
     "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.yullin.swing"
     }
   },
@@ -357,6 +364,14 @@
       "clobbers": [
         "window.Keyboard"
       ]
+    },
+    {
+      "id": "cordova-plugin-dialogs.notification",
+      "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+      "pluginId": "cordova-plugin-dialogs",
+      "merges": [
+        "navigator.notification"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -369,6 +384,7 @@
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-file-transfer": "1.7.1",
     "cordova-plugin-save-image": "0.3.0",
-    "cordova-plugin-keyboard": "1.2.0"
+    "cordova-plugin-keyboard": "1.2.0",
+    "cordova-plugin-dialogs": "2.0.1"
   }
 }
