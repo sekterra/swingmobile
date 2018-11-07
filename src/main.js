@@ -75,24 +75,24 @@ Vue.use(fullCalendar);
 // TODO : Set the first page
 let component = App
 
-if (navigator.notification) {
-  var globalization = 'No globalization'
-  navigator.globalization.getLocaleName(
-    function (language) {
-      navigator.notification.alert('language: ' + language.value + '\n', () => {
-      })
-    },
-    function () {
-      navigator.notification.alert('Error getting language\n');
-    }
-  );
-}
+// if (navigator.notification) {
+//   var globalization = 'No globalization'
+//   navigator.globalization.getLocaleName(
+//     function (language) {
+//       navigator.notification.alert('language: ' + language.value + '\n', () => {
+//       })
+//     },
+//     function () {
+//       navigator.notification.alert('Error getting language\n');
+//     }
+//   );
+// }
 
-navigator.globalization.getDatePattern(
-  function (date) { navigator.notification.alert('pattern: ' + date.pattern + '\n'); },
-  function () { navigator.notification.alert('Error getting pattern\n'); },
-  { formatLength: 'short', selector: 'date and time' }
-);
+// navigator.globalization.getDatePattern(
+//   function (date) { navigator.notification.alert('pattern: ' + date.pattern + '\n'); },
+//   function () { navigator.notification.alert('Error getting pattern\n'); },
+//   { formatLength: 'short', selector: 'date and time' }
+// );
 
 Vue.use(VueCordovaDevice)
 // Vue.use(Keyboard)
