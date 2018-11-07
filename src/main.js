@@ -91,7 +91,6 @@ if (navigator.notification) {
 
 Vue.use(VueCordovaDevice)
 // Vue.use(Keyboard)
-
 console.log(Vue.cordova.device);
 
 // TODO : Global filters
