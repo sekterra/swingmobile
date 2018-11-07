@@ -69,7 +69,6 @@ const i18n = new VueI18n({
 });
 
 Vue.use(VueNumeric)
-// Vue.use(CountryFlag)
 Vue.component(VueNumberInput.name, VueNumberInput);
 
 Vue.use(fullCalendar);
@@ -88,6 +87,12 @@ if (navigator.notification) {
     }
   );
 }
+
+navigator.globalization.getDatePattern(
+  function (date) { navigator.notification.alert('pattern: ' + date.pattern + '\n'); },
+  function () { navigator.notification.alert('Error getting pattern\n'); },
+  { formatLength: 'short', selector: 'date and time' }
+);
 
 Vue.use(VueCordovaDevice)
 // Vue.use(Keyboard)
