@@ -45,6 +45,7 @@ import YTextarea from '@/components/widgets/YTextarea'
 import YTimepicker from '@/components/widgets/YTimepicker'
 import YInspectionDetail from '@/components/widgets/YInspectionDetail'
 import YSimpleDatepicker from '@/components/widgets/YSimpleDatepicker'
+import YDurationpicker from '@/components/widgets/YDurationpicker'
 
 // TODO : global javascript imports
 import rules from '@/js/rules.js'
@@ -126,6 +127,7 @@ Vue.component(YTextarea.name, YTextarea);
 Vue.component(YTimepicker.name, YTimepicker);
 Vue.component(YInspectionDetail.name, YInspectionDetail);
 Vue.component(YSimpleDatepicker.name, YSimpleDatepicker);
+Vue.component(YDurationpicker.name, YDurationpicker);
 
 // TODO : Global
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' });

@@ -102,7 +102,12 @@
                       </y-datepicker>
                     </v-flex>
                     <v-flex sm6 class="py-0">
-                      <y-datepicker 
+                      <y-durationpicker
+                        default-type="today"
+                        v-model="durationpicker"
+                      >
+                      </y-durationpicker>
+                      <!-- <y-datepicker 
                         :editable="editable"
                         :label="$t('title.woPlanDate') + '*'"
                         name="planStartDt"
@@ -112,7 +117,7 @@
                         v-validate="'required'"
                         :error-msg="errors.first('planStartDt')"
                       >
-                      </y-datepicker>
+                      </y-datepicker> -->
                     </v-flex>
                     <v-flex sm6 class="py-0">
                       <y-select
@@ -368,6 +373,7 @@ export default {
     tmpImageList: [],
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
+    durationpicker: null
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {
