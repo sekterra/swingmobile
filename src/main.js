@@ -76,6 +76,11 @@ Vue.use(fullCalendar);
 let component = App
 
 if (navigator.notification) {
+  navigator.notification.alert('has notification', () => {
+  })
+}
+
+if (navigator.notification) {
   var globalization = 'No globalization'
   navigator.globalization.getLocaleName(
     function (language) {
