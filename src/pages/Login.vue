@@ -96,38 +96,28 @@ export default {
       let self = this
       this.loading = true
       this.$ajax.requestPost((_result) => {
-        try {
+        this.$ajax.isSetHeader = true
+        jwt.setJwtToken(_result.token)
+        jwt.checkValidToken((data) => {
+          if (data === '' || data === 'undefined') {
+            window.alert('jwt error')
+            comm.movePage('/')
+            return
+          }
+          localStorage.userPk = data.userpk
+          this.$emit('USER_LOGIN')
+          // window.getApp.setUserPk(data.userpk)
+        })
+        setTimeout(() => { 
+          this.loading = false
+          this.$ajax.isAuthCheck = false
           this.$ajax.isSetHeader = true
-          jwt.setJwtToken(_result.token)
-          jwt.checkValidToken((data) => {
-            if (data === '' || data === 'undefined') {
-              window.alert('jwt error')
-              comm.movePage('/')
-              return
-            }
-            localStorage.userPk = data.userpk
-            this.$emit('USER_LOGIN')
-            // window.getApp.setUserPk(data.userpk)
-          })
-          setTimeout(() => { 
-            this.loading = false
-            this.$ajax.isAuthCheck = false
-            this.$ajax.isSetHeader = true
-            this.$comm.movePage(self.$router, '/dashboard')
-          }, 1000);
-        } catch(e) {
-          console.log('_success error:' + e.message)
-          // window.alert(e.message)
-        }
+          this.$comm.movePage(self.$router, '/dashboard')
+        }, 1000);
       }, (_error) => {
         console.log('_error:' + JSON.stringify(_error))
         this.loading = false
-        // window.alert(JSON.stringify(_error))
       })
-      // this.loading = true;
-      // setTimeout(() => {
-      //   this.$router.push('/dashboard');
-      // }, 1000);
     }
   },
   
