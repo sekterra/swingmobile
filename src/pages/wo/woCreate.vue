@@ -102,24 +102,33 @@
                       </y-datepicker>
                     </v-flex>
                     <v-flex sm6 class="py-0">
+                      <!-- 작업계획일 -->
                       <y-durationpicker
-                        default-type="today"
-                        v-model="durationpicker"
+                      :editable="editable"
+                      :label="$t('title.woPlanDate')"
+                      name="woPlanDate"
+                      default-type="today"
+                      v-validate="'required'"
+                      v-model="durationpicker"
+                      :error-msg="errors.first('woPlanDate')"
                       >
                       </y-durationpicker>
-                      <!-- <y-datepicker 
-                        :editable="editable"
-                        :label="$t('title.woPlanDate') + '*'"
-                        name="planStartDt"
-                        v-model="saveData.workOrder.planStartDt"
-                        default-type="today"
-                        child-validate-type="required"
-                        v-validate="'required'"
-                        :error-msg="errors.first('planStartDt')"
-                      >
-                      </y-datepicker> -->
                     </v-flex>
                     <v-flex sm6 class="py-0">
+                      <!-- 작업기간 -->
+                      <y-durationpicker
+                      :editable="editable"
+                      :label="$t('title.workDate')"
+                      name="workDate"
+                      default-type="today"
+                      v-validate="'required'"
+                      v-model="durationpicker"
+                      :error-msg="errors.first('workDate')"
+                      >
+                      </y-durationpicker>
+                    </v-flex>
+                    <v-flex sm6 class="py-0">
+                      <!-- 보전유형 -->
                       <y-select
                         :editable="editable"
                         :label="$t('title.maintenanceType') + '*'"
@@ -132,6 +141,7 @@
                       </y-select>
                     </v-flex>
                     <v-flex sm6 class="py-0" v-if="isBreakdown">
+                      <!-- 고장일시 -->
                       <y-datepicker
                         v-if="editable"
                         :editable="true"
@@ -164,6 +174,7 @@
                       ></v-text-field>
                     </v-flex>
                     <v-flex sm6 class="py-0">
+                      <!-- 현상코드 -->
                       <y-select
                         :editable="editable"
                         :label="$t('title.conditionType')"
@@ -174,6 +185,7 @@
                       </y-select>
                     </v-flex>
                     <v-flex sm6 class="py-0">
+                      <!-- 원인코드 -->
                       <y-select
                         :editable="editable"
                         :label="$t('title.causeType')"
@@ -184,6 +196,7 @@
                       </y-select>
                     </v-flex>
                     <v-flex sm6 class="py-0">
+                      <!-- 프로젝트 -->
                       <y-select
                         :editable="editable"
                         :label="$t('title.project')"
@@ -192,6 +205,11 @@
                         v-model="saveData.workOrder.project"
                       >
                       </y-select>
+                    </v-flex>
+                  </v-layout>
+                  <v-layout row wrap fill-height>
+                    <v-flex xs12>
+                      <y-expantion-grid></y-expantion-grid>
                     </v-flex>
                   </v-layout>
                   <!-- 이미지 파일 업로드 -->
@@ -331,6 +349,8 @@ let transaction = transactionConfig.wo.request
 export default {
   $_veeValidate: {
     validator: 'new'
+  },
+  components: {
   },
   data: () => (
   {

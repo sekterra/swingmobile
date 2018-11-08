@@ -46,6 +46,7 @@ import YTimepicker from '@/components/widgets/YTimepicker'
 import YInspectionDetail from '@/components/widgets/YInspectionDetail'
 import YSimpleDatepicker from '@/components/widgets/YSimpleDatepicker'
 import YDurationpicker from '@/components/widgets/YDurationpicker'
+import YExpantionGrid from '@/components/widgets/YExpantionGrid'
 
 // TODO : global javascript imports
 import rules from '@/js/rules.js'
@@ -128,6 +129,7 @@ Vue.component(YTimepicker.name, YTimepicker);
 Vue.component(YInspectionDetail.name, YInspectionDetail);
 Vue.component(YSimpleDatepicker.name, YSimpleDatepicker);
 Vue.component(YDurationpicker.name, YDurationpicker);
+Vue.component(YExpantionGrid.name, YExpantionGrid);
 
 // TODO : Global
 Vue.use(VeeValidate, { fieldsBagName: 'formFields' });

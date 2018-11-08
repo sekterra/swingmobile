@@ -281,6 +281,9 @@ var selectConfig = {
   userInfo: {
     url: 'member/userinfo/'
   },
+  exsupplier: {
+    url: 'woSupsGridColumnOptions'
+  }
 }
 
 export default selectConfig
