@@ -109,7 +109,8 @@
       "detectedError": "Detected fault",
       "woCompleteList": "WO Complete",
       "inspectionCalendar": "Inspection's Calendar",
-      "userInfo": "User Information"
+      "userInfo": "User Information",
+      "exSupplierSelect": "Select Outsourcing"
     },
     "message": {
       "woNo": "Will be automatically generated.",

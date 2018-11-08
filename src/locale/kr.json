@@ -109,7 +109,8 @@
       "detectedError": "점검시 이상 발견 수",
       "woCompleteList": "WO완료처리",
       "inspectionCalendar": "점검일정 달력",
-      "userInfo": "사용자 정보"
+      "userInfo": "사용자 정보",
+      "exSupplierSelect": "외주업체 선택"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

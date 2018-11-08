@@ -209,7 +209,12 @@
                   </v-layout>
                   <v-layout row wrap fill-height>
                     <v-flex xs12>
-                      <y-expantion-grid></y-expantion-grid>
+                      <y-expantion-grid
+                        :title="$t('title.exSupplierSelect')"
+                        :items="exSupplier"
+                        :itemTitle="exSupplierTitles"
+                      >
+                      </y-expantion-grid>
                     </v-flex>
                   </v-layout>
                   <!-- 이미지 파일 업로드 -->
@@ -393,7 +398,9 @@ export default {
     tmpImageList: [],
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
-    durationpicker: null
+    durationpicker: null,
+    exSupplier: [], // 외주업체 서비스
+    exSupplierTitles: {}
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {
@@ -422,6 +429,21 @@ export default {
       return isBreak
     }
   },
+  beforeMount() {
+    this.exSupplierTitles = {
+      title: 'exSupplierNm',
+      pk: 'exSupplierPk',
+      cardItems: [
+        'exSupplierNm',
+        'phone',
+        'fax',
+        'address1',
+        'address2',
+        'homepage',
+        'exSupplierDsc'
+      ]
+    }
+  },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
     // 참고 : @/router/path.js의 props 속성에서 설정된 방식으로 처리됨
@@ -435,6 +457,7 @@ export default {
       this.getImagePks(pk)
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
+    this.getExsupplier()
 
     // 업로드가 완료되면 업로드 이미지 정보 초기화
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
@@ -503,7 +526,6 @@ export default {
     checkValidation() {
       this.$validator.validateAll().then((_result) => {
         this.isValid = _result
-        console.log('_result:' + JSON.stringify(_result))
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
         if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
@@ -675,6 +697,14 @@ export default {
         self.$nextTick(() => {
           self.tmpImageList.unshift(window.URL.createObjectURL(_result))
         })   
+      })
+    },
+    getExsupplier() {
+      this.$ajax.url = selectConfig.exSupplier.url
+      this.$ajax.param = selectConfig.exSupplier.searchData
+      let self = this
+      this.$ajax.requestGet((_result) => {
+        self.exSupplier = _result.content
       })
     },
     onScroll(e) {

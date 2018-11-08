@@ -278,11 +278,20 @@ var selectConfig = {
       }
     },
   },
+  // 사용자 정보
   userInfo: {
     url: 'member/userinfo/'
   },
-  exsupplier: {
-    url: 'woSupsGridColumnOptions'
+  // 외주업체 정보
+  exSupplier: {
+    url: 'workorder/exsupplier/',
+    searchData: {
+      page: 0,
+      size: 0,
+      sort: 'exSupplierNm,asc',         // 정렬조건 [형식 &sort=menuNm,asc&sort=menuLevel,desc]
+      searchText: null,
+      useYn: true
+    },
   }
 }
 
