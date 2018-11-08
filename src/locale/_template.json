@@ -110,7 +110,14 @@
       "woCompleteList": "",
       "inspectionCalendar": "",
       "userInfo": "",
-      "exSupplierSelect": ""
+      "exSupplierSelect": "",
+      "exSupplierNm": "",
+      "phone": "",
+      "fax": "",
+      "address1": "",
+      "address2": "",
+      "homepage": "",
+      "exSupplierDsc": ""
     },
     "message": {
       "woNo": "",

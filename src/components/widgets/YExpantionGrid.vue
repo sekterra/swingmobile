@@ -8,7 +8,7 @@
 <template>
 <v-card flat>
   <v-card-title class="pa-0 ma-0">
-    <v-subheader>{{title}}</v-subheader>
+    <div class="caption grey--text">{{title}}</div>
     <v-toolbar
       dense
       dark
@@ -30,7 +30,7 @@
       </v-toolbar>
     </v-card-title>
     <v-divider></v-divider>
-    <v-card-media height="100" class="pa-0 ma-0 vscroll">
+    <v-card-media height="300" class="pa-0 ma-0 vscroll">
       <v-expansion-panel
       >
         <v-flex
@@ -47,12 +47,22 @@
                 v-model="checkValues[i]"
                 color="indigo"
                 hide-details
-                :value="item.pk"
+                :val="item.pk"
                 :label="item.title"/>
             </div>
-            <v-card>
-              <v-card-text>
-              </v-card-text>
+            <v-card flat>
+              <v-card-media>
+                <v-card>
+                  <!-- <v-card-title><h4>{{ props.item.name }}</h4></v-card-title> -->
+                  <v-divider></v-divider>
+                  <v-list dense>
+                    <v-list-tile v-for="key in itemTitle.cardItems" :key="key">
+                      <v-list-tile-content>{{$t('title.' + key)}}</v-list-tile-content>
+                      <v-list-tile-content class="align-end">{{ items[i][key] }}</v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+                </v-card>
+              </v-card-media>
             </v-card>
           </v-expansion-panel-content>
         </v-flex>
@@ -68,11 +78,20 @@
     <v-divider></v-divider>
 
     <v-card-actions>
+      <div>
+        <div class="caption grey--text">선택업체</div>
       <v-chip
+        v-for="(item, i) in checkValues"
+        v-if="checkValues.length"
+        :key="i + '_chip'"
+        v-model="checkValues[i]"
         close
-        color="green"
+        color="indigo"
         outline
-      >Success</v-chip>
+      >
+      {{titleInfos[i].title}}
+      </v-chip>
+      </div>
     </v-card-actions>
   </v-card>
 </template>
@@ -130,11 +149,12 @@ export default {
       this.cardContents = []
       var checkValues = []
       $.each(this.items, (_i, _item) => {
-        this.titleInfos.unshift({
+        this.titleInfos.push({
           title: _item[this.itemTitle.title],
-          pk: _item[this.itemTitle.pk]
+          pk: _item[this.itemTitle.pk],
+          index: _i
         })
-        checkValues.unshift(null)
+        checkValues.push(false)
       })
       this.$set(this, 'checkValues', checkValues)
     },
@@ -142,7 +162,6 @@ export default {
       // if (_checkValue) _checkValue = null
       // else _checkValue = _pk
        _checkValue = _pk
-      console.log('itemClicked')
     },
   }
 }

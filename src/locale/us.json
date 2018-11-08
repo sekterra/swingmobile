@@ -110,7 +110,14 @@
       "woCompleteList": "WO Complete",
       "inspectionCalendar": "Inspection's Calendar",
       "userInfo": "User Information",
-      "exSupplierSelect": "Select Outsourcing"
+      "exSupplierSelect": "Select Outsourcing",
+      "exSupplierNm": "Name of Outsourcing Co.",
+      "phone": "Telephone No.",
+      "fax": "Fax No.",
+      "address1": "Address1",
+      "address2": "Address2",
+      "homepage": "Homepage url",
+      "exSupplierDsc": "Remark"
     },
     "message": {
       "woNo": "Will be automatically generated.",
