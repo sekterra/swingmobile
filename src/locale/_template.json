@@ -117,7 +117,9 @@
       "address1": "",
       "address2": "",
       "homepage": "",
-      "exSupplierDsc": ""
+      "exSupplierDsc": "",
+      "title": "",
+      "selectedOutsourcing": ""
     },
     "message": {
       "woNo": "",

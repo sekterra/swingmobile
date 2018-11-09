@@ -117,7 +117,9 @@
       "address1": "주소1",
       "address2": "주소2",
       "homepage": "홈페이지",
-      "exSupplierDsc": "비고"
+      "exSupplierDsc": "비고",
+      "things": "개",
+      "selectedOutsourcing": "선택한 외주업체"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

@@ -212,11 +212,14 @@
                       <y-expantion-grid
                         :title="$t('title.exSupplierSelect')"
                         :items="exSupplier"
-                        :itemTitle="exSupplierTitles"
+                        :item-title="exSupplierTitles"
+                        :summary-title="$t('title.selectedOutsourcing')"
                       >
                       </y-expantion-grid>
+                      <v-divider></v-divider>
                     </v-flex>
                   </v-layout>
+                  
                   <!-- 이미지 파일 업로드 -->
                   <v-layout>
                     <v-flex xs12>

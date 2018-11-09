@@ -117,7 +117,9 @@
       "address1": "Address1",
       "address2": "Address2",
       "homepage": "Homepage url",
-      "exSupplierDsc": "Remark"
+      "exSupplierDsc": "Remark",
+      "title": "things",
+      "selectedOutsourcing": "Selected outsourcing Co."
     },
     "message": {
       "woNo": "Will be automatically generated.",
