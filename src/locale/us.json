@@ -120,7 +120,8 @@
       "exSupplierDsc": "Remark",
       "title": "things",
       "selectedOutsourcing": "Selected outsourcing Co.",
-      "showDetail": "View details"
+      "showDetail": "View details",
+      "readOnlyMode": "Read mode"
     },
     "message": {
       "woNo": "Will be automatically generated.",

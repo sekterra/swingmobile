@@ -14,8 +14,10 @@ examples:
       ref="control"
       v-model="vValue"
       :placeholder="placeholder"
-      append-outer-icon="info"
+      :append-outer-icon="icon"
       clearable
+      :hide-details="hideDetail"
+      :class="customClass"
       :counter="counter"
       :maxlength="maxlength"
       @input="input"
@@ -76,6 +78,17 @@ export default {
     },
     maxlength: {
       type: Number
+    },
+    icon: {
+      type: String
+    },
+    // 커스텀 클래스
+    customClass: {
+      type: String
+    },
+    hideDetail: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

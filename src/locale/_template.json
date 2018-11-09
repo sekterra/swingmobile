@@ -120,7 +120,8 @@
       "exSupplierDsc": "",
       "title": "",
       "selectedOutsourcing": "",
-      "showDetail": ""
+      "showDetail": "",
+      "readOnlyMode": ""
     },
     "message": {
       "woNo": "",

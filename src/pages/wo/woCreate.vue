@@ -207,7 +207,7 @@
                       </y-select>
                     </v-flex>
                   </v-layout>
-                  <v-layout row wrap fill-height>
+                  <!-- <v-layout row wrap fill-height>
                     <v-flex xs12>
                       <y-expantion-grid
                         :title="$t('title.exSupplierSelect')"
@@ -218,10 +218,17 @@
                       </y-expantion-grid>
                       <v-divider></v-divider>
                     </v-flex>
-                  </v-layout>
+                  </v-layout> -->
                   <v-layout row wrap fill-height>
                     <v-flex xs12>
-                      <y-regist-list></y-regist-list>
+                      <y-regist-list
+                        title="업체목록"
+                        subTitle="선택 업체 수"
+                        controlTitle="업체검색"
+                        selectItemKey="exSupplier"
+                        :editable="editable"
+                      >
+                      </y-regist-list>
                     </v-flex>
                   </v-layout>
                   
@@ -717,7 +724,7 @@ export default {
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김
-      window.getApp.$emit('APP_KEYBOARD_HIDE')
+      // window.getApp.$emit('APP_KEYBOARD_HIDE')
     }
   }
 };

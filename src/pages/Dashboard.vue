@@ -708,7 +708,6 @@ export default {
         $.each(_result, (_i, _item) => {
           totalCount += _item.totCnt;
           totalCompleteCount += _item.finishCnt;
-          console.log(_item.totCnt + ':' + _item.finishCnt)
         })
         self.dataset.inspection.completeRate = this.$comm.getPercentage(totalCompleteCount, totalCount).toString() + '%';
       })

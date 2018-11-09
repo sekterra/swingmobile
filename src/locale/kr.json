@@ -88,7 +88,7 @@
       "materialCost": "자재비",
       "laborCost": "인건비",
       "outsourcingCost": "외주비",
-      "totalCost": "총비용",
+      "totalCost": "총 비용",
       "unit": "단위",
       "woCauseStatus6Month": "6개월간 원인별 WO 현황",
       "woCosts": "작업비용",
@@ -120,7 +120,8 @@
       "exSupplierDsc": "비고",
       "things": "개",
       "selectedOutsourcing": "선택한 외주업체",
-      "showDetail": "상세보기"
+      "showDetail": "상세보기",
+      "readOnlyMode": "읽기전용 모드"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

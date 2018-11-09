@@ -11,6 +11,7 @@ examples:
     <v-autocomplete
       v-if="editable"
       ref="autocomplete"
+      :color="color"
       :label="label"
       :name="name"
       :items="items"
@@ -18,7 +19,7 @@ examples:
       :item-value="itemValue"
       v-model="vValue"
       @input="input"
-      
+      :hide-selected="hideSelected"
       :error="error"
       :error-messages="errorMsg"
     ></v-autocomplete>
@@ -72,6 +73,19 @@ export default {
     value: {
       type: [Number, String],
       default: null
+    },
+    // 중복 방지를 위해 선택된 값을 숨겨야 할 경우
+    hideSelected: {
+      type: Boolean,
+      default: false
+    },
+    // 선택 후 초기화 시켜야 할 경우
+    isClearText: {
+      type: Boolean,
+      default: false
+    },
+    color: {
+      type: String
     }
   },
   data() {
@@ -132,6 +146,21 @@ export default {
       this.$emit('input', this.vValue)
       this.$refs.autocomplete.$refs.input.blur()
       window.getApp.$emit('APP_KEYBOARD_HIDE')
+      // 선택후 텍스트 값 초기화
+      if (this.isClearText) {
+        this.$nextTick(() => {
+            this.vValue = null
+        })
+      }
+    },
+    getSelectItemName() {
+      if (!this.vValue) return null
+      var filter = this.items.filter((_item) => {
+        return _item[this.item.itemKey] === this.vValue
+      })
+
+      if (filter.length <= 0) return null
+      return filter[0][this.itemText]
     }
   }
 }
