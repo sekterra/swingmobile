@@ -121,7 +121,8 @@
       "things": "개",
       "selectedOutsourcing": "선택한 외주업체",
       "showDetail": "상세보기",
-      "readOnlyMode": "읽기전용 모드"
+      "readOnlyMode": "읽기전용 모드",
+      "selectedItems": "선택된 항목"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
@@ -139,7 +140,8 @@
       "inspectionFail": "본 설비는 점검시 이상이 발견되었습니다.",
       "retryFileUpload": "업로드 실패한 파일이 있습니다. 다시 업로드를 시작하시겠습니까?",
       "uploadFailedFileRemoved": "업로드 실패 파일을 삭제하였습니다.",
-      "noDocumentUpload": "Mobile버전에서는 문서 파일업로드를 지원하지 않습니다."
+      "noDocumentUpload": "Mobile버전에서는 문서 파일업로드를 지원하지 않습니다.",
+      "enterCost": "비용 입력"
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",

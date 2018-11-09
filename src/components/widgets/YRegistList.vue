@@ -34,59 +34,67 @@
         </span>
       </v-toolbar>
       </v-card-title>
-      <v-card flat :height="height" max-height="300" :min-height="baseHeight" class="vscroll">  
-        <v-list 
-          subheader
-          two-line
-        >
-          <v-subheader>선택 목록</v-subheader>
-          <template 
-            v-for="(item, i) in selectedList">
-          <v-list-tile 
-            :key="item.pk"
-            :class="{'grey lighten-5': (i > 1 && i % 2 === 0), 'indigo lighten-5': (i === 0)}"
+      <v-card flat>
+        <v-card-title class="caption grey--text">{{$t('title.selectedItems')}}</v-card-title>
+        <v-card-media :height="height" max-height="300" :min-height="baseHeight" class="vscroll">
+          <v-list 
+            subheader
+            two-line
           >
-            <v-list-tile-avatar>
-                <v-icon :class="{'amber': (i % 2 === 0), 'indigo': (i % 2 === 1), 'white--text': true}">assignment</v-icon>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title :class="{'strikethrough': item.isCancel}">
-                {{item.name}}
-              </v-list-tile-title>
-              <div>
-                <y-text
-                  :editable="editable"
-                  custom-class="pt-0"
-                  name="workTitle"
-                  placeholder="여기에 비용을 입력하세요."
-                  @input="(_value) => {
-                    item.cost = Number(_value)
-                    setTotalCost()
-                  }"
+            <template 
+              v-for="(item, i) in selectedList">
+            <v-list-tile 
+              :key="item.pk"
+              :class="{'grey lighten-5': (i > 1 && i % 2 === 0), 'indigo lighten-5': (i === 0)}"
+            >
+              <v-list-tile-avatar>
+                  <v-icon :class="{'amber': (i % 2 === 0), 'indigo': (i % 2 === 1), 'white--text': true}">assignment</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title :class="{'strikethrough': item.isCancel}">
+                  {{item.name}}
+                </v-list-tile-title>
+                <div>
+                  <y-text
+                    :editable="editable"
+                    custom-class="pt-0"
+                    name="workTitle"
+                    placeholder="여기에 비용을 입력하세요."
+                    @input="(_value) => {
+                      item.cost = Number(_value)
+                      setTotalCost()
+                    }"
+                  >
+                  </y-text>
+                </div>
+              </v-list-tile-content>
+              <v-list-tile-action>
+                <v-btn 
+                  v-if="editable"
+                  icon
+                  @click.stop="setCancel(item)"
                 >
-                </y-text>
+                  <v-icon color="indigo">highlight_off</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+            <v-divider :key="'div_' + item.pk" />
+            </template>
+            <div v-if="!selectedList.length"
+                class="text-xs-center indigo--text">
+                {{$t('message.noData')}}
               </div>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-btn 
-                v-if="editable"
-                icon
-                @click.stop="setCancel(item)"
-              >
-                <v-icon color="indigo">highlight_off</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-divider :key="'div_' + item.pk" />
-          </template>
-          <div v-if="!selectedList.length"
-          class="text-xs-center indigo--text">
-              {{$t('message.noData')}}
-            </div>
-        </v-list>  
+          </v-list>
+        </v-card-media>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <div class="caption indigo--text">{{subTitle}} : {{selectedList.length}}{{$t('title.things')}}</div>
+          <v-spacer></v-spacer>
+          <div class="caption indigo--text">{{$t('title.totalCost')}} : {{totalCost}}{{$t('title.things')}}</div>
+        </v-card-actions>
       </v-card>
 
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider>
 
       <v-list two-line subheader class="grey lighten-5">
         <v-subheader>{{$t('title.summary')}}</v-subheader>
@@ -104,13 +112,13 @@
             <v-list-tile-sub-title>{{totalCost}}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
-      </v-list>
+      </v-list> -->
   </v-card>
   </div>
 </template>
 
 <script>
-var baseHeight=80
+var baseHeight=50
 export default {
   /* attributes: name, components, props, data */
   name: 'y-regist-list',
@@ -170,7 +178,7 @@ export default {
         isCancel: false // 취소선 표시여부
       };
       this.selectedList.unshift(item)
-      this.height = 50 + (this.selectedList.length * 70)
+      this.height = this.selectedList.length * 71
     },
     // 추가한 내용을 취소할 경우
     setCancel(_item) {
@@ -200,4 +208,8 @@ export default {
 .strikethrough {
   text-decoration: line-through;
 }
+.vscroll {
+  overflow-y:auto;
+}
+
 </style>

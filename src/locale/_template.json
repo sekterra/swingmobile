@@ -121,7 +121,9 @@
       "title": "",
       "selectedOutsourcing": "",
       "showDetail": "",
-      "readOnlyMode": ""
+      "readOnlyMode": "",
+      "selectedItems": "",
+      "enterCost": ""
     },
     "message": {
       "woNo": "",

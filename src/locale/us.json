@@ -121,7 +121,8 @@
       "title": "things",
       "selectedOutsourcing": "Selected outsourcing Co.",
       "showDetail": "View details",
-      "readOnlyMode": "Read mode"
+      "readOnlyMode": "Read mode",
+      "selectedItems": "Selected items"
     },
     "message": {
       "woNo": "Will be automatically generated.",
