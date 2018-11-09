@@ -119,7 +119,8 @@
       "homepage": "Homepage url",
       "exSupplierDsc": "Remark",
       "title": "things",
-      "selectedOutsourcing": "Selected outsourcing Co."
+      "selectedOutsourcing": "Selected outsourcing Co.",
+      "showDetail": "View details"
     },
     "message": {
       "woNo": "Will be automatically generated.",

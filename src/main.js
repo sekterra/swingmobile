@@ -46,7 +46,9 @@ import YTimepicker from '@/components/widgets/YTimepicker'
 import YInspectionDetail from '@/components/widgets/YInspectionDetail'
 import YSimpleDatepicker from '@/components/widgets/YSimpleDatepicker'
 import YDurationpicker from '@/components/widgets/YDurationpicker'
+import YRegistList from '@/components/widgets/YRegistList'
 import YExpantionGrid from '@/components/widgets/YExpantionGrid'
+
 
 // TODO : global javascript imports
 import rules from '@/js/rules.js'
@@ -77,23 +79,23 @@ Vue.use(fullCalendar);
 // TODO : Set the first page
 let component = App
 
-if (navigator.notification) {
-  navigator.notification.alert('has notification', () => {
-  })
-}
+// if (navigator.notification) {
+//   navigator.notification.alert('has notification', () => {
+//   })
+// }
 
-if (navigator.notification) {
-  var globalization = 'No globalization'
-  navigator.globalization.getLocaleName(
-    function (language) {
-      navigator.notification.alert('language: ' + language.value + '\n', () => {
-      })
-    },
-    function () {
-      navigator.notification.alert('Error getting language\n');
-    }
-  );
-}
+// if (navigator.notification) {
+//   var globalization = 'No globalization'
+//   navigator.globalization.getLocaleName(
+//     function (language) {
+//       navigator.notification.alert('language: ' + language.value + '\n', () => {
+//       })
+//     },
+//     function () {
+//       navigator.notification.alert('Error getting language\n');
+//     }
+//   );
+// }
 
 // if (navigator.globalization) {
 //   navigator.globalization.getDatePattern(
@@ -129,6 +131,7 @@ Vue.component(YTimepicker.name, YTimepicker);
 Vue.component(YInspectionDetail.name, YInspectionDetail);
 Vue.component(YSimpleDatepicker.name, YSimpleDatepicker);
 Vue.component(YDurationpicker.name, YDurationpicker);
+Vue.component(YRegistList.name, YRegistList);
 Vue.component(YExpantionGrid.name, YExpantionGrid);
 
 // TODO : Global

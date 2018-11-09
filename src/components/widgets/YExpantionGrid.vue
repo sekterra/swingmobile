@@ -14,19 +14,25 @@
       dark
       color="indigo darken-1"
     >
-    <v-toolbar-title></v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-text-field
+    <v-toolbar-title class="white--text">
+      <v-text-field
             v-model="keyword"
             hide-details
             color="grey lighten-4"
             prepend-icon="search"
+            placeholder="검색어를 입력하세요."
             append-line
             @input="search"
         ></v-text-field>
-        <v-btn icon>
-          <v-icon>more_vert</v-icon>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn 
+          icon
+          @click="changedExpand"
+          >
+            <v-icon small v-if="isExpand">expand_more</v-icon>
+            <v-icon small v-else>pause</v-icon>
         </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -57,7 +63,7 @@
               </v-icon>
               {{item.title}}
             </div>
-            <v-card v-if="isExtend">
+            <v-card v-if="isExpand">
               <v-card-media>
                 <v-card>
                   <v-divider></v-divider>
@@ -131,10 +137,6 @@ export default {
     summaryTitle: {
       type: String,
       default: null
-    },
-    isExtend: {
-      type: Boolean,
-      default: true
     }
   },
   watch: {
@@ -148,7 +150,8 @@ export default {
     cardContents: [],
     selection: [],
     checkCount: 0,
-    height: 45
+    height: 45,
+    isExpand: 'y'
   }),
   watch: {
     items() {
@@ -156,6 +159,10 @@ export default {
     }
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
+  mounted() {
+    this.isExpand = localStorage.hasOwnProperty('isExpand') && localStorage.isExpand === 'false' ? false : true
+    console.log('localStorage.isExpand:' + localStorage.isExpand + ':' + typeof localStorage.isExpand + ':' + this.isExpand + 'localStorage.hasOwnProperty(isExpand):' + localStorage.hasOwnProperty('isExpand'))
+  },
   //* methods */
   methods: {
     /**
@@ -176,8 +183,10 @@ export default {
       this.height = this.titleInfos.length * 45
     },
     itemClicked(_i, _index) {
-       this.$set(this.orgInfos[_index], 'isCheck', !this.orgInfos[_index].isCheck)
-       this.$set(this.titleInfos[_i], 'isCheck', !this.titleInfos[_i].isCheck)
+      //  this.$set(this.orgInfos[_index], 'isCheck', !this.orgInfos[_index].isCheck)
+      //  this.$set(this.titleInfos[_i], 'isCheck', !this.titleInfos[_i].isCheck)
+      this.orgInfos[_index].isCheck = !this.orgInfos[_index].isCheck
+      this.titleInfos[_i].isCheck = !this.titleInfos[_i].isCheck
        if(this.orgInfos[_i].isCheck) this.checkCount++
        else {
          if(this.checkCount) this.checkCount--
@@ -185,10 +194,25 @@ export default {
        }
     },
     search() {
-      if (!this.keyword) this.titleInfos = this.$comm.clone(this.orgInfos)
-      else if (this.keyword.length <= 1) return
-      this.titleInfos = this.orgInfos.filter((_item) => {
+      if (this.keyword.length > 0 && this.keyword.length <= 1) return
+      var filter = []
+      if (!this.keyword) filter = this.$comm.clone(this.orgInfos)
+      var filter = this.orgInfos.filter((_item) => {
         return _item.title.toUpperCase().split(' ').join('').indexOf(this.keyword.toUpperCase().split(' ').join('')) >= 0
+      })
+      // this.$set(this, 'titleInfos', filter)
+      this.titleInfos = this.$comm.clone(filter)
+    },
+    changedExpand() {
+      this.isExpand = !this.isExpand
+      localStorage.isExpand = this.isExpand
+    },
+    /**
+     * 선택한 항목을 반환하는 함수(부모로 부터 호출)
+     */
+    getSelectedItems() {
+      return this.orgInfos.filter((_item) => {
+        return _item.isCheck
       })
     }
   }

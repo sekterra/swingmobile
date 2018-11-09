@@ -219,6 +219,11 @@
                       <v-divider></v-divider>
                     </v-flex>
                   </v-layout>
+                  <v-layout row wrap fill-height>
+                    <v-flex xs12>
+                      <y-regist-list></y-regist-list>
+                    </v-flex>
+                  </v-layout>
                   
                   <!-- 이미지 파일 업로드 -->
                   <v-layout>
