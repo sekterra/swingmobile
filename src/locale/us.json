@@ -122,7 +122,8 @@
       "selectedOutsourcing": "Selected outsourcing Co.",
       "showDetail": "View details",
       "readOnlyMode": "Read mode",
-      "selectedItems": "Selected items"
+      "selectedItems": "Selected items",
+      "enterCost": "Enter a cost"
     },
     "message": {
       "woNo": "Will be automatically generated.",

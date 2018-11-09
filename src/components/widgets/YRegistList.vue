@@ -50,11 +50,11 @@
               <v-list-tile-avatar>
                   <v-icon :class="{'amber': (i % 2 === 0), 'indigo': (i % 2 === 1), 'white--text': true}">assignment</v-icon>
               </v-list-tile-avatar>
-              <v-list-tile-content>
+              <v-list-tile-content >
                 <v-list-tile-title :class="{'strikethrough': item.isCancel}">
                   {{item.name}}
                 </v-list-tile-title>
-                <div>
+                <div style="width:100%;">
                   <y-text
                     :editable="editable"
                     custom-class="pt-0"
@@ -78,7 +78,10 @@
                 </v-btn>
               </v-list-tile-action>
             </v-list-tile>
-            <v-divider :key="'div_' + item.pk" />
+            <!-- <v-divider 
+              v-if="i < selectedList.length - 1"
+              :key="'div_' + item.pk" 
+            /> -->
             </template>
             <div v-if="!selectedList.length"
                 class="text-xs-center indigo--text">
