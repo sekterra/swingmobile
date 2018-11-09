@@ -91,7 +91,7 @@
         </v-card-media>
         <v-divider></v-divider>
         <v-card-actions>
-          <div class="caption indigo--text">{{subTitle}} : {{selectedList.length}}{{$t('title.things')}}</div>
+          <div class="caption indigo--text">{{subTitle}} : {{selectCount}}{{$t('title.things')}}</div>
           <v-spacer></v-spacer>
           <div class="caption indigo--text">{{$t('title.totalCost')}} : {{totalCost}}{{$t('title.things')}}</div>
         </v-card-actions>
@@ -182,11 +182,13 @@ export default {
       };
       this.selectedList.unshift(item)
       this.height = this.selectedList.length * 71
+      this.selectCount = this.getSelectedItems().length
     },
     // 추가한 내용을 취소할 경우
     setCancel(_item) {
       _item.isCancel = !_item.isCancel
       this.setTotalCost()
+      this.selectCount = this.getSelectedItems().length
     },
     // 선택한 내용을 부모에게 반환(취소된 것 제외)
     getSelectedItems() {
@@ -200,7 +202,6 @@ export default {
           if (!_item.isCancel) return sum + (_item.cost ? _item.cost : 0)
           else return sum
       }, 0);
-      console.log(JSON.stringify(this.selectedList))
       this.totalCost = this.$comm.setNumberSeperator(isNaN(totalCost) ? 0 : totalCost)
     }
   }
@@ -210,6 +211,7 @@ export default {
 <style>
 .strikethrough {
   text-decoration: line-through;
+  font-style: oblique;
 }
 .vscroll {
   overflow-y:auto;
