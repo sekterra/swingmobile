@@ -477,7 +477,6 @@ export default {
     checkValidation() {
       this.$validator.validateAll().then((_result) => {
         this.isValid = _result
-        console.log('_result:' + JSON.stringify(_result))
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
         if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))

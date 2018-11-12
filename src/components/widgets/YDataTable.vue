@@ -46,71 +46,66 @@ examples:
         </template>
         <template slot="items" slot-scope="props">
           <tr :active="props.selected">
-          <td
-            v-for="header in headers" :key="header.text"
-            v-if="items.length > 0"
-            :class="header.hasOwnProperty('columnAlign') ? 'text-xs-' + header.columnAlign : ''"
-          >
-            <v-btn
-              v-if="header.type === 'edit' && editable"
-              small 
-              icon
-              outline
-              color="primary"
-              :loading="props.selected"
-              @click="editItem(props); props.selected = !props.selected"
+            <td
+              v-for="header in headers" :key="header.text"
+              v-if="items.length > 0"
+              :class="header.hasOwnProperty('columnAlign') ? 'text-xs-' + header.columnAlign : ''"
             >
-              <v-icon
+              <v-btn
+                v-if="header.type === 'edit' && editable"
+                small 
+                icon
+                outline
+                color="primary"
+                :loading="props.selected"
+                @click="editItem(props); props.selected = !props.selected"
+              >
+                <v-icon
+                  small
+                  v-if="!props.selected"
+                  v-model="props.item[header.name]"
+                >
+                edit
+                </v-icon>
+                <v-icon
+                  v-else>
+                  block
+                </v-icon>
+              </v-btn>
+              <v-btn
+                v-if="header.type === 'radio'"
+                small 
+                icon
+                outline
+                color="success"
+                @click="selectedData(props.item)"
+              >
+                <v-icon
                 small
-                v-if="!props.selected"
-                v-model="props.item[header.name]"
+                >
+                  done
+                </v-icon>
+              </v-btn>
+              <span v-else-if="!header.columnEditable" class="shortened">
+                {{props.item[header.name]}}
+              </span>
+              <v-switch 
+                color="success"
+                v-else-if="header.columnEditable && header.type === 'radio'"
               >
-              edit
-              </v-icon>
-              <v-icon
-                v-else>
-                block
-              </v-icon>
-            </v-btn>
-            <v-btn
-              v-if="header.type === 'radio'"
-              small 
-              icon
-              outline
-              color="success"
-              @click="selectedData(props.item)"
-            >
-              <v-icon
-              small
+              </v-switch>
+              <v-text-field
+                v-else-if="header.columnEditable && header.type === 'text'"
               >
-                done
-              </v-icon>
-            </v-btn>
-            <!-- <input type="radio"
-              v-if="header.type === 'radio'"
-              :name="header.name"
-              @click.stop="selectedData(props.item, $event.target)"
-            /> -->
-            <!-- <v-radio-group
-              v-if="header.type === 'radio'"
-              v-model="radioGroup"
-              class="ma-0 pa-0"
-              name="rowSelector">
-              <v-radio v-if="header.type === 'radio'" :value="props.item.equipPk"/>
-            </v-radio-group> -->
-            <span v-else-if="!header.columnEditable" class="shortened">
-              {{props.item[header.name]}}
-            </span>
-            <v-switch 
-              color="success"
-              v-else-if="header.columnEditable && header.type === 'radio'"
-            >
-            </v-switch>
-            <v-text-field
-              v-else-if="header.columnEditable && header.type === 'text'"
-            >
-            </v-text-field>
-          </td>
+              </v-text-field>
+              <v-chip 
+                v-if="header.type === 'process'"
+                label 
+                small 
+                :color="props.item.color" text-color="white" >
+                {{ props.item.colorTitle }}
+              </v-chip>
+            </td>
           </tr>
         </template>
       </v-data-table>

@@ -94,6 +94,7 @@ export default {
       item: {},
       itemText: null,
       itemValue: null,
+      itemSubValue: null,
       vValue: null,
     }
   },
@@ -153,14 +154,21 @@ export default {
         })
       }
     },
-    getSelectItemName() {
+    getSelectItem() {
       if (!this.vValue) return null
       var filter = this.items.filter((_item) => {
         return _item[this.item.itemKey] === this.vValue
       })
 
       if (filter.length <= 0) return null
-      return filter[0][this.itemText]
+      var value = {
+        item: filter[0],
+        itemInfo: {
+          key: this.itemText,
+          value: this.itemValue
+        }
+      }
+      return value
     }
   }
 }

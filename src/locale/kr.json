@@ -122,7 +122,16 @@
       "selectedOutsourcing": "선택한 외주업체",
       "showDetail": "상세보기",
       "readOnlyMode": "읽기전용 모드",
-      "selectedItems": "선택된 항목"
+      "selectedItems": "선택된 항목",
+      "outsourcingList": "외주업체 목록",
+      "numberOfSelects": "선택 수",
+      "searchForOutsourcing": "업체검색",
+      "AddWorkerOrOccupation": "작업인력 또는 직종 추가",
+      "numberOfThings": "선택 수",
+      "searchForWokerOccupation": "작업자/직종 검색",
+      "employee": "직원",
+      "jobClass": "직종",
+      "totalHours": "총 시간"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

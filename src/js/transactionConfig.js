@@ -80,7 +80,31 @@
         },
         requestType: 'POST'
       },
-    }
+      update: {
+        url: 'workorder/create/',
+        param: {
+          workOrder: {
+            workOrderPk: null,
+            equipment: null,
+            workTitle: null,
+            workText: null,
+            dept: null,
+            planStartDt: null,
+            planEndDt: null,
+            startDt: null, // 요청과 차이점
+            endDt: null, // 요청과 차이점
+            maintType: null,
+            problem: null,
+            cause: null,
+            project: null,
+            breakdownDt: null
+          },
+          workOrderSuppliers: [],
+          woLabors: []
+        },
+        requestType: 'PUT'
+      }
+    },
   },
   inspection: {
     update: {

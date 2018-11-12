@@ -123,7 +123,16 @@
       "showDetail": "View details",
       "readOnlyMode": "Read mode",
       "selectedItems": "Selected items",
-      "enterCost": "Enter a cost"
+      "enterCost": "Enter a cost",
+      "outsourcingList": "Outsourcer List",
+      "numberOfSelects": "Number of selected",
+      "searchForOutsourcing": "Search for Outsourcer",
+      "AddWorkerOrOccupation": "Add worker or occupation",
+      "numberOfThings": "Number of things",
+      "searchForWokerOccupation": "Search for a worker / an Occupation",
+      "employee": "man",
+      "jobClass": "job",
+      "totalHours": "Total of hours"
     },
     "message": {
       "woNo": "Will be automatically generated.",

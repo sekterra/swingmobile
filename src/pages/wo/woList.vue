@@ -77,6 +77,7 @@
 
 <script>
 import selectConfig from '@/js/selectConfig'
+import $ from 'jquery'
 
 export default {
   /* attributes: name, components, props, data */
@@ -124,7 +125,8 @@ export default {
         { text: this.$t('title.equipmentCode'), name: 'equipCd', width: '15%', align: 'center' },
         { text: this.$t('title.equipmentName'), name: 'equipNm', width: '20%', align: 'center' },
         { text: this.$t('title.woRequestDate'), name: 'rqstDt', width: '10%', align: 'center', columnAlign: 'center' },
-        { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' }
+        { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' },
+        { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
       ]
     }
   },
@@ -146,7 +148,11 @@ export default {
       console.log('row double click');
     },
     editItem(_item) {
-      this.$comm.movePage(this.$router, '/woCreate?pk=' + _item.workOrderPk)
+      var url =''
+      console.log(JSON.stringify(_item))
+      if (_item.woStatusCd === 'WO_STATUS_R') url = '/woRequest?pk=' + _item.workOrderPk
+      else url =  '/woCreate?pk=' + _item.workOrderPk
+      this.$comm.movePage(this.$router, url)
     },
     actionSearch(_searchData) {
       this.searchData = _searchData
@@ -161,7 +167,16 @@ export default {
       this.gridLoading = true
       if(!this.searchData.startDate || !this.searchData.endDate) return
       this.$ajax.requestGet((_result) => {
-        self.gridData = typeof _result.content !== 'undefined' ? _result.content : _result
+        var gridData = typeof _result.content !== 'undefined' ? _result.content : _result
+        $.each(gridData, (_i, _item) => {
+          if (_item.woStatusCd === 'WO_STATUS_R') _item.color = 'grey'
+          if (_item.woStatusCd === 'WO_STATUS_A') _item.color = 'blue'
+          if (_item.woStatusCd === 'WO_STATUS_P') _item.color = 'indigo'
+          if (_item.woStatusCd === 'WO_STATUS_X') _item.color = 'success'
+          if (_item.woStatusCd === 'WO_STATUS_C') _item.color = 'red'
+          _item.colorTitle = _item.woStatusNm
+        })
+        self.gridData = gridData
         self.$refs.dataTable.hideLoading()
       }, (_error) => {
         self.gridLoading = false

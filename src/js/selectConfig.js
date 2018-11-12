@@ -104,6 +104,12 @@ var selectConfig = {
         startDate: null,
         endDate: null
       },
+    },
+    outsource: {
+      url: 'workorder/exsuppliers/'
+    },
+    labors: {
+      url: 'workorder/labors/'
     }
   },
   woList: [

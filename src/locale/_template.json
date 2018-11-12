@@ -123,7 +123,16 @@
       "showDetail": "",
       "readOnlyMode": "",
       "selectedItems": "",
-      "enterCost": ""
+      "enterCost": "",
+      "outsourcingList": "",
+      "numberOfSelects": "",
+      "searchForOutsourcing": "",
+      "AddWorkerOrOccupation": "",
+      "numberOfThings": "",
+      "searchForWokerOccupation": "",
+      "employee": "",
+      "jobClass": "",
+      "totalHours": ""
     },
     "message": {
       "woNo": "",

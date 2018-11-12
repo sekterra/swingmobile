@@ -216,8 +216,14 @@ export default {
       else {
         this.vValueFrom = this.$comm.getToday()
         this.vValueTo = this.$comm.getToday()
+        
         this.setLocalFormattedDate()
       }
+      this.vValue = {
+        fromDate: this.vValueFrom,
+        toDate: this.vValueTo
+      }
+      this.$emit('input', this.vValue);
     }
   },
   /* methods */

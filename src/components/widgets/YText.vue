@@ -17,6 +17,7 @@ examples:
       :append-outer-icon="icon"
       clearable
       :hide-details="hideDetail"
+      :hint="hint"
       :class="customClass"
       :counter="counter"
       :maxlength="maxlength"
@@ -89,6 +90,9 @@ export default {
     hideDetail: {
       type: Boolean,
       default: false
+    },
+    hint: {
+      type: String
     }
   },
   data() {
@@ -105,6 +109,7 @@ export default {
   watch: {
     // todo : 부모의 v-model 변경을 감시
     value() {
+      console.log('y-text:' + this.value)
       this.vValue = this.value
     }
   },

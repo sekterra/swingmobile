@@ -55,21 +55,36 @@
                   {{item.name}}
                 </v-list-tile-title>
                 <div style="width:100%;">
-                  <y-text
+                  <!-- <y-text
                     :editable="editable"
                     custom-class="pt-0"
                     name="workTitle"
                     placeholder="여기에 비용을 입력하세요."
+                    :hint="item.hint"
+                    v-model="item.cost"
                     @input="(_value) => {
                       item.cost = Number(_value)
                       setTotalCost()
                     }"
                   >
-                  </y-text>
+                  </y-text> -->
+                  <v-text-field
+                    :editable="editable"
+                    custom-class="pt-0"
+                    name="workTitle"
+                    placeholder="여기에 비용을 입력하세요."
+                    :hint="item.hint"
+                    v-model="item.cost"
+                    @input="(_value) => {
+                      item.cost = Number(_value)
+                      setTotalCost()
+                    }"
+                  >
+                  </v-text-field>
                 </div>
               </v-list-tile-content>
               <v-list-tile-action>
-                <v-btn 
+                <v-btn
                   v-if="editable"
                   icon
                   @click.stop="setCancel(item)"
@@ -93,7 +108,7 @@
         <v-card-actions>
           <div class="caption indigo--text">{{subTitle}} : {{selectCount}}{{$t('title.things')}}</div>
           <v-spacer></v-spacer>
-          <div class="caption indigo--text">{{$t('title.totalCost')}} : {{totalCost}}{{$t('title.things')}}</div>
+          <div class="caption indigo--text">{{titleOfTotal}} : {{totalCost}}</div>
         </v-card-actions>
       </v-card>
 
@@ -134,6 +149,7 @@ export default {
       type: Number,
       default: 5
     },
+    items: Array,
     // grid 항목 정보
     itemInfo: {
       type: Object,
@@ -143,23 +159,42 @@ export default {
       type: Boolean,
       default: true
     },
-    // 등록된 개수
-    selectCount: {
-      type: Number,
-      default: 0
+    // // 등록된 개수
+    // selectCount: {
+    //   type: Number,
+    //   default: 0
+    // },
+    titleOfTotal: {
+      type: String
+    },
+    hintKey: {
+      type: String
+    },
+    hintUnit: {
+      type: String
     }
   },
   data: () => ({
     selectValue: null,
     selectedList: [],
+    selectCount: 0,
     totalCost: 0,
     height: baseHeight,
-    baseHeight: baseHeight
+    baseHeight: baseHeight,
+    hint: null
   }),
   watch: {
     // 선택값이 변경되면 중복여부를 확인후 없으면 추가 있으면 추가하지 않음
     selectValue() {
       if (this.selectValue) this.addDataToList()
+    },
+    items() {
+      if (this.items) {
+        this.selectedList = this.$comm.clone(this.items)
+        this.height = this.selectedList.length * 71
+        this.selectCount = this.selectedList.length;
+        this.setTotalCost()
+      }
     }
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
@@ -174,9 +209,16 @@ export default {
       }
       // 기존에 추가되었으면 추가 안함
       if (filter.length > 0) return
+      var selectedItem = this.$refs.select.getSelectItem()
+      var item = selectedItem.item
+      var itemInfo = selectedItem.itemInfo
+      var name = item[itemInfo.key]
+      var hint = ''
+      if (this.hintKey && item.hasOwnProperty(this.hintKey)) hint = item[this.hintKey]
       var item = {
         pk: this.selectValue,
-        name: this.$refs.select.getSelectItemName(),
+        name: name,
+        hint: hint.toString(),
         cost: null,
         isCancel: false // 취소선 표시여부
       };

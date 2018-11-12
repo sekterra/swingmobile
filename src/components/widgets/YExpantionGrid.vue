@@ -22,6 +22,7 @@
             prepend-icon="search"
             placeholder="검색어를 입력하세요."
             append-line
+            full-width
             @input="search"
         ></v-text-field>
         </v-toolbar-title>

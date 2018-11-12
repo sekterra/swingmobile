@@ -44,7 +44,7 @@
                         :error-messages="errors.collect('equipment')"
                         @click="openSearchPopup"
                         @click:append-outer="openSearchPopup"
-                        :clear-icon-cb="equipmentNameChanged"
+                        @click:clear="equipmentNameChanged"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs12 class="py-0">
@@ -89,7 +89,7 @@
                       >
                       </y-textarea>
                     </v-flex>
-                    <v-flex sm6 class="py-0">
+                    <!-- <v-flex sm6 class="py-0">
                       <y-datepicker 
                         :editable="editable"
                         :label="$t('title.woRequestDate') + '*'"
@@ -100,7 +100,7 @@
                         :error-msg="errors.first('rqstDt')"
                       >
                       </y-datepicker>
-                    </v-flex>
+                    </v-flex> -->
                     <v-flex sm6 class="py-0">
                       <!-- 작업계획일 -->
                       <y-durationpicker
@@ -109,7 +109,7 @@
                       name="woPlanDate"
                       default-type="today"
                       v-validate="'required'"
-                      v-model="durationpicker"
+                      v-model="woPlanDate"
                       :error-msg="errors.first('woPlanDate')"
                       >
                       </y-durationpicker>
@@ -122,7 +122,7 @@
                       name="workDate"
                       default-type="today"
                       v-validate="'required'"
-                      v-model="durationpicker"
+                      v-model="workDate"
                       :error-msg="errors.first('workDate')"
                       >
                       </y-durationpicker>
@@ -207,7 +207,24 @@
                       </y-select>
                     </v-flex>
                   </v-layout>
-                  <!-- <v-layout row wrap fill-height>
+                  <!-- 외주업체 -->
+                  <v-layout row wrap fill-height>
+                    <v-flex xs12>
+                      <y-regist-list
+                        ref="outsourcing"
+                        :title="$t('title.outsourcingList')"
+                        :subTitle="$t('title.numberOfSelects')"
+                        :controlTitle="$t('title.searchForOutsourcing')"
+                        :title-of-total="$t('title.totalCost')"
+                        selectItemKey="exSupplier"
+                        :editable="editable"
+                        :items="outsourcingItems"
+                      >
+                      </y-regist-list>
+                    </v-flex>
+                  </v-layout>
+                  <!-- 확장 검색 사용예제
+                    <v-layout row wrap fill-height>
                     <v-flex xs12>
                       <y-expantion-grid
                         :title="$t('title.exSupplierSelect')"
@@ -219,14 +236,40 @@
                       <v-divider></v-divider>
                     </v-flex>
                   </v-layout> -->
+
+                  <!-- 작업 인력 -->
                   <v-layout row wrap fill-height>
                     <v-flex xs12>
                       <y-regist-list
-                        title="업체목록"
-                        subTitle="선택 업체 수"
-                        controlTitle="업체검색"
-                        selectItemKey="exSupplier"
+                        ref="employee"
+                        :title="$t('title.employee')"
+                        :subTitle="$t('title.numberOfSelects')"
+                        :controlTitle="$t('title.searchForOutsourcing')"
+                        :title-of-total="$t('title.totalHours')"
+                        selectItemKey="employee"
+                        hint-key="wageCost"
+                        hint-unit=""
                         :editable="editable"
+                        :items="employeeList"
+                      >
+                      </y-regist-list>
+                    </v-flex>
+                  </v-layout>
+
+                  <!-- 작업 직종 -->
+                  <v-layout row wrap fill-height>
+                    <v-flex xs12>
+                      <y-regist-list
+                        ref="jobClass"
+                        :title="$t('title.jobClass')"
+                        :subTitle="$t('title.numberOfSelects')"
+                        :controlTitle="$t('title.searchForOutsourcing')"
+                        :title-of-total="$t('title.totalHours')"
+                        selectItemKey="jobClass"
+                        hint-key="wageCost"
+                        hint-unit=""
+                        :editable="editable"
+                        :items="jobClassList"
                       >
                       </y-regist-list>
                     </v-flex>
@@ -295,7 +338,6 @@
                 <v-flex xs12>
                   <div class="text-xs-center">
                     <y-btn
-                      v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
                       type="save"
                       :title="$t('button.save')"
                       :action-url="url"
@@ -332,14 +374,6 @@
           </v-card>
         </v-flex>           
       </v-layout>
-      <!-- <y-dialog 
-        title="test"
-        message="이것은 다이얼로그 테스트입니다."
-        :is-open-dialog="isOpenDialog"
-        type="info"
-        @dialogResult="dialogResult"
-        >
-      </y-dialog> -->
       <y-popup 
         :search-item="popupSearchItem"
         :search-type="popupSearchType"
@@ -360,12 +394,13 @@
 <script>
 import transactionConfig from '@/js/transactionConfig.js'
 import selectConfig from '@/js/selectConfig.js'
+import comboConfig from '@/js/comboConfig'
 import jwt from '@/js/jwtToken.js'
 import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
 
-let transaction = transactionConfig.wo.request
+let transaction = transactionConfig.wo.woCreate
 export default {
   $_veeValidate: {
     validator: 'new'
@@ -413,14 +448,16 @@ export default {
     tmpImageList: [],
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
-    durationpicker: null,
+    woPlanDate: null,
+    workDate: null,
     exSupplier: [], // 외주업체 서비스
-    exSupplierTitles: {}
+    exSupplierTitles: {},
+    workerOrOccupationItems: [], // TODO : 작업인력 또는 직종정보를 담고있는 배열
+    outsourcingItems: [],
+    employeeList: [],
+    jobClassList: []
   }),
   watch: {
-    'saveData.workOrder.planStartDt': function () {
-      this.saveData.workOrder.planEndDt = this.saveData.workOrder.planStartDt
-    },
     breakdownDate() {
       this.mappedBreakdownDt()
     },
@@ -430,6 +467,24 @@ export default {
     uploadedImagesCount() {
       if (this.upload.imageList.length && this.upload.uploadedImagesCount === this.upload.imageList.length) {
         this.completeImageUpload()
+      }
+    },
+    woPlanDate() {
+      if (!this.woPlanDate) {
+        this.saveData.workOrder.planStartDt =  null
+        this.saveData.workOrder.planEndDt =  null
+      } else {
+        this.saveData.workOrder.planStartDt =  this.woPlanDate.fromDate;
+        this.saveData.workOrder.planEndDt =  this.woPlanDate.toDate;
+      }
+    },
+    workDate() {
+      if (!this.workDate) {
+        this.saveData.workOrder.startDt = null;
+        this.saveData.workOrder.endDt = null;
+      } else {
+        this.saveData.workOrder.startDt =  this.workDate.fromDate;
+        this.saveData.workOrder.endDt =  this.workDate.toDate;
       }
     }
   },
@@ -469,11 +524,13 @@ export default {
       this.requestType = transaction.update.requestType // post
       this.saveData = transaction.update.param
       this.onSearch(pk)
+      this.getOutsourceList(pk)
+      this.getLaborList(pk)
       this.getImagePks(pk)
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
     this.getExsupplier()
-
+    
     // 업로드가 완료되면 업로드 이미지 정보 초기화
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
       this.upload.imageList = []
@@ -499,7 +556,7 @@ export default {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
       if (!this.isValid) return
-      // window.alert(JSON.stringify(_result))
+      
       this.uploadImages(_result.returnResult.workOrderPk)
       this.saveData = this.$comm.clone(this.defaultSaveData)
       window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
@@ -539,6 +596,7 @@ export default {
      * 저장전 유효성 검사
      */
     checkValidation() {
+      this.mappedSubItems()
       this.$validator.validateAll().then((_result) => {
         this.isValid = _result
         // TODO : 전역 성공 메시지 처리
@@ -547,6 +605,49 @@ export default {
       }).catch(() => {
         this.isValid = false
       });
+    },
+    /**
+     * saveData 공급업체, 직원, 직종 목록 설정
+     */
+    mappedSubItems() {
+      this.saveData.workOrderSuppliers = []
+      this.saveData.woLabors = []
+
+      var workOrderSuppliers = this.$refs.outsourcing.getSelectedItems()
+      var employeeList = this.$refs.employee.getSelectedItems()
+      var jobClassList = this.$refs.jobClass.getSelectedItems()
+
+      // 공급업체
+      if (workOrderSuppliers.length) {
+        $.each(workOrderSuppliers, (_i, _item) => {
+          this.saveData.workOrderSuppliers.push({
+            exSupplier: _item.pk,
+            cost: _item.cost
+          })
+        })
+      }
+
+      // 직원 목록
+      if (employeeList.length) {
+        $.each(employeeList, (_i, _item) => {
+          this.saveData.woLabors.push({
+            userInfo: _item.pk,
+            jobClass: null,
+            workHr: _item.cost
+          })
+        })
+      }
+
+      // 직종 목록
+      if (jobClassList.length) {
+        $.each(jobClassList, (_i, _item) => {
+          this.saveData.woLabors.push({
+            userInfo: null,
+            jobClass: _item.pk,
+            workHr: _item.cost
+          })
+        })
+      }
     },
     /**
      * Event Bus로 정보 수신(datatable > woList > popup > woCreate)
@@ -581,6 +682,50 @@ export default {
       this.$ajax.url = 'workorder/request/' + _pk
       this.$ajax.requestGet((_result) => {
         this.mappedWoData(_result, _isWorkCopy)
+      })
+    },
+    /**
+     * 외주 업체 목록
+     */
+    getOutsourceList(_pk) {
+      this.$ajax.url = selectConfig.wo.outsource.url + _pk
+      var self = this
+      this.$ajax.requestGet((_result) => {
+        $.each(_result, (_i, _item) => {
+          self.outsourcingItems.push({
+            pk: _item.exSupplierPk,
+            name: _item.exSupplierNm,
+            cost: _item.cost,
+            isCancel: false
+          })
+        })
+        console.log(JSON.stringify(_result))
+      })
+    },
+    /**
+     * 작업자 목록
+     */
+    getLaborList(_pk) {
+      this.$ajax.url = selectConfig.wo.labors.url + _pk
+      var self = this
+      this.$ajax.requestGet((_result) => {
+        $.each(_result, (_i, _item) => {
+          if (_item.userPk) {
+            self.employeeList.push({
+              pk: _item.userPk,
+              name: _item.userNm,
+              cost: _item.workHr,
+              isCancel: false
+            })
+          } else if (_item.jobClassPk) {
+            self.jobClassList.push({
+              pk: _item.jobClassPk,
+              name: _item.jobClassNm,
+              cost: _item.workHr,
+              isCancel: false
+            })
+          }
+        })
       })
     },
     /**
