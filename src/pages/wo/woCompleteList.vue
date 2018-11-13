@@ -72,6 +72,7 @@ examples:
             :editable="isGridEditable"
             :search-type="searchType"
             @selectedData="selectedData"
+            @editItem="editItem"
           >
           </y-data-table>
         </v-flex>
@@ -82,6 +83,7 @@ examples:
 
 <script>
 import selectConfig from '@/js/selectConfig'
+import $ from 'jquery'
 
 export default {
   /* attributes: name, components, props, data */
@@ -100,8 +102,8 @@ export default {
     return {
       msg: '컨트롤',
       expandSearchOption: [ 
-        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker'},
-        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker'},
+        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '3m'},
+        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
         {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
         {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
       ],
@@ -118,8 +120,8 @@ export default {
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: null,
-      searchData: null,
+      gridUrl: selectConfig.woList[0].url,
+      searchData: this.$comm.clone(selectConfig.woList[0].searchData),
       gridLoading: false,
       gridData: [],
       gridHeaderOptions: [
@@ -129,14 +131,13 @@ export default {
         { text: this.$t('title.equipmentCode'), name: 'equipCd', width: '15%', align: 'center' },
         { text: this.$t('title.equipmentName'), name: 'equipNm', width: '20%', align: 'center' },
         { text: this.$t('title.woRequestDate'), name: 'rqstDt', width: '10%', align: 'center', columnAlign: 'center' },
-        { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' }
+        { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' },
+        { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
       ]
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
-  mounted() {
-    this.gridUrl = selectConfig.woList[0].url
-    this.searchData = this.$comm.clone(selectConfig.woList[0].searchData)
+  created() {
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
     // popup 여부에 따라 그리드 헤더 옵션변경
@@ -152,8 +153,9 @@ export default {
     rowDblClick() {
       console.log('row double click');
     },
-    editItem() {
-      this.$emit('edit');
+    editItem(_item) {
+      var url = '/woComplete?pk=' + _item.workOrderPk
+      this.$comm.movePage(this.$router, url)
     },
     actionSearch(_searchData) {
       this.searchData = _searchData
@@ -161,15 +163,25 @@ export default {
     },
     onSearch() {
       let self = this
-      this.searchData.woStatus = ['WO_STATUS_P']
-      this.searchData.woStatusEx = ['WO_STATUS_X', 'WO_STATUS_C']
+      this.searchData.woStatus = ['WO_STATUS_P', , 'WO_STATUS_C']
+      this.searchData.woStatusEx = ['WO_STATUS_X']
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
-      this.$ajax.param.startDate = this.$comm.getPrevDate('3m')
-      this.$ajax.param.endDate = this.$comm.getToday()
+      this.$ajax.param.startDate = this.searchData.startDate
+      this.$ajax.param.endDate = this.searchData.endDate
+      if(!this.searchData.startDate || !this.searchData.endDate) return
       this.gridLoading = true
       this.$ajax.requestGet((_result) => {
-        self.gridData = typeof _result.content !== 'undefined' ? _result.content : _result
+        var gridData = typeof _result.content !== 'undefined' ? _result.content : _result
+        $.each(gridData, (_i, _item) => {
+          if (_item.woStatusCd === 'WO_STATUS_R') _item.color = 'grey'
+          if (_item.woStatusCd === 'WO_STATUS_A') _item.color = 'blue'
+          if (_item.woStatusCd === 'WO_STATUS_P') _item.color = 'indigo'
+          if (_item.woStatusCd === 'WO_STATUS_X') _item.color = 'success'
+          if (_item.woStatusCd === 'WO_STATUS_C') _item.color = 'red'
+          _item.colorTitle = _item.woStatusNm
+        })
+        self.gridData = gridData
         self.$refs.dataTable.hideLoading()
       }, (_error) => {
         self.gridLoading = false

@@ -132,7 +132,8 @@
       "searchForWokerOccupation": "",
       "employee": "",
       "jobClass": "",
-      "totalHours": ""
+      "totalHours": "",
+      "woList": ""
     },
     "message": {
       "woNo": "",

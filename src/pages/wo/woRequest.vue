@@ -64,6 +64,7 @@
                         :maxlength="200"
                         v-model="saveData.workOrder.workTitle"
                         v-validate="'required'"
+                        data-vv-name="workTitle"
                         :error-msg="errors.first('workTitle')"
                       >
                       </y-text>
@@ -97,6 +98,7 @@
                         v-model="saveData.workOrder.workOrderApproval.rqstDt"
                         default-type="today"
                         v-validate="'required'"
+                        data-vv-name="rqstDt"
                         :error-msg="errors.first('rqstDt')"
                       >
                       </y-datepicker>
@@ -110,6 +112,7 @@
                         default-type="today"
                         child-validate-type="required"
                         v-validate="'required'"
+                        data-vv-name="planStartDt"
                         :error-msg="errors.first('planStartDt')"
                       >
                       </y-datepicker>
@@ -122,6 +125,7 @@
                         item-search-key="maintType"
                         v-model="saveData.workOrder.maintType"
                         v-validate="'required'"
+                        data-vv-name="maintType"
                         :error-msg="errors.first('maintType')"
                       >
                       </y-select>
@@ -136,6 +140,7 @@
                         default-type="today"
                         child-validate-type="required"
                         v-validate="'required'"
+                        data-vv-name="breakdownDate"
                         :error-msg="errors.first('breakdownDate')"
                       >
                       </y-datepicker>
@@ -148,6 +153,7 @@
                         default-type="current"
                         child-validate-type="required"
                         v-validate="'required'"
+                        data-vv-name="breakdownTime"
                         :error-msg="errors.first('breakdownTime')"
                       >
                       </y-timepicker>
@@ -636,7 +642,7 @@ export default {
         })
         self.carouseImageList = self.tmpImageList
         self.$nextTick(() => {
-          self.isShowCarousel = true
+          self.isShowCarousel = self.carouseImageList.length > 0
           self.carouselIndex = 0
         })
       })

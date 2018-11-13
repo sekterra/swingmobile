@@ -101,8 +101,6 @@ export default {
         this.color = 'error'
         this.hasButtonError = true
       }
-      console.log('customColor:' + this.customColor)
-      // if (this.customColor) this.color = this.customColor
     },
     /**
      * 버튼 클릭 처리

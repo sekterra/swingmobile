@@ -131,7 +131,8 @@
       "searchForWokerOccupation": "작업자/직종 검색",
       "employee": "직원",
       "jobClass": "직종",
-      "totalHours": "총 시간"
+      "totalHours": "총 시간",
+      "woList": "WO목록"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

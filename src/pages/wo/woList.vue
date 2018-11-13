@@ -57,7 +57,7 @@
         <!-- 그리드 영역 -->
         <v-flex xs12>
           <y-data-table 
-            :title="$t('title.woRequestList')"
+            :title="$t('title.woList')"
             ref="dataTable"
             :headers="gridHeaderOptions"
             create-url="/woCreate"
@@ -149,7 +149,6 @@ export default {
     },
     editItem(_item) {
       var url =''
-      console.log(JSON.stringify(_item))
       if (_item.woStatusCd === 'WO_STATUS_R') url = '/woRequest?pk=' + _item.workOrderPk
       else url =  '/woCreate?pk=' + _item.workOrderPk
       this.$comm.movePage(this.$router, url)

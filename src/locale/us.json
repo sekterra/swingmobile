@@ -132,7 +132,8 @@
       "searchForWokerOccupation": "Search for a worker / an Occupation",
       "employee": "man",
       "jobClass": "job",
-      "totalHours": "Total of hours"
+      "totalHours": "Total of hours",
+      "woList": "WO List"
     },
     "message": {
       "woNo": "Will be automatically generated.",

@@ -103,6 +103,10 @@
           woLabors: []
         },
         requestType: 'PUT'
+      },
+      complete: {
+        url: 'workorder/resultfinish/',
+        requestType: 'PUT'
       }
     },
   },

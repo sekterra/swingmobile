@@ -75,6 +75,8 @@
                     placeholder="여기에 비용을 입력하세요."
                     :hint="item.hint"
                     v-model="item.cost"
+                    hide-details
+                    class="ma-0 pa-0"
                     @input="(_value) => {
                       item.cost = Number(_value)
                       setTotalCost()

@@ -90,18 +90,6 @@
                       >
                       </y-textarea>
                     </v-flex>
-                    <!-- <v-flex sm6 class="py-0">
-                      <y-datepicker 
-                        :editable="editable"
-                        :label="$t('title.woRequestDate') + '*'"
-                        name="rqstDt"
-                        v-model="saveData.workOrder.workOrderApproval.rqstDt"
-                        default-type="today"
-                        v-validate="'required'"
-                        :error-msg="errors.first('rqstDt')"
-                      >
-                      </y-datepicker>
-                    </v-flex> -->
                     <v-flex sm6 class="py-0">
                       <!-- 작업계획일 -->
                       <y-durationpicker
