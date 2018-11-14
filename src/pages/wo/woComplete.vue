@@ -3,7 +3,7 @@
     <v-container grid-list-xl fluid class="mt-0 pt-0">
       <v-layout row wrap v-scroll="onScroll">
         <v-flex sm12>
-          <v-card>
+          <v-card v-if="requestData.equipCd">
             <v-toolbar color="primary darken-1" dark="" flat dense cad>
               <v-toolbar-title class="subheading">{{$t('menu.woCompleteList')}}</v-toolbar-title>
             </v-toolbar>
@@ -47,10 +47,10 @@
                                   <v-icon small>chevron_right</v-icon> {{$t('title.woTitle')}} : {{ requestData.workTitle }}
                                 </v-flex>
                                 <v-flex xs12 sm6>
-                                  <v-icon small>chevron_right</v-icon> {{$t('title.requestUser')}} : {{ workOrderApproval.rqstUserNm }}
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.requestUser')}} : {{ requestData.workOrderApproval.rqstUserNm }}
                                 </v-flex>
                                 <v-flex xs12 sm6>
-                                  <v-icon small>chevron_right</v-icon> {{$t('title.woRequestDate')}} : {{ workOrderApproval.rqstDt }}
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.woRequestDate')}} : {{ requestData.workOrderApproval.rqstDt }}
                                 </v-flex>
                               <!-- 고장 일시 -->
                             </v-layout>
@@ -137,13 +137,13 @@
                         v-if="editable"
                         :editable="true"
                         :label="$t('title.woEndTime') + '*'"
-                        name="finishMin"
-                        v-model="finishMin"
+                        name="finishTime"
+                        v-model="finishTime"
                         default-type="current"
                         child-validate-type="required"
                         v-validate="'required'"
-                        data-vv-name="finishMin"
-                        :error-msg="errors.first('finishMin')"
+                        data-vv-name="finishTime"
+                        :error-msg="errors.first('finishTime')"
                       >
                       </y-timepicker>
                     </v-flex>
@@ -198,7 +198,7 @@
                         :label="$t('title.remedy')"
                         name="woRemedy"
                         item-search-key="woRemedy"
-                        v-model="saveData.workOrder.woRemedy"
+                        v-model="saveData.workOrder.remedy"
                       >
                       </y-select>
                     </v-flex>
@@ -213,6 +213,7 @@
                         :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalCost')"
+                        :combo-placeholder="$t('message.enterCost')"
                         selectItemKey="exSupplier"
                         icon="location_city"
                         :editable="editable"
@@ -231,6 +232,7 @@
                         :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
+                        :combo-placeholder="$t('message.workHour')"
                         selectItemKey="employee"
                         hint-key="wageCost"
                         hint-unit=""
@@ -251,21 +253,24 @@
                         :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
+                        :combo-placeholder="$t('message.workHour')"
                         selectItemKey="jobClass"
                         hint-key="wageCost"
                         hint-unit=""
                         icon="business_center"
                         :editable="editable"
                         :items="jobClassList"
+                        @registListMounted="registListMounted"
                       >
                       </y-regist-list>
                     </v-flex>
                   </v-layout>
 
-                  <!-- 작업 직종 -->
+                  <!-- 작업 자재 -->
                   <v-layout row wrap fill-height>
                     <v-flex xs12>
                       <y-material-info-list
+                        ref="materialList"
                         :items="materialList"
                         :title="$t('title.woMaterial')"
                         :controlTitle="$t('title.woMaterialInput')"
@@ -319,9 +324,9 @@
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center" lazy>
-                    <!-- <y-btn
-                       v-if="saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_X' && saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_C'"
-                       type="save"
+                    <y-btn
+                       v-if="requestData.workOrderApproval.woStatusCd !== 'WO_STATUS_X' && requestData.workOrderApproval.woStatusCd !== 'WO_STATUS_C'"
+                       type="test"
                       :title="$t('button.save')"
                       :action-url="url"
                       :action-type="requestType"
@@ -330,8 +335,8 @@
                       @btnClicked="btnSaveClicked" 
                       @btnClickedError="btnClickedError"
                       @checkValidation="checkValidation"
-                    ></y-btn> -->
-                    <y-btn
+                    ></y-btn>
+                    <!-- <y-btn
                       v-if="workOrderApproval.woStatusCd === 'WO_STATUS_P'"
                       type="save"
                       :title="$t('button.complete')"
@@ -343,7 +348,7 @@
                       @btnClickedError="btnClickedError"
                       @checkValidation="checkValidation"
                     >
-                    </y-btn>
+                    </y-btn> -->
                     <!-- <y-btn
                       v-if="saveData.workOrder.workOrderApproval.woStatusCd === 'WO_STATUS_P'"
                        lazy
@@ -367,19 +372,6 @@
                       @btnClicked="btnDeleteClicked" 
                       @btnClickedError="btnClickedError"
                     ></y-btn>
-                    <y-btn
-                      v-if="!pk"
-                      type="clear"
-                      :title="$t('button.clear')"
-                      @btnClicked="btnClearClicked" 
-                    ></y-btn>
-                    
-                    <!-- <y-btn
-                      type="cancel"
-                      :title="$t('button.cancel')"
-                      @btnClicked="btnCancelClicked" 
-                      @btnClickedError="btnClickedError"
-                    ></y-btn> -->
                   </div>
                   </v-flex>
             </v-card-text>
@@ -424,26 +416,20 @@ export default {
   data: () => (
   {
     // wo 저장
-    saveData: transaction.insert.param,
-    url: transaction.insert.url,
-    requestType: transaction.insert.requestType,
-    completeUrl: transaction.complete.url,
-    completeRequestType: transaction.complete.requestType,
-    equipment: {
-      equipPk: null,
-      equipNm: null,
-      equipStatusCd: null,
-      warrantyDt: null,
-    },
-    requestData: {},  // WO 요청정보
-    workOrderApproval: {},
+    saveData: {},
+    url: null,
+    requestType: null,
+    // completeUrl: transaction.complete.url,
+    // completeRequestType: transaction.complete.requestType,
+    // WO 요청정보
+    requestData: {
+      workOrderApproval: []
+    },  
     defaultSaveData: {},  // 초기 저장값(저장 값 초기화 시키기 위해 사용)
-    // 알림 메시지
-    isOpenDialog: false,
     // 검색용 팝업
     isOpenPopup: false,
     // 팝업 검색 결과 타입 설정(single: radio, multi: checkbox)
-    popupGridType: 'radio',
+    popupGridType: '',
     // form 유효성 여부
     isValidForm: true,
     popupSearchItem: '',
@@ -461,24 +447,22 @@ export default {
       buffer: 0,
       uploadedImagesCount: 0  
     },
-    attachType: 'WO_PRE_PHOTO',
+    attachType: 'WO_AFTER_PHOTO',
     isShowCarousel: false,
     tmpImageList: [],
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
-    woPlanDate: null,
     workDate: null,
+    jobClassItems: [],  // 직종 정보(임금 단가 계산시 사용)
     // exSupplier: [], // 외주업체 서비스
     // exSupplierTitles: {},
-    workerOrOccupationItems: [], // TODO : 작업인력 또는 직종정보를 담고있는 배열
     outsourcingItems: [],
     employeeList: [],
     jobClassList: [],
     materialList: [],
     show: true,
     finishDate: null,
-    finishHour: null,
-    finishMin: null
+    finishTime: null
   }),
   watch: {
     breakdownDate() {
@@ -490,15 +474,6 @@ export default {
     uploadedImagesCount() {
       if (this.upload.imageList.length && this.upload.uploadedImagesCount === this.upload.imageList.length) {
         this.completeImageUpload()
-      }
-    },
-    woPlanDate() {
-      if (!this.woPlanDate) {
-        this.saveData.workOrder.planStartDt =  null
-        this.saveData.workOrder.planEndDt =  null
-      } else {
-        this.saveData.workOrder.planStartDt =  this.woPlanDate.fromDate;
-        this.saveData.workOrder.planEndDt =  this.woPlanDate.toDate;
       }
     },
     workDate() {
@@ -523,6 +498,9 @@ export default {
     }
   },
   beforeMount() {
+    this.saveData = this.$comm.clone(transaction.complete.param)
+    this.url = transaction.complete.url
+    this.requestType = transaction.complete.requestType
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -530,9 +508,6 @@ export default {
     if (this.$attrs.query) {
       var pk = this.$attrs.query
       this.pk = pk
-      this.url = transaction.update.url + '/' + pk
-      this.requestType = transaction.update.requestType // post
-      this.saveData = transaction.update.param
       this.onSearch(pk)
       this.getOutsourceList(pk)
       this.getLaborList(pk)
@@ -548,40 +523,94 @@ export default {
     });
   },  
   methods: {
-    // 버그 있음 : 수정 필요
-    btnClearClicked () {
-      this.saveData = this.$comm.clone(this.defaultSaveData);
-      this.$validator.reset();
-
-      /** 사용자 입력 요청과 처리 예제 */
-      // window.getApp.$emit('APP_CONFIRM', '테스트 하시겠습니까?');
-      // window.getApp.$on('APP_CONFIRM_REPLY', (_reply) => {
-      //   if (_reply) window.getApp.$emit('APP_REQUEST_SUCCESS', 'YES')
-      //   else window.getApp.$emit('APP_REQUEST_ERROR', 'NO')
-      // })
+    // 단일 WO 검색
+    onSearch(_pk) {
+      this.$ajax.url = 'workorder/request/' + _pk
+      this.$ajax.requestGet((_result) => {
+        this.requestData = _result
+        this.mappedWoData(_result)
+      })
     },
-    btnClickedError(_error) {
-      // console.log('error:' + JSON.stringify(_error))
+    /**
+     * 외주 업체 목록
+     */
+    getOutsourceList(_pk) {
+      this.$ajax.url = selectConfig.wo.outsource.url + _pk
+      var self = this
+      this.$ajax.requestGet((_result) => {
+        $.each(_result, (_i, _item) => {
+          self.outsourcingItems.push({
+            pk: _item.exSupplierPk,
+            name: _item.exSupplierNm,
+            cost: _item.cost,
+            isCancel: false
+          })
+        })
+      })
+    },
+    /**
+     * 작업자 목록
+     */
+    getLaborList(_pk) {
+      this.$ajax.url = selectConfig.wo.labors.url + _pk
+      var self = this
+      this.$ajax.requestGet((_result) => {
+        $.each(_result, (_i, _item) => {
+          if (_item.userPk) {
+            self.employeeList.push({
+              pk: _item.userPk,
+              name: _item.userNm,
+              cost: _item.workHr,
+              isCancel: false
+            })
+          } else if (_item.jobClassPk) {
+            self.jobClassList.push({
+              pk: _item.jobClassPk,
+              name: _item.jobClassNm,
+              cost: _item.workHr,
+              isCancel: false
+            })
+          }
+        })
+      })
+    },
+    /**
+     * WO의 조회된 데이터와 저장하는 데이터를 mapping 하는 함수
+     */
+    mappedWoData(_woData) {
+      for (var key in this.saveData.workOrder) {
+        if (_woData.hasOwnProperty(key)) this.saveData.workOrder[key] = _woData[key]
+      }
+      this.saveData.workOrder.workOrderPk = this.pk
+      this.saveData.workOrder.problem = _woData.problemPk
+      this.saveData.workOrder.cause = _woData.causePk
+      this.saveData.workOrder.dept = _woData.deptPk
+      this.saveData.workOrder.project = _woData.prjPk
+      this.saveData.workOrder.remedy = _woData.remedyPk      
+      this.saveData.workOrder.finishDt = this.$comm.moment(this.finishDate + ' ' + this.finishTime).format('YYYYMMDDHHmm')
+
+      // this.$set(this, 'saveData', workOrder)
+      console.log(':::::::::::::: workOrder:' + JSON.stringify(this.saveData))
+    },
+    mappedBreakdownDt() {
+      if (this.breakdownDate && this.breakdownTime) {
+        var datetime = this.breakdownDate + ' ' + this.breakdownTime
+        this.saveData.workOrder.breakdownDt = this.$comm.moment(datetime).format('YYYYMMDDHHmm')
+      } else this.saveData.workOrder.breakdownDt = null
     },
     btnSaveClicked(_result) {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
-      if (!this.isValid) return
+      this.mappedSubItems()
+      // if (!this.isValid) return
       
-      this.uploadImages(_result.returnResult.workOrderPk)
-      this.saveData = this.$comm.clone(this.defaultSaveData)
-      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
-      this.$comm.movePage(this.$router, '/woList')
+      // this.uploadImages(_result.returnResult.workOrderPk)
+      // this.saveData = this.$comm.clone(this.defaultSaveData)
+      // window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
+      // this.$comm.movePage(this.$router, '/woList')
     },
     btnDeleteClicked(_result) {
       console.log('::: delete clicked')
-    },
-    btnCancelClicked() {
-      this.isOpenDialog = true
-    },
-    dialogResult() {
-      // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
-      this.isOpenDialog = false
     },
     openSearchPopup() {
       this.popupSearchItem = 'material'
@@ -618,17 +647,22 @@ export default {
     mappedSubItems() {
       this.saveData.workOrderSuppliers = []
       this.saveData.woLabors = []
+      this.saveData.woMtrls = []
 
       var workOrderSuppliers = this.$refs.outsourcing.getSelectedItems()
       var employeeList = this.$refs.employee.getSelectedItems()
       var jobClassList = this.$refs.jobClass.getSelectedItems()
+      var materialList = this.$refs.materialList.getSelectedItems()
 
+      var pk = Number(this.pk)
+      let self = this
       // 공급업체
       if (workOrderSuppliers.length) {
         $.each(workOrderSuppliers, (_i, _item) => {
-          this.saveData.workOrderSuppliers.push({
+          self.saveData.workOrderSuppliers.push({
+            workOrder: Number(pk),
             exSupplier: _item.pk,
-            cost: _item.cost
+            cost: Number(_item.value)
           })
         })
       }
@@ -636,10 +670,12 @@ export default {
       // 직원 목록
       if (employeeList.length) {
         $.each(employeeList, (_i, _item) => {
-          this.saveData.woLabors.push({
-            userInfo: _item.pk,
+          self.saveData.woLabors.push({
+            workOrder: pk,
+            employee: _item.pk,
             jobClass: null,
-            workHr: _item.cost
+            // workHr: comm.removeNumberFormat(LaborGridData[i].workHr),
+            realWorkHr: _item.value
           })
         })
       }
@@ -647,10 +683,26 @@ export default {
       // 직종 목록
       if (jobClassList.length) {
         $.each(jobClassList, (_i, _item) => {
-          this.saveData.woLabors.push({
-            userInfo: null,
+          self.saveData.woLabors.push({
+            workOrder: pk,
+            employee: null,
             jobClass: _item.pk,
-            workHr: _item.cost
+            // workHr: comm.removeNumberFormat(LaborGridData[i].workHr),
+            realWorkHr: Number(_item.value)
+          })
+        })
+      }
+
+      // 자재 정보 매핑
+      if (materialList.length) {
+        $.each(materialList, (_i, _item) => {
+          self.saveData.woMtrls.push({
+            workOrder: pk,
+            material: _item.materialPk,
+            planAmt: Number(_item.planAmt),
+            aAmt: Number(_item.aAmt),
+            bAmt: Number(_item.bAmt),
+            unitPrice: Number(_item.unitPrice)
           })
         })
       }
@@ -674,7 +726,7 @@ export default {
             materialPk: null,
             mtrlNm: null,
             mtrlCd: null,
-            planAmt: null,
+            planAmt: 0,
             aStockAmt: null,
             bStockAmt: null,
             unitPrice: null,
@@ -696,121 +748,6 @@ export default {
 
       this.isOpenPopup = false
       // console.log('bindMaterialData:' + JSON.stringify(_items))
-    },
-    bindWoData(_items) {
-      this.isOpenPopup = false
-      if (_items.length <= 0) return
-      this.onSearch(_items[0].workOrderPk, true)
-    },
-    // 단일 WO 검색
-    onSearch(_pk, _isWorkCopy) {
-      this.$ajax.url = 'workorder/request/' + _pk
-      this.$ajax.requestGet((_result) => {
-        this.requestData = _result
-        this.workOrderApproval = _result.workOrderApproval
-        this.mappedWoData(_result, _isWorkCopy)
-      })
-    },
-    /**
-     * 외주 업체 목록
-     */
-    getOutsourceList(_pk) {
-      this.$ajax.url = selectConfig.wo.outsource.url + _pk
-      var self = this
-      this.$ajax.requestGet((_result) => {
-        $.each(_result, (_i, _item) => {
-          self.outsourcingItems.push({
-            pk: _item.exSupplierPk,
-            name: _item.exSupplierNm,
-            cost: _item.cost,
-            isCancel: false
-          })
-        })
-        console.log(JSON.stringify(_result))
-      })
-    },
-    /**
-     * 작업자 목록
-     */
-    getLaborList(_pk) {
-      this.$ajax.url = selectConfig.wo.labors.url + _pk
-      var self = this
-      this.$ajax.requestGet((_result) => {
-        $.each(_result, (_i, _item) => {
-          if (_item.userPk) {
-            self.employeeList.push({
-              pk: _item.userPk,
-              name: _item.userNm,
-              cost: _item.workHr,
-              isCancel: false
-            })
-          } else if (_item.jobClassPk) {
-            self.jobClassList.push({
-              pk: _item.jobClassPk,
-              name: _item.jobClassNm,
-              cost: _item.workHr,
-              isCancel: false
-            })
-          }
-        })
-      })
-    },
-    /**
-     * WO의 조회된 데이터와 저장하는 데이터를 mapping 하는 함수
-     */
-    mappedWoData(_woData, _isWorkCopy) {
-      var workOrder = {}
-      for (var key in this.saveData.workOrder) {
-        if (_woData.hasOwnProperty(key)) {
-          if (!_isWorkCopy) workOrder[key] = _woData[key]
-          else if (_isWorkCopy) {
-            if (key !== 'planStartDt') workOrder[key] = _woData[key]
-            else workOrder[key] = this.$comm.getToday()
-          }
-        }
-      }
-      this.equipment.equipPk = _woData.equipPk
-      this.equipment.equipNm = '[' + _woData.equipCd + '] ' + _woData.equipNm
-      // workOrder.workOrderPk = _woData.workOrderPk
-      workOrder.equipment = _woData.equipPk
-      workOrder.dept = _woData.deptPk
-      workOrder.maintType = _woData.maintTypeCd
-      workOrder.project = _woData.prjPk
-      workOrder.problem = _woData.problemPk
-      workOrder.cause = _woData.causePk
-      workOrder.workOrderApproval = {}
-      workOrder.workOrderApproval = _woData.workOrderApproval
-      if (_isWorkCopy) {
-        workOrder.workOrderApproval.rqstDt =  this.$comm.getToday()
-        workOrder.workOrderApproval.rqstUser = window.getApp.getUserInfo().userPk
-      } else {
-        workOrder.workOrderApproval.rqstDt = _woData.workOrderApproval.rqstDt
-        workOrder.workOrderApproval.rqstUser = _woData.workOrderApproval.rqstUserPk
-      }
-
-      if (workOrder.breakdownDt) {
-        var tmpDate = workOrder.breakdownDt.substring(0, 8)
-        var tmpTime = workOrder.breakdownDt.substring(8, workOrder.breakdownDt.length)
-        var date = this.$comm.moment(tmpDate)
-        var time = this.$comm.moment(tmpTime)
-        this.breakdownDate = date.format('L')
-        this.breakdownTime = time.format('HH:mm')
-        this.$forceUpdate()
-      }
-      
-      this.$set(this.saveData, 'workOrder', workOrder)
-      // 팝업에서 전달된 값에 대한 유효성 재검사
-      this.$validator.validate('equipment', this.equipment.equipNm)
-      if (_isWorkCopy) {
-        this.getLaborList(_woData.workOrderPk)
-        this.getImagePks(_woData.workOrderPk)
-      }
-    },
-    mappedBreakdownDt() {
-      if (this.breakdownDate && this.breakdownTime) {
-        var datetime = this.breakdownDate + ' ' + this.breakdownTime
-        this.saveData.workOrder.breakdownDt = this.$comm.moment(datetime).format('YYYYMMDDHHmm')
-      } else this.saveData.workOrder.breakdownDt = null
     },
     // Use the camera plugin to capture image
     takePicture() {
@@ -903,7 +840,6 @@ export default {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
       if (!this.isValid) return
-      console.log(':::: btnCompleteClicked ::::')
       
       this.uploadImages(_result.returnResult.workOrderPk)
       this.saveData = this.$comm.clone(this.defaultSaveData)
@@ -928,6 +864,13 @@ export default {
     },
     editItem() {
 
+    },
+    btnClickedError(_error) {
+      // console.log('error:' + JSON.stringify(_error))
+    },
+    // 직종 등록 컴포넌트가 mounted되면 직종 정보를 가져온다.
+    registListMounted() {
+      this.jobClassItems = this.$refs.jobClass.getAllInfoOfCombo()
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김

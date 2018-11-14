@@ -152,7 +152,8 @@
       "materialSpec": "",
       "manufacturer": "",
       "inventoryDate": "",
-      "woMaterialInput": ""
+      "woMaterialInput": "",
+      "confirm": ""
     },
     "message": {
       "woNo": "",
@@ -172,6 +173,8 @@
       "uploadFailedFileRemoved": "",
       "todayStatus": "",
       "noDocumentUpload": "",
+      "enterCost": "",
+      "workHour": "",
       "aAmountInput": "",
       "bAmountInput": "",
       "inputAmount": "",
@@ -203,7 +206,9 @@
       "cancel": "",
       "clear": "",
       "complete": "",
-      "list": ""
+      "list": "",
+      "confirm": "",
+      "close": ""
     }
   }
 }

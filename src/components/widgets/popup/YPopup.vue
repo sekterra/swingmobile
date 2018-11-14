@@ -43,13 +43,13 @@ examples:
           <y-btn
             v-if="gridType !== 'radio'"
             type="select"
-            title="confirm"
+            :title="$t('button.confirm')"
             @btnClicked="sendDataToParent"
           >
           </y-btn>
           <y-btn
             type="close"
-            title="close"
+            :title="$t('button.close')"
             @btnClicked="closePopup"
           >
           </y-btn>

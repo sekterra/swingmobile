@@ -152,7 +152,8 @@
       "manufacturer": "제조사",
       "inventoryDate": "재고기준일",
       "woMaterialInput": "작업자재 입력",
-      "inputMaterialUsage": "자재 사용량 입력"
+      "inputMaterialUsage": "자재 사용량 입력",
+      "confirm": "승인"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
@@ -172,6 +173,7 @@
       "uploadFailedFileRemoved": "업로드 실패 파일을 삭제하였습니다.",
       "noDocumentUpload": "Mobile버전에서는 문서 파일업로드를 지원하지 않습니다.",
       "enterCost": "비용 입력",
+      "workHour": "작업시간 입력",
       "aAmountInput": "A급 사용량",
       "bAmountInput": "B급 사용량",
       "inputAmount": "사용량 입력",
@@ -203,7 +205,9 @@
       "cancel": "취소",
       "clear": "초기화",
       "complete": "완료",
-      "list": "목록"
+      "list": "목록",
+      "confirm": "승인",
+      "close": "닫기"
     }
   }
 }

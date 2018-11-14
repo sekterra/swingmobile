@@ -62,13 +62,13 @@
                       :editable="editable"
                       custom-class="pt-0"
                       name="workTitle"
-                      placeholder="여기에 비용을 입력하세요."
+                      :placeholder="comboPlaceholder"
                       :hint="item.hint"
-                      v-model="item.cost"
+                      v-model="item.value"
                       hide-details
                       class="ma-0 pa-0"
                       @input="(_value) => {
-                        item.cost = Number(_value)
+                        item.value = Number(_value)
                         setTotalCost()
                       }"
                     />
@@ -149,6 +149,10 @@ export default {
     icon: {
       type: String,
       default: 'create'
+    },
+    comboPlaceholder: {
+      type: String,
+      default: ''
     }
   },
   data: () => ({
@@ -179,6 +183,11 @@ export default {
     }
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
+  mounted() {
+    this.$nextTick(() => {
+      this.$emit('registListMounted')
+    })
+  },
   //* methods */
   methods: {
     addDataToList() {
@@ -200,7 +209,7 @@ export default {
         pk: this.selectValue,
         name: name,
         hint: hint.toString(),
-        cost: null,
+        value: null,
         isCancel: false // 취소선 표시여부
       };
       this.selectedList.unshift(item)
@@ -222,10 +231,14 @@ export default {
     // 총 합계 비용 계산
     setTotalCost() {
       var totalCost = this.selectedList.reduce(function (sum, _item) {
-          if (!_item.isCancel) return sum + (_item.cost ? _item.cost : 0)
+          if (!_item.isCancel) return sum + (_item.value ? _item.value : 0)
           else return sum
       }, 0);
       this.totalCost = this.$comm.setNumberSeperator(isNaN(totalCost) ? 0 : totalCost)
+    },
+    // 콤보박스의 전체 정보를 가져오는 함수
+    getAllInfoOfCombo() {
+      return this.$refs.select.getItems()
     }
   }
 }

@@ -169,6 +169,9 @@ export default {
         }
       }
       return value
+    },
+    getItems() {
+      return this.items
     }
   }
 }

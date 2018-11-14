@@ -153,7 +153,8 @@
       "manufacturer": "Manufacturer",
       "inventoryDate": "Inventory Date",
       "woMaterialInput": "Material usage",
-      "inputMaterialUsage": "Input material usage"
+      "inputMaterialUsage": "Input material usage",
+      "confirm": "Confirm"
     },
     "message": {
       "woNo": "Will be automatically generated.",
@@ -171,6 +172,8 @@
       "retryFileUpload": "There are some failed files to upload. Do you want to try again?",
       "uploadFailedFileRemoved": "Upload failed files has been removed.",
       "noDocumentUpload": "Does not support to upload files for a document on a mobile.",
+      "enterCost": "Input cost",
+      "workHour": "Input work hours",
       "aAmountInput": "Class A usage",
       "bAmountInput": "Class B usage",
       "inputAmount": "Input usage",
@@ -197,12 +200,14 @@
       "inspectionStatistics": "Statistics for inspection"
     },
     "button": {
-      "save": "save",
-      "delete": "delete",
-      "cancel": "cancel",
-      "clear": "clear",
-      "complete": "complete",
-      "list": "back to list"
+      "save": "Save",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "clear": "Clear",
+      "complete": "Complete",
+      "list": "Back to list",
+      "confirm": "Confirm",
+      "close": "Close"
     }
   }
 }
