@@ -184,9 +184,6 @@ export default {
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    this.$nextTick(() => {
-      this.$emit('registListMounted')
-    })
   },
   //* methods */
   methods: {

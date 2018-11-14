@@ -260,7 +260,6 @@
                         icon="business_center"
                         :editable="editable"
                         :items="jobClassList"
-                        @registListMounted="registListMounted"
                       >
                       </y-regist-list>
                     </v-flex>
@@ -516,6 +515,9 @@ export default {
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
     // this.getExsupplier()
+
+    // TODO : 직종 정보 가져오기 사용할 것
+    // this.jobClassItems = this.$refs.jobClass.getAllInfoOfCombo()
     
     // 업로드가 완료되면 업로드 이미지 정보 초기화
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
@@ -867,10 +869,6 @@ export default {
     },
     btnClickedError(_error) {
       // console.log('error:' + JSON.stringify(_error))
-    },
-    // 직종 등록 컴포넌트가 mounted되면 직종 정보를 가져온다.
-    registListMounted() {
-      this.jobClassItems = this.$refs.jobClass.getAllInfoOfCombo()
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김

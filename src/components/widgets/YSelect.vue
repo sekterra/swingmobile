@@ -96,6 +96,7 @@ export default {
       itemValue: null,
       itemSubValue: null,
       vValue: null,
+      orgItems: []
     }
   },
   computed: {
