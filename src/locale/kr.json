@@ -151,7 +151,8 @@
       "materialSpec": "자재사양",
       "manufacturer": "제조사",
       "inventoryDate": "재고기준일",
-      "woMaterialInput": "작업자재 입력"
+      "woMaterialInput": "작업자재 입력",
+      "inputMaterialUsage": "자재 사용량 입력"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

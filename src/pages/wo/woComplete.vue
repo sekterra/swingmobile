@@ -275,17 +275,6 @@
                         @openSearchPopup="openSearchPopup"
                       >
                       </y-material-info-list>
-                      <!-- <y-data-table
-                        :title="$t('title.woMaterial')"
-                        ref="dataTable"
-                        popup-callback="openSearchPopup"
-                        :headers="gridHeaderOptions"
-                        :items="gridData"
-                        :editable="editable"
-                        @openSearchPopup="openSearchPopup"
-                        @editItem="editItem"
-                      >
-                      </y-data-table> -->
                     </v-flex>
                   </v-layout>
                   

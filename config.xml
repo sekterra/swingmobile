@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.yullin.swing" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <hook src="hooks/hookers.js" type="before_prepare"/>
-    <hook src="hooks/beforedep.js" type="before_deploy"/>
+    <hook src="hooks/hookers.js" type="before_prepare" />
+    <hook src="hooks/beforedep.js" type="before_deploy" />
     <name>swing</name>
     <description>
         swing CMMS mobile Application
@@ -9,47 +9,47 @@
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Software development team of Yullin Technologies
     </author>
-    <content src="index.html"/>
-    <access origin="*"/>
-    <allow-intent href="http://*/*"/>
-    <allow-intent href="https://*/*"/>
-    <allow-intent href="tel:*"/>
-    <allow-intent href="sms:*"/>
-    <allow-intent href="mailto:*"/>
-    <allow-intent href="geo:*"/>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
     <platform name="android">
-        <allow-intent href="market:*"/>
-        <icon density="ldpi" src="res/icon/android/ldpi.png"/>
-        <icon density="mdpi" src="res/icon/android/mdpi.png"/>
-        <icon density="hdpi" src="res/icon/android/hdpi.png"/>
-        <icon density="xhdpi" src="res/icon/android/xhdpi.png"/>
+        <allow-intent href="market:*" />
+        <icon density="ldpi" src="res/icon/android/ldpi.png" />
+        <icon density="mdpi" src="res/icon/android/mdpi.png" />
+        <icon density="hdpi" src="res/icon/android/hdpi.png" />
+        <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
     </platform>
     <platform name="ios">
-        <allow-intent href="itms:*"/>
-        <allow-intent href="itms-apps:*"/>
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
     </platform>
-    <allow-navigation href="*"/>
+    <allow-navigation href="*" />
     <feature name="Camera">
-        <param name="ios-package" value="CDVCamera"/>
+        <param name="ios-package" value="CDVCamera" />
     </feature>
     <feature name="File">
-        <param name="android-package" value="org.apache.cordova.FileUtils"/>
-        <param name="ios-package" value="CDVFile"/>
+        <param name="android-package" value="org.apache.cordova.FileUtils" />
+        <param name="ios-package" value="CDVFile" />
     </feature>
     <feature name="FileTransfer">
-        <param name="android-package" value="org.apache.cordova.FileTransfer"/>
-        <param name="ios-package" value="CDVFileTransfer"/>
+        <param name="android-package" value="org.apache.cordova.FileTransfer" />
+        <param name="ios-package" value="CDVFileTransfer" />
     </feature>
-    <plugin name="cordova-plugin-camera" spec="^4.0.3"/>
-    <plugin name="cordova-plugin-device" spec="^2.0.2"/>
-    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1"/>
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3"/>
-    <plugin name="cordova-plugin-globalization" spec="~1.11.0"/>
-    <plugin name="cordova-plugin-file-transfer" spec="~1.7.1"/>
-    <plugin name="cordova-plugin-save-image" spec="~0.3.0"/>
-    <plugin name="cordova-plugin-keyboard" spec="^1.2.0"/>
-    <plugin name="cordova-plugin-dialogs" spec="^2.0.1"/>
-    <engine name="browser" spec="^5.0.4"/>
-    <engine name="ios" spec="^4.5.5"/>
-    <engine name="android" spec="^7.1.1"/>
+    <plugin name="cordova-plugin-camera" spec="^4.0.3" />
+    <plugin name="cordova-plugin-device" spec="^2.0.2" />
+    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-plugin-globalization" spec="~1.11.0" />
+    <plugin name="cordova-plugin-file-transfer" spec="~1.7.1" />
+    <plugin name="cordova-plugin-save-image" spec="~0.3.0" />
+    <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
+    <plugin name="cordova-plugin-dialogs" spec="^2.0.1" />
+    <engine name="browser" spec="^5.0.4" />
+    <engine name="ios" spec="^4.5.5" />
+    <engine name="android" spec="^7.1.1" />
 </widget>

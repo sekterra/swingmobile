@@ -26,72 +26,81 @@
       </v-toolbar>
       </v-card-title>
       <v-card flat>
+        <v-card-title class="caption grey--text">{{$t('title.selectedItems')}}</v-card-title>
         <v-card-media max-height="300" class="vscroll">
             <v-container 
-              v-for="(item, i) in selectedList"
-              :key="item.materialPk"
               fluid 
               grid-list-xs 
               py-0 
               px-1>
-              <v-layout 
-                row 
-                wrap 
-                px-2
-                :class="{'grey lighten-5': (i > 1 && i % 2 === 0), 'blue-grey lighten-5': (i % 2 === 1), 'indigo lighten-5': (i === 0)}"
-                >
-                <v-flex xs12>
-                  <v-layout align-center justify-space-between row pt-2 pb-0>
-                    <span :class="{'title indigo--text pl-2': true, 'strikethrough': item.isCancel}">{{item.mtrlCd}}</span>
-                    <v-btn
-                      icon
-                      @click.stop="setCancel(item)">
-                      <v-icon color="indigo">highlight_off</v-icon>
-                    </v-btn>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs12 sm6 md3 class="py-1">
-                    <v-icon color="black">turned_in</v-icon> {{$t('title.mtrlNm')}}: {{item.mtrlNm}}
+              <div
+              v-if="selectedList.length > 0"
+              v-for="(item, i) in selectedList"
+              :key="item.materialPk">
+                <v-layout 
+                  row 
+                  wrap 
+                  px-2
+                  :class="{'grey lighten-5': (i > 1 && i % 2 === 0), 'blue-grey lighten-5': (i % 2 === 1), 'indigo lighten-5': (i === 0)}"
+                  >
+                  <v-flex xs12>
+                    <v-layout align-center justify-space-between row pt-2 pb-0>
+                      <span :class="{'title indigo--text pl-2': true, 'strikethrough': item.isCancel}">{{item.mtrlCd}}</span>
+                      <v-btn
+                        icon
+                        @click.stop="setCancel(item)">
+                        <v-icon color="indigo">highlight_off</v-icon>
+                      </v-btn>
+                    </v-layout>
                   </v-flex>
                   <v-flex xs12 sm6 md3 class="py-1">
-                    <v-icon color="black">local_atm</v-icon> {{$t('title.unitPrice')}}: {{$comm.setNumberSeperator(item.unitPrice)}}
-                  </v-flex>                  
-                  <v-flex xs12 sm6 md3 class="py-1">
-                     <v-icon color="black">view_agenda</v-icon> {{$t('title.aStockAmt')}}: {{$comm.setNumberSeperator(item.aStockAmt)}}
-                  </v-flex>
-                  <v-flex xs12 sm6 md3 class="py-1">
-                      <v-icon color="grey">view_agenda</v-icon> {{$t('title.bStockAmt')}}: {{$comm.setNumberSeperator(item.bStockAmt) }}
-                  </v-flex>
-              </v-layout>
-              <v-layout row wrap pl-2 mb-2>
-                <v-flex xs12 py-1>
-                  <span class="subheading indigo--text">{{$t('title.inputMaterialUsage')}}</span>
-                </v-flex>
-                <v-flex xs6 pt-0>
-                    <v-text-field
-                      :label="$t('message.aAmountInput')"
-                      name="aStockAmt"
-                      :placeholder="$t('message.inputAmount')"
-                      hide-details
-                      v-model="item.aAmt"
-                      @input="(_value) => {
-                        item.aAmt = Number(_value)
-                        setTotalCost()
-                      }"
-                    />
+                      <v-icon color="black">turned_in</v-icon> {{$t('title.mtrlNm')}}: {{item.mtrlNm}}
+                    </v-flex>
+                    <v-flex xs12 sm6 md3 class="py-1">
+                      <v-icon color="black">local_atm</v-icon> {{$t('title.unitPrice')}}: {{$comm.setNumberSeperator(item.unitPrice)}}
+                    </v-flex>                  
+                    <v-flex xs12 sm6 md3 class="py-1">
+                      <v-icon color="black">view_agenda</v-icon> {{$t('title.aStockAmt')}}: {{$comm.setNumberSeperator(item.aStockAmt)}}
+                    </v-flex>
+                    <v-flex xs12 sm6 md3 class="py-1">
+                        <v-icon color="grey">view_agenda</v-icon> {{$t('title.bStockAmt')}}: {{$comm.setNumberSeperator(item.bStockAmt) }}
+                    </v-flex>
+                </v-layout>
+                <v-layout row wrap pl-2 mb-2>
+                  <v-flex xs12 py-1>
+                    <span class="subheading indigo--text">{{$t('title.inputMaterialUsage')}}</span>
                   </v-flex>
                   <v-flex xs6 pt-0>
-                    <v-text-field
-                      :label="$t('message.bAmountInput')"
-                      name="bStockAmt"
-                      :placeholder="$t('message.inputAmount')"
-                      hide-details
-                      v-model="item.bAmt"
-                    />
-                </v-flex>
-              </v-layout>
+                      <v-text-field
+                        :label="$t('message.aAmountInput')"
+                        name="aStockAmt"
+                        :placeholder="$t('message.inputAmount')"
+                        hide-details
+                        v-model="item.aAmt"
+                        @input="(_value) => {
+                          item.aAmt = Number(_value)
+                          setTotalCost()
+                        }"
+                      />
+                    </v-flex>
+                    <v-flex xs6 pt-0>
+                      <v-text-field
+                        :label="$t('message.bAmountInput')"
+                        name="bStockAmt"
+                        :placeholder="$t('message.inputAmount')"
+                        hide-details
+                        v-model="item.bAmt"
+                      />
+                  </v-flex>
+                </v-layout>
+              </div>
+              <div v-if="selectedList.length <= 0"
+                class="text-xs-center indigo--text">
+                {{$t('message.noData')}}
+              </div>
           </v-container>
         </v-card-media>
+        <v-divider></v-divider>
         <v-card-actions>
           <div class="caption indigo--text">{{subTitle}} : {{selectCount}} {{$t('title.things')}}</div>
           <v-spacer></v-spacer>

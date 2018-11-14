@@ -152,7 +152,8 @@
       "materialSpec": "Material specification",
       "manufacturer": "Manufacturer",
       "inventoryDate": "Inventory Date",
-      "woMaterialInput": "Material usage"
+      "woMaterialInput": "Material usage",
+      "inputMaterialUsage": "Input material usage"
     },
     "message": {
       "woNo": "Will be automatically generated.",

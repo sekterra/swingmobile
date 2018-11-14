@@ -36,7 +36,7 @@
       </v-card-title>
       <v-card flat>
         <v-card-title class="caption grey--text">{{$t('title.selectedItems')}}</v-card-title>
-        <v-card-media :height="height" max-height="300" :min-height="baseHeight" class="vscroll">
+        <v-card-media max-height="300" class="vscroll">
           <v-list 
             subheader
             three-line
