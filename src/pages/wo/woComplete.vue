@@ -5,79 +5,75 @@
         <v-flex sm12>
           <v-card>
             <v-toolbar color="primary darken-1" dark="" flat dense cad>
-              <v-toolbar-title class="subheading">{{$t('menu.woCreate')}}</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-tooltip bottom>
-                <v-icon
-                  slot="activator"
-                  color="white"
-                  @click="openWoPopup"
-                >
-                file_copy
-                </v-icon>
-                <span>Tooltip</span>
-              </v-tooltip>
+              <v-toolbar-title class="subheading">{{$t('menu.woCompleteList')}}</v-toolbar-title>
             </v-toolbar>
             <v-divider></v-divider>
+            <v-card-media>
+              <!-- 요청내역 -->
+              <v-container grid-list-xl fluid>
+              <v-layout row>
+                <v-flex xs12>
+                  <v-card>
+                    <v-img
+                      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                      height="200px"
+                    >
+                    </v-img>
+            
+                    <v-card-title primary-title>
+                      <div>
+                        <div class="headline">{{ '[' + requestData.equipCd + '] ' + requestData.equipNm }}</div>
+                      </div>
+                    </v-card-title>
+                      <v-card-media>
+                          <v-container py-0>
+                            <v-layout row wrap>
+                              <v-flex xs12 sm6>
+                                <v-icon small>chevron_right</v-icon> {{$t('title.woNo')}} : {{ requestData.workOrderNo }}
+                              </v-flex>
+                            </v-layout>
+                            <v-slide-y-transition>
+                            <v-layout row wrap  v-show="show">
+                                <v-flex xs12 sm6>
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.warrantyDate')}} : {{ requestData.warrantyDt}}
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.woPlanDate')}} : {{ requestData.planStartDt + ' ~ ' + requestData.planEndDt }}
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.maintenanceType')}} : {{ requestData.maintTypeNm }}
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.woTitle')}} : {{ requestData.workTitle }}
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.requestUser')}} : {{ workOrderApproval.rqstUserNm }}
+                                </v-flex>
+                                <v-flex xs12 sm6>
+                                  <v-icon small>chevron_right</v-icon> {{$t('title.woRequestDate')}} : {{ workOrderApproval.rqstDt }}
+                                </v-flex>
+                              <!-- 고장 일시 -->
+                            </v-layout>
+                            </v-slide-y-transition>
+                        </v-container>
+                      </v-card-media>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn icon @click="show = !show">
+                        <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+                      </v-btn>
+                    </v-card-actions>
+                    </v-card>
+                </v-flex>
+              </v-layout>
+              </v-container>
+              <!-- /요청내역 -->
+            </v-card-media>
             <v-card-text class="">
+              <!-- WO내용 -->
               <v-form v-model="isValidForm">
                   <v-layout row wrap fill-height>
-                    <v-flex sm6 class="py-0">
-                      <v-text-field
-                        :label="$t('title.woNo')"
-                        v-model="saveData.workOrder.workOrderPk"
-                        :placeholder="$t('message.woNo')"
-                        disabled
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex sm6 class="py-0">
-                      <v-text-field
-                        :label="$t('title.equipmentName') + '*'"
-                        name="equipment"
-                        v-model="equipment.equipNm"
-                        :placeholder="$t('message.equipmentName')"
-                        append-outer-icon="open_in_browser"
-                        v-validate="'required'"
-                        data-vv-name="equipment"
-                        clearable
-                        readonly
-                        :error-messages="errors.collect('equipment')"
-                        @click="openSearchPopup"
-                        @click:append-outer="openSearchPopup"
-                        @click:clear="equipmentNameChanged"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs12 class="py-0">
-                      <y-equipment-card 
-                        v-if="equipment.equipPk"
-                        :pk="equipment.equipPk"
-                      >
-                      </y-equipment-card>
-                    </v-flex>
-                    <v-flex sm6 class="py-0">
-                      <!-- 작업 제목 -->
-                      <y-text
-                        :editable="editable"
-                        :label="$t('title.woTitle') + '*'"
-                        name="workTitle"
-                        :counter="200"
-                        :maxlength="200"
-                        v-model="saveData.workOrder.workTitle"
-                        v-validate="'required'"
-                        data-vv-name="workTitle"
-                        :error-msg="errors.first('workTitle')"
-                      >
-                      </y-text>
-                    </v-flex>
-                    <v-flex sm6 class="py-0">
-                      <y-select
-                        :label="$t('title.woDepartment')"
-                        item-search-key="depart"
-                        name="deptPk"
-                        v-model="saveData.workOrder.dept"
-                      >
-                      </y-select>
-                    </v-flex>
+                    <!-- 작업 내용 -->
                     <v-flex sm12 class="py-0">
                       <y-textarea
                         :editable="editable"
@@ -90,22 +86,8 @@
                       >
                       </y-textarea>
                     </v-flex>
+                    <!-- 작업기간 -->
                     <v-flex sm6 class="py-0">
-                      <!-- 작업계획일 -->
-                      <y-durationpicker
-                      :editable="editable"
-                      :label="$t('title.woPlanDate')"
-                      name="woPlanDate"
-                      default-type="today"
-                      v-validate="'required'"
-                      v-model="woPlanDate"
-                      data-vv-name="woPlanDate"
-                      :error-msg="errors.first('woPlanDate')"
-                      >
-                      </y-durationpicker>
-                    </v-flex>
-                    <v-flex sm6 class="py-0">
-                      <!-- 작업기간 -->
                       <y-durationpicker
                       :editable="editable"
                       :label="$t('title.workDate')"
@@ -118,55 +100,63 @@
                       >
                       </y-durationpicker>
                     </v-flex>
+                    <!-- 작업 부서 -->
                     <v-flex sm6 class="py-0">
-                      <!-- 보전유형 -->
                       <y-select
-                        :editable="editable"
-                        :label="$t('title.maintenanceType') + '*'"
-                        name="maintType"
-                        item-search-key="maintType"
-                        v-model="saveData.workOrder.maintType"
-                        v-validate="'required'"
-                        data-vv-name="maintType"
-                        :error-msg="errors.first('maintType')"
+                        :label="$t('title.woDepartment')"
+                        item-search-key="depart"
+                        name="deptPk"
+                        v-model="saveData.workOrder.dept"
                       >
                       </y-select>
                     </v-flex>
-                    <v-flex sm6 class="py-0" v-if="isBreakdown">
-                      <!-- 고장일시 -->
+                    <!-- 작업종료 일자 -->
+                    <v-flex xs12 sm6 
+                      v-if="editable"
+                      class="py-0">
                       <y-datepicker
-                        v-if="editable"
                         :editable="true"
-                        :label="$t('title.equipmentOfDowndate') + '*'"
-                        name="breakdownDate"
-                        v-model="breakdownDate" 
+                        :label="$t('title.woEndDate') + '*'"
+                        name="finishDate"
+                        v-model="finishDate" 
                         default-type="today"
                         child-validate-type="required"
                         v-validate="'required'"
-                        data-vv-name="breakdownDate"
-                        :error-msg="errors.first('breakdownDate')"
+                        data-vv-name="finishDate"
+                        :error-msg="errors.first('finishDate')"
                       >
                       </y-datepicker>
+                    </v-flex>
+                    <!-- 작업종료 시간 -->
+                    <v-flex 
+                      v-if="editable"
+                      xs12 
+                      sm6 
+                      class="py-0">
                       <y-timepicker
                         v-if="editable"
                         :editable="true"
-                        :label="$t('title.equipmentOfDowntime') + '*'"
-                        name="breakdownTime"
-                        v-model="breakdownTime"
+                        :label="$t('title.woEndTime') + '*'"
+                        name="finishMin"
+                        v-model="finishMin"
                         default-type="current"
                         child-validate-type="required"
                         v-validate="'required'"
-                        data-vv-name="breakdownTime"
-                        :error-msg="errors.first('breakdownTime')"
+                        data-vv-name="finishMin"
+                        :error-msg="errors.first('finishMin')"
                       >
                       </y-timepicker>
+                    </v-flex>
+                    <v-flex xs12
+                      v-if="!editable"
+                    >
                       <v-text-field
-                        v-else
-                        :value="breakdownDate + ' ' + breakdownTime"
+                        :value="finishDate"
                         :label="$t('title.equipmentOfDowndatetime')"
                         readonly
                       ></v-text-field>
                     </v-flex>
+                 
                     <v-flex sm6 class="py-0">
                       <!-- 현상코드 -->
                       <y-select
@@ -189,6 +179,7 @@
                       >
                       </y-select>
                     </v-flex>
+                                        
                     <v-flex sm6 class="py-0">
                       <!-- 프로젝트 -->
                       <y-select
@@ -200,6 +191,18 @@
                       >
                       </y-select>
                     </v-flex>
+                    <!-- 조치코드 -->
+                    <v-flex sm6 class="py-0">
+                      <y-select
+                        :editable="editable"
+                        :label="$t('title.remedy')"
+                        name="woRemedy"
+                        item-search-key="woRemedy"
+                        v-model="saveData.workOrder.woRemedy"
+                      >
+                      </y-select>
+                    </v-flex>
+
                   </v-layout>
                   <!-- 외주업체 -->
                   <v-layout row wrap fill-height>
@@ -207,29 +210,17 @@
                       <y-regist-list
                         ref="outsourcing"
                         :title="$t('title.outsourcingList')"
-                        :subTitle="$t('title.numberOfSelects')"
+                        :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalCost')"
                         selectItemKey="exSupplier"
+                        icon="location_city"
                         :editable="editable"
                         :items="outsourcingItems"
                       >
                       </y-regist-list>
                     </v-flex>
                   </v-layout>
-                  <!-- 확장 검색 사용예제
-                    <v-layout row wrap fill-height>
-                    <v-flex xs12>
-                      <y-expantion-grid
-                        :title="$t('title.exSupplierSelect')"
-                        :items="exSupplier"
-                        :item-title="exSupplierTitles"
-                        :summary-title="$t('title.selectedOutsourcing')"
-                      >
-                      </y-expantion-grid>
-                      <v-divider></v-divider>
-                    </v-flex>
-                  </v-layout> -->
 
                   <!-- 작업 인력 -->
                   <v-layout row wrap fill-height>
@@ -237,12 +228,13 @@
                       <y-regist-list
                         ref="employee"
                         :title="$t('title.employee')"
-                        :subTitle="$t('title.numberOfSelects')"
+                        :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
                         selectItemKey="employee"
                         hint-key="wageCost"
                         hint-unit=""
+                        icon="people"
                         :editable="editable"
                         :items="employeeList"
                       >
@@ -256,16 +248,44 @@
                       <y-regist-list
                         ref="jobClass"
                         :title="$t('title.jobClass')"
-                        :subTitle="$t('title.numberOfSelects')"
+                        :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
                         selectItemKey="jobClass"
                         hint-key="wageCost"
                         hint-unit=""
+                        icon="business_center"
                         :editable="editable"
                         :items="jobClassList"
                       >
                       </y-regist-list>
+                    </v-flex>
+                  </v-layout>
+
+                  <!-- 작업 직종 -->
+                  <v-layout row wrap fill-height>
+                    <v-flex xs12>
+                      <y-material-info-list
+                        :items="materialList"
+                        :title="$t('title.woMaterial')"
+                        :controlTitle="$t('title.woMaterialInput')"
+                        :sub-title="$t('title.numberOfSelects')"
+                        :title-of-total="$t('title.cost')"
+                        icon="category"
+                        @openSearchPopup="openSearchPopup"
+                      >
+                      </y-material-info-list>
+                      <!-- <y-data-table
+                        :title="$t('title.woMaterial')"
+                        ref="dataTable"
+                        popup-callback="openSearchPopup"
+                        :headers="gridHeaderOptions"
+                        :items="gridData"
+                        :editable="editable"
+                        @openSearchPopup="openSearchPopup"
+                        @editItem="editItem"
+                      >
+                      </y-data-table> -->
                     </v-flex>
                   </v-layout>
                   
@@ -307,27 +327,6 @@
                     </v-card>
                     </v-flex>
                   </v-layout>
-                  <!-- <v-layout
-                    align-center 
-                    justify-center 
-                    row
-                    fill-height
-                  >
-                      <v-btn 
-                        round
-                        color="black" 
-                        dark
-                        @click="takePicture"
-                      >
-                        <v-icon>
-                          camera
-                        </v-icon>
-                      </v-btn>
-                  </v-layout> -->
-                  <!-- <v-flex xs6>
-                    <div>{{upload.uploadedImagesCount}}/{{upload.imageList.length}} ({{upload.loaded}})bytes</div>
-                    </v-flex> -->
-                  <!-- /이미지 파일 업로드 -->
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center" lazy>
@@ -344,7 +343,7 @@
                       @checkValidation="checkValidation"
                     ></y-btn> -->
                     <y-btn
-                      v-if="saveData.workOrder.workOrderApproval.woStatusCd === 'WO_STATUS_P'"
+                      v-if="workOrderApproval.woStatusCd === 'WO_STATUS_P'"
                       type="save"
                       :title="$t('button.complete')"
                       :action-url="completeUrl"
@@ -394,18 +393,18 @@
                     ></y-btn> -->
                   </div>
                   </v-flex>
-            </v-card-text>     
+            </v-card-text>
+            <!-- /WO내용 -->
           </v-card>
         </v-flex>           
       </v-layout>
       <y-popup 
         :search-item="popupSearchItem"
-        :search-type="popupSearchType"
+        :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
         @closePopup="closePopup"
-        @bindEquipmentData="bindEquipmentData"
-        @bindWoData="bindWoData"
+        @bindMaterialData="bindMaterialData"
       >
       </y-popup>
     </v-container>
@@ -423,6 +422,7 @@ import jwt from '@/js/jwtToken.js'
 import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
+import YMaterialInfoList from '@/components/widgets/YMaterialInfoList'
 
 let transaction = transactionConfig.wo.woCreate
 export default {
@@ -430,6 +430,7 @@ export default {
     validator: 'new'
   },
   components: {
+    YMaterialInfoList
   },
   data: () => (
   {
@@ -445,13 +446,15 @@ export default {
       equipStatusCd: null,
       warrantyDt: null,
     },
+    requestData: {},  // WO 요청정보
+    workOrderApproval: {},
     defaultSaveData: {},  // 초기 저장값(저장 값 초기화 시키기 위해 사용)
     // 알림 메시지
     isOpenDialog: false,
     // 검색용 팝업
     isOpenPopup: false,
     // 팝업 검색 결과 타입 설정(single: radio, multi: checkbox)
-    popupSearchType: 'radio',
+    popupGridType: 'radio',
     // form 유효성 여부
     isValidForm: true,
     popupSearchItem: '',
@@ -476,12 +479,17 @@ export default {
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
     woPlanDate: null,
     workDate: null,
-    exSupplier: [], // 외주업체 서비스
-    exSupplierTitles: {},
+    // exSupplier: [], // 외주업체 서비스
+    // exSupplierTitles: {},
     workerOrOccupationItems: [], // TODO : 작업인력 또는 직종정보를 담고있는 배열
     outsourcingItems: [],
     employeeList: [],
-    jobClassList: []
+    jobClassList: [],
+    materialList: [],
+    show: true,
+    finishDate: null,
+    finishHour: null,
+    finishMin: null
   }),
   watch: {
     breakdownDate() {
@@ -526,19 +534,6 @@ export default {
     }
   },
   beforeMount() {
-    this.exSupplierTitles = {
-      title: 'exSupplierNm',
-      pk: 'exSupplierPk',
-      cardItems: [
-        'exSupplierNm',
-        'phone',
-        'fax',
-        'address1',
-        'address2',
-        'homepage',
-        'exSupplierDsc'
-      ]
-    }
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -553,9 +548,10 @@ export default {
       this.getOutsourceList(pk)
       this.getLaborList(pk)
       this.getImagePks(pk)
+      this.getMaterialList(pk)
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
-    this.getExsupplier()
+    // this.getExsupplier()
     
     // 업로드가 완료되면 업로드 이미지 정보 초기화
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
@@ -599,25 +595,19 @@ export default {
       this.isOpenDialog = false
     },
     openSearchPopup() {
-      this.popupSearchItem = 'equipment'
-      this.popupSearchType = 'radio'
+      this.popupSearchItem = 'material'
+      this.popupGridType = 'checkbox'
       this.isOpenPopup = true
-      this.eventForReturn = 'bindEquipmentData'
+      this.eventForReturn = 'bindMaterialData'
     },
     equipmentNameChanged() {
       this.equipment.equipNm = null
       this.equipment.equipPk = null
     },
-    openWoPopup() {
-      this.popupSearchItem = 'wo'
-      this.popupSearchType = 'radio'
-      this.isOpenPopup = true
-      this.eventForReturn = 'bindWoData'
-    },
     closePopup() {
       this.popupSearchItem = ''
       this.isOpenPopup = false
-      this.popupSearchType = ''
+      this.popupGridType = ''
     },
     /**
      * 저장전 유효성 검사
@@ -675,32 +665,48 @@ export default {
           })
         })
       }
-      console.log(':::::::::: mappedSubItems:' + JSON.stringify(this.saveData))
     },
     /**
      * Event Bus로 정보 수신(datatable > woList > popup > woCreate)
      *  _items : array 형식으로 전달됨
      */
-    bindEquipmentData(_items) {
-      if (_items.length <= 0) return
-      var equipment = _items[0]
-      if (equipment) {
-        this.saveData.workOrder.equipment = equipment.equipPk
-        this.equipment.equipPk = equipment.equipPk
-        this.equipment.equipNm = '[' + equipment.equipCd + '] ' + equipment.equipNm
-        this.equipment.equipStatusCd = equipment.equipStatusCd
-        this.equipment.warrantyDt = equipment.warrantyDt
-
-        if (equipment.equipStatusCd === 'EQUIP_STATUS_B') {
-          // comm.alert('해당설비는 고장 상태입니다.')
-        }
-        // 팝업에서 전달된 값에 대한 유효성 재검사
-        this.$nextTick(() => {
-          this.$validator.validate('equipment', this.equipment.equipNm)
+    bindMaterialData(_items) {
+      var materialItems = []      
+      var item = {}
+      var isDuplicated = false; // 중복 데이터 여부
+      $.each(_items, (_i, _item) => {
+        var filter = this.materialList.filter((_item2) => {
+          return _item.mtrlPk === _item2.materialPk
         })
-      }
+
+        if (filter.length) isDuplicated = true
+        else {
+          item = {
+            materialPk: null,
+            mtrlNm: null,
+            mtrlCd: null,
+            planAmt: null,
+            aStockAmt: null,
+            bStockAmt: null,
+            unitPrice: null,
+            physicalInvCount: null,
+            physicalInvYn: null
+          }
+          for (var key in item) {
+            item[key] = _item[key]
+          }
+          item.materialPk = _item.mtrlPk
+          item.aAmt = null
+          item.bAmt = null
+          item.isCancel = false // 선택 취소 여부 별도 추가
+          this.materialList.unshift(item)
+        }
+      })
+
+      if (isDuplicated) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.duplicated'))
+
       this.isOpenPopup = false
-      this.$forceUpdate()
+      // console.log('bindMaterialData:' + JSON.stringify(_items))
     },
     bindWoData(_items) {
       this.isOpenPopup = false
@@ -711,6 +717,8 @@ export default {
     onSearch(_pk, _isWorkCopy) {
       this.$ajax.url = 'workorder/request/' + _pk
       this.$ajax.requestGet((_result) => {
+        this.requestData = _result
+        this.workOrderApproval = _result.workOrderApproval
         this.mappedWoData(_result, _isWorkCopy)
       })
     },
@@ -800,7 +808,6 @@ export default {
         this.breakdownTime = time.format('HH:mm')
         this.$forceUpdate()
       }
-      console.log('workOrder:' + JSON.stringify(_woData))
       
       this.$set(this.saveData, 'workOrder', workOrder)
       // 팝업에서 전달된 값에 대한 유효성 재검사
@@ -895,14 +902,14 @@ export default {
         })   
       })
     },
-    getExsupplier() {
-      this.$ajax.url = selectConfig.exSupplier.url
-      this.$ajax.param = selectConfig.exSupplier.searchData
-      let self = this
-      this.$ajax.requestGet((_result) => {
-        self.exSupplier = _result.content
-      })
-    },
+    // getExsupplier() {
+    //   this.$ajax.url = selectConfig.exSupplier.url
+    //   this.$ajax.param = selectConfig.exSupplier.searchData
+    //   let self = this
+    //   this.$ajax.requestGet((_result) => {
+    //     self.exSupplier = _result.content
+    //   })
+    // },
     btnCompleteClicked() {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
@@ -913,6 +920,25 @@ export default {
       this.saveData = this.$comm.clone(this.defaultSaveData)
       window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
       this.$comm.movePage(this.$router, '/woCompleteList')
+    },
+    /**
+     * WO 자재 정보
+     */
+    getMaterialList(_pk) {
+      this.$ajax.url = selectConfig.material.woMaterial.url + _pk
+      var self = this
+      this.$ajax.requestGet((_result) => {
+        for (var idx in _result) {
+          _result[idx].aAmt = _result[idx].aStockAmt > 0 ? _result[idx].aStockAmt : 0 // placeholder 용
+          this.materialList.push(_result[idx])
+        }
+        // self.$refs.dataTable.hideLoading()
+      }, () => {
+        // self.$refs.dataTable.hideLoading()
+      })
+    },
+    editItem() {
+
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김

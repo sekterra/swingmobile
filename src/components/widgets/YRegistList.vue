@@ -12,7 +12,7 @@
       <v-card-title class="pa-0 ma-0">
       <v-toolbar color="primary" flat  dark>
         <v-toolbar-side-icon>
-          <v-icon v-if="editable">create</v-icon>
+          <v-icon v-if="editable">{{icon}}</v-icon>
           <v-icon v-else>https</v-icon>
         </v-toolbar-side-icon>
         <v-toolbar-title class="hidden-sm-and-down">{{controlTitle}}</v-toolbar-title>
@@ -39,7 +39,7 @@
         <v-card-media :height="height" max-height="300" :min-height="baseHeight" class="vscroll">
           <v-list 
             subheader
-            two-line
+            three-line
           >
             <template 
               v-for="(item, i) in selectedList">
@@ -47,43 +47,33 @@
               :key="item.pk"
               :class="{'grey lighten-5': (i > 1 && i % 2 === 0), 'indigo lighten-5': (i === 0)}"
             >
-              <v-list-tile-avatar>
-                  <v-icon :class="{'amber': (i % 2 === 0), 'indigo': (i % 2 === 1), 'white--text': true}">assignment</v-icon>
-              </v-list-tile-avatar>
               <v-list-tile-content >
                 <v-list-tile-title :class="{'strikethrough': item.isCancel}">
                   {{item.name}}
                 </v-list-tile-title>
-                <div style="width:100%;">
-                  <!-- <y-text
-                    :editable="editable"
-                    custom-class="pt-0"
-                    name="workTitle"
-                    placeholder="여기에 비용을 입력하세요."
-                    :hint="item.hint"
-                    v-model="item.cost"
-                    @input="(_value) => {
-                      item.cost = Number(_value)
-                      setTotalCost()
-                    }"
-                  >
-                  </y-text> -->
-                  <v-text-field
-                    :editable="editable"
-                    custom-class="pt-0"
-                    name="workTitle"
-                    placeholder="여기에 비용을 입력하세요."
-                    :hint="item.hint"
-                    v-model="item.cost"
-                    hide-details
-                    class="ma-0 pa-0"
-                    @input="(_value) => {
-                      item.cost = Number(_value)
-                      setTotalCost()
-                    }"
-                  >
-                  </v-text-field>
-                </div>
+                <v-list-tile-sub-title>
+                  <div style="width:100%;">
+                    <span
+                      v-if="itemTitle"
+                    >
+                      {{itemTitle}} : {{item.itemTitle}}
+                    </span>
+                    <v-text-field
+                      :editable="editable"
+                      custom-class="pt-0"
+                      name="workTitle"
+                      placeholder="여기에 비용을 입력하세요."
+                      :hint="item.hint"
+                      v-model="item.cost"
+                      hide-details
+                      class="ma-0 pa-0"
+                      @input="(_value) => {
+                        item.cost = Number(_value)
+                        setTotalCost()
+                      }"
+                    />
+                  </div>
+                </v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-btn
@@ -95,10 +85,6 @@
                 </v-btn>
               </v-list-tile-action>
             </v-list-tile>
-            <!-- <v-divider 
-              v-if="i < selectedList.length - 1"
-              :key="'div_' + item.pk" 
-            /> -->
             </template>
             <div v-if="!selectedList.length"
                 class="text-xs-center indigo--text">
@@ -108,37 +94,17 @@
         </v-card-media>
         <v-divider></v-divider>
         <v-card-actions>
-          <div class="caption indigo--text">{{subTitle}} : {{selectCount}}{{$t('title.things')}}</div>
+          <div class="caption indigo--text">{{subTitle}} : {{selectCount}} {{$t('title.things')}}</div>
           <v-spacer></v-spacer>
           <div class="caption indigo--text">{{titleOfTotal}} : {{totalCost}}</div>
         </v-card-actions>
       </v-card>
-
-      <!-- <v-divider></v-divider>
-
-      <v-list two-line subheader class="grey lighten-5">
-        <v-subheader>{{$t('title.summary')}}</v-subheader>
-      <v-list-tile avatar>
-          <v-list-tile-content>
-            <v-list-tile-title class="indigo--text">{{subTitle}}</v-list-tile-title>
-            <v-list-tile-sub-title>
-              {{selectedList.length}}{{$t('title.things')}}
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile avatar>
-          <v-list-tile-content>
-            <v-list-tile-title  class="indigo--text">{{$t('title.totalCost')}}</v-list-tile-title>
-            <v-list-tile-sub-title>{{totalCost}}</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list> -->
   </v-card>
   </div>
 </template>
 
 <script>
-var baseHeight=50
+var baseHeight=88
 export default {
   /* attributes: name, components, props, data */
   name: 'y-regist-list',
@@ -147,6 +113,7 @@ export default {
     subTitle: String, // 컴포넌트 서브 타이틀(요약 영역 chip에 표시되는 타이틀)
     controlTitle: String, // 선택용 컨트롤에 표시되는 타이틀(화면크기가 sm이상 일 경우 표시))
     selectItemKey: String,  // select 컨트롤의 키
+    itemTitle: String,
     rowCount: {
       type: Number,
       default: 5
@@ -174,6 +141,14 @@ export default {
     },
     hintUnit: {
       type: String
+    },
+    threeLine: {
+      type: Boolean,
+      default: false
+    },
+    icon: {
+      type: String,
+      default: 'create'
     }
   },
   data: () => ({
@@ -183,6 +158,7 @@ export default {
     totalCost: 0,
     height: baseHeight,
     baseHeight: baseHeight,
+    twoLine: true,   
     hint: null
   }),
   watch: {
@@ -193,10 +169,13 @@ export default {
     items() {
       if (this.items) {
         this.selectedList = this.$comm.clone(this.items)
-        this.height = this.selectedList.length * 71
+        this.height = this.selectedList.length * baseHeight
         this.selectCount = this.selectedList.length;
         this.setTotalCost()
       }
+    },
+    threeLine() {
+      if (this.threeLine) this.twoLine = false
     }
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
@@ -225,7 +204,7 @@ export default {
         isCancel: false // 취소선 표시여부
       };
       this.selectedList.unshift(item)
-      this.height = this.selectedList.length * 71
+      this.height = this.selectedList.length * baseHeight
       this.selectCount = this.getSelectedItems().length
     },
     // 추가한 내용을 취소할 경우

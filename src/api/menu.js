@@ -34,7 +34,7 @@ const Menu =  [
     name: 'woList',
   },
   {
-    title: 'WO 완료',
+    title: 'WO 완료목록',
     menuPk: 4,
     group: 'wo',
     icon: 'done',

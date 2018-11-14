@@ -267,6 +267,7 @@ comm.getLocaleYearMon = function (_thisDateStr, _givenFormat) {
 }
 
 comm.setNumberSeperator = (_number) => {
+  if (!_number) return 0
   if (isNaN(_number)) return null
   return _number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

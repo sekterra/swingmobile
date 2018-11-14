@@ -17,6 +17,7 @@
       "maintenanceType": "보전유형",
       "conditionType": "현상코드",
       "causeType": "원인코드",
+      "remedy": "조치코드",
       "project": "프로젝트",
       "woImageFileUpload": "설비상태 업로드",
       "workDate": "작업기간",
@@ -132,7 +133,25 @@
       "employee": "직원",
       "jobClass": "직종",
       "totalHours": "총 시간",
-      "woList": "WO목록"
+      "woList": "WO목록",
+      "warrantyDate": "보증만료일",
+      "requestUser": "요청자",
+      "woEndDate": "작업 종료일자",
+      "woEndTime": "작업 종료시간",
+      "woEndDateTime": "작업 종료일시",
+      "woMaterial": "작업자재",
+      "mtrlCd": "자재코드",
+      "mtrlNm": "자재명",
+      "unitPrice": "자재단가",
+      "planAmt": "예상소모량",
+      "aStockAmt": "A급 수량",
+      "bStockAmt": "B급 수량",
+      "materialType": "자재종류",
+      "materialLocation": "자재위치",
+      "materialSpec": "자재사양",
+      "manufacturer": "제조사",
+      "inventoryDate": "재고기준일",
+      "woMaterialInput": "작업자재 입력"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
@@ -151,12 +170,17 @@
       "retryFileUpload": "업로드 실패한 파일이 있습니다. 다시 업로드를 시작하시겠습니까?",
       "uploadFailedFileRemoved": "업로드 실패 파일을 삭제하였습니다.",
       "noDocumentUpload": "Mobile버전에서는 문서 파일업로드를 지원하지 않습니다.",
-      "enterCost": "비용 입력"
+      "enterCost": "비용 입력",
+      "aAmountInput": "A급 사용량",
+      "bAmountInput": "B급 사용량",
+      "inputAmount": "사용량 입력",
+      "inputMaterialUsage": "자재 사용량 입력"
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",
       "validError": "입력된 값에 오류가 있습니다.",
-      "noCamera": "카메라를 사용할 수 없습니다."
+      "noCamera": "카메라를 사용할 수 없습니다.",
+      "duplicated": "중복된 데이터가 존재합니다."
     },
     "menu": {
       "Dashboard": "대쉬보드",

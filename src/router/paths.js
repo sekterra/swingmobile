@@ -102,6 +102,17 @@ export default [
     )
   },
   {
+    path: '/woComplete',
+    // meta: { breadcrumb: true },
+    name: 'woComplete',
+    props: (route) => ({ query: route.query.pk }),
+    component: () => import(
+      /* webpackChunkName: "routes" */
+      /* webpackMode: "lazy-once" */
+      `@/pages/wo/woComplete.vue`
+    )
+  },
+  {
     path: '/woList',
     meta: { breadcrumb: true },
     name: 'woList',

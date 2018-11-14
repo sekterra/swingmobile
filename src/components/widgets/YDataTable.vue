@@ -11,7 +11,7 @@ examples:
         <v-toolbar-title><h4>{{title}}</h4></v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn 
-          v-if="createUrl"
+          v-if="createUrl || popupCallback"
           icon 
           @click.stop="create">
           <v-icon>add</v-icon>
@@ -21,18 +21,30 @@ examples:
       <v-card-text class="pa-0">
       <v-data-table
         v-model="selected"
+        ref="dataTable"
         :headers="headers"
         :items="items"
         :search="search"
         :pagination.sync="pagination"
         :loading="loading"
+        :select-all="gridType === 'checkbox'"
+        :item-key="itemKey"
         hide-actions
-        lazy
         class="elevation-0"
       >
         <!-- slot=headerCell 옵션 확인 필요 -->
         <template slot="headers" slot-scope="props">  
           <tr>
+            <th v-if="gridType === 'checkbox'">
+              <v-checkbox
+                :input-value="props.all"
+                :indeterminate="props.indeterminate"
+                color="indigo"
+                hide-details
+                @click.native="toggleAll"
+              ></v-checkbox>
+            </th>
+            <th v-else-if="gridType"></th>
             <th
               v-for="header in props.headers"
               :key="header.text"
@@ -45,48 +57,51 @@ examples:
           </tr>
         </template>
         <template slot="items" slot-scope="props">
-          <tr :active="props.selected">
+          <!-- TODO : 아래 props.selected = !props.selected가 들어가야 checkbox가 정상적으로 작동 -->
+          <tr :active="props.selected" @click="gridType === 'checkbox' ? props.selected = !props.selected : ''">
+            <td v-if="gridType === 'checkbox'">
+              <v-checkbox
+                :input-value="props.selected"
+                :indeterminate="props.indeterminate"
+                color="indigo"
+                hide-details />
+            </td>
+            <td v-else-if="gridType === 'edit' && editable">
+              <v-btn
+                small 
+                icon
+                outline
+                color="indigo"
+                :loading="props.selected"
+                @click="editItem(props);"
+              >
+                <v-icon
+                  small
+                  v-if="!props.selected">
+                edit
+                </v-icon>
+                <v-icon v-else>
+                  block
+                </v-icon>
+              </v-btn>
+            </td>
+            <td v-else-if="gridType === 'radio'">
+              <v-btn
+                small 
+                icon
+                outline
+                color="indigo"
+                @click="selectedData(props.item)"
+              >
+                <v-icon small>done</v-icon>
+              </v-btn>
+            </td>
             <td
               v-for="header in headers" :key="header.text"
               v-if="items.length > 0"
               :class="header.hasOwnProperty('columnAlign') ? 'text-xs-' + header.columnAlign : ''"
             >
-              <v-btn
-                v-if="header.type === 'edit' && editable"
-                small 
-                icon
-                outline
-                color="primary"
-                :loading="props.selected"
-                @click="editItem(props); props.selected = !props.selected"
-              >
-                <v-icon
-                  small
-                  v-if="!props.selected"
-                  v-model="props.item[header.name]"
-                >
-                edit
-                </v-icon>
-                <v-icon
-                  v-else>
-                  block
-                </v-icon>
-              </v-btn>
-              <v-btn
-                v-if="header.type === 'radio'"
-                small 
-                icon
-                outline
-                color="success"
-                @click="selectedData(props.item)"
-              >
-                <v-icon
-                small
-                >
-                  done
-                </v-icon>
-              </v-btn>
-              <span v-else-if="!header.columnEditable" class="shortened">
+              <span v-if="!header.columnEditable" class="shortened">
                 {{props.item[header.name]}}
               </span>
               <v-switch 
@@ -117,7 +132,7 @@ examples:
           circle
         ></v-pagination>
       </div>
-    <v-divider></v-divider>
+      <v-divider></v-divider>
     </v-card-text>
   </v-card>
 </template>
@@ -154,12 +169,20 @@ export default {
       type: Number,
       default: 5
     },
-    // 검색용 팝업
-    searchType: {
+    createUrl: {
       type: String,
       default: ''
     },
-    createUrl: {
+    popupCallback: {
+      type: String,
+      default: ''
+    },
+    // 그리드 타입(radio, checkbox)
+    gridType: {
+      type: String,
+      default: ''
+    },
+    itemKey: {
       type: String,
       default: ''
     }
@@ -178,10 +201,10 @@ export default {
     }
   },
   mounted() {
-    console.log('grid item changed:' + JSON.stringify(this.items))
+    console.log(':::::::::::: mounted')
   },
   activated() {
-    console.log('grid item changed:' + JSON.stringify(this.pagination))
+    console.log(':::::::::::: activated')
   },
   watch: {
     items() {
@@ -197,7 +220,7 @@ export default {
         this.pagination.totalItems == null
       ) return 0
       return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
-    }
+    },
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   /* methods */
@@ -212,8 +235,11 @@ export default {
       setTimeout(() => {self.loading = false}, 1000) 
     },
     create() {
-      if (!this.createUrl) return;
-      this.$comm.movePage(this.$router, this.createUrl)
+      if (this.createUrl) this.$comm.movePage(this.$router, this.createUrl)
+      else {
+        console.log('this.popupCallback:' + this.popupCallback)
+        if(this.popupCallback) this.$emit(this.popupCallback)
+      }
     },
     changeSort (column) {
       if (this.pagination.sortBy === column) {
@@ -231,6 +257,19 @@ export default {
       // var $obj = $(_obj)
       // if ($obj.is(':checked')) this.$emit('selectedData', _item)
       this.$emit('selectedData', _item)
+    },
+    /**
+     * datatable에서 선택된 정보를 부모에 넘긴다.
+     */
+    getCheckedData () {
+      return this.selected.slice()
+    },
+    toggleAll () {
+      if (this.selected.length) this.selected = []
+      else this.selected = this.items.slice()
+    },
+    clearSelected() {
+      this.selected = []
     }
   }
 }

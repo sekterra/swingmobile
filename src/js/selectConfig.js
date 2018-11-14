@@ -298,6 +298,30 @@ var selectConfig = {
       searchText: null,
       useYn: true
     },
+  },
+  material: {
+    woMaterial: {
+      url: 'workorder/mtrls/',
+      searchData: null
+    },
+    materialList: {
+      url: '/material/search',
+      searchData: {
+        searchText: null, // 자재명, 자재코드
+        mtrlDsc: null,  // 자재사양
+        makerNm: null,  // 제조사
+        subsMtrlText: null, // 대체자재명,대체자재코드
+        mtrlLocPk: null,  // 자재위치
+        equipPk: null,  // 자재사용설비
+        mtrlClassPk: null,  // 자재종류
+        stockCondType: 'MTRL_STOCK_COND_N', // 재고부족자재유형(없음,재고량기준,안전재고량기준)
+        stockLimitCount: null,  // 재고건수
+        researchYn: false,  // 결과내 재검색
+        mtrlPk: null, // 제외할 자재Pk
+        supplierNm: null,
+        useYn: null
+      }
+    }
   }
 }
 

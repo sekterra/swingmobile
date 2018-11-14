@@ -17,6 +17,7 @@
       "maintenanceType": "",
       "conditionType": "",
       "causeType": "",
+      "remedy": "",
       "project": "",
       "woImageFileUpload": "",
       "workDate": "",
@@ -118,7 +119,7 @@
       "address2": "",
       "homepage": "",
       "exSupplierDsc": "",
-      "title": "",
+      "things": "",
       "selectedOutsourcing": "",
       "showDetail": "",
       "readOnlyMode": "",
@@ -133,7 +134,25 @@
       "employee": "",
       "jobClass": "",
       "totalHours": "",
-      "woList": ""
+      "woList": "",
+      "warrantyDate": "",
+      "requestUser": "",
+      "woEndDate": "",
+      "woEndTime": "",
+      "woEndDateTime": "",
+      "woMaterial": "",
+      "mtrlCd": "",
+      "mtrlNm": "",
+      "unitPrice": "",
+      "planAmt": "",
+      "aStockAmt": "",
+      "bStockAmt": "",
+      "materialType": "",
+      "materialLocation": "",
+      "materialSpec": "",
+      "manufacturer": "",
+      "inventoryDate": "",
+      "woMaterialInput": ""
     },
     "message": {
       "woNo": "",
@@ -152,12 +171,17 @@
       "retryFileUpload": "",
       "uploadFailedFileRemoved": "",
       "todayStatus": "",
-      "noDocumentUpload": ""
+      "noDocumentUpload": "",
+      "aAmountInput": "",
+      "bAmountInput": "",
+      "inputAmount": "",
+      "inputMaterialUsage": ""
     },
     "error": {
       "requestError": "",
       "validError": "",
-      "noCamera": ""
+      "noCamera": "",
+      "duplicated": ""
     },
     "menu": {
       "Dashboard": "",

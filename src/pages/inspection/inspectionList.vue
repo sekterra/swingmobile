@@ -65,7 +65,7 @@
             :items="gridData"
             :loading="gridLoading"
             :editable="isGridEditable"
-            :search-type="searchType"
+            :grid-type="gridType"
             @selectedData="selectedData"
             @editItem="editItem"
           >
@@ -87,9 +87,9 @@ export default {
       type: Boolean,
       default: true
     },
-    searchType: {
+    gridType: {
       type: String,
-      default: ''
+      default: 'edit'
     }
   },
   data() {
@@ -119,7 +119,6 @@ export default {
       gridLoading: false,
       gridData: [],
       gridHeaderOptions: [
-        { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
         { text: this.$t('title.inspectionNo'), align: 'center', name: 'chkPlanNo', width: '15%', columnAlign: 'right' },
         { text: this.$t('title.inspectionTitle'), name: 'chkMastNm', width: '20%', align: 'center' },
         { text: this.$t('title.inspectionDepartment'), name: 'deptNm', width: '15%', align: 'center' },
@@ -134,8 +133,6 @@ export default {
   created() {
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
-    // popup 여부에 따라 그리드 헤더 옵션변경
-    this.gridHeaderOptions[0].type = this.searchType ? this.searchType : 'edit'
   },
   /* methods */
   methods: {

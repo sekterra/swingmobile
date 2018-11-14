@@ -106,6 +106,28 @@
       },
       complete: {
         url: 'workorder/resultfinish/',
+        param: {
+          workOrder: {
+            workOrderPk: null,
+            workText: null,
+            startDt: null,
+            endDt: null,
+            dept: null,
+            remedy: null,
+            problem: null,
+            cause: null,
+            project: null,
+            totCost: 0, // 전체비용
+            mtrlCost: 0,  // 자재 비용
+            laborCost: 0, // 인건비용
+            outsideCost: 0, // 외주 비용
+            etcCost: 0,   // 기타 비용
+            finishDt: null  // 종료일시
+          },
+          workOrderSuppliers: [],
+          woLabors: [],
+          woMtrls: []
+        },
         requestType: 'PUT'
       }
     },

@@ -149,6 +149,7 @@ export default {
           self.$emit('btnClickedError', _error) 
         })
       } else {
+        console.log('emit btnClicked')
         this.closeLoading()
         this.$emit('btnClicked')
       }

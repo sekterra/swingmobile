@@ -343,7 +343,7 @@
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center" lazy>
-                    <!-- <y-btn
+                    <y-btn
                        v-if="saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_X' && saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_C'"
                        type="save"
                       :title="$t('button.save')"
@@ -354,8 +354,8 @@
                       @btnClicked="btnSaveClicked" 
                       @btnClickedError="btnClickedError"
                       @checkValidation="checkValidation"
-                    ></y-btn> -->
-                    <y-btn
+                    ></y-btn>
+                    <!-- <y-btn
                       v-if="saveData.workOrder.workOrderApproval.woStatusCd === 'WO_STATUS_P'"
                       type="save"
                       :title="$t('button.complete')"
@@ -367,23 +367,7 @@
                       @btnClickedError="btnClickedError"
                       @checkValidation="checkValidation"
                     >
-                    </y-btn>
-                    <!-- <y-btn
-                      v-if="saveData.workOrder.workOrderApproval.woStatusCd === 'WO_STATUS_P'"
-                       lazy
-                       type="complete"
-                      :title="$t('button.complete')"
-                      :action-url="completeUrl"
-                      :action-type="completeRequestType"
-                      :param="saveData"
-                      :is-valid-by-parent = "isValid"
-                      btn-click-callback="btnCompleteClicked"
-                      btn-clicked-error-callback="btnClickedError"
-                      comunication-parent-callback="checkValidationComplete"
-                      @btnCompleteClicked="btnCompleteClicked" 
-                      @btnClickedError="btnClickedError"
-                      @checkValidationComplete="checkValidation"
-                    ></y-btn> -->
+                    </y-btn> -->
                     <y-btn
                       v-if="pk"
                       type="delete"
@@ -412,7 +396,7 @@
       </v-layout>
       <y-popup 
         :search-item="popupSearchItem"
-        :search-type="popupSearchType"
+        :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
         @closePopup="closePopup"
@@ -463,7 +447,7 @@ export default {
     // 검색용 팝업
     isOpenPopup: false,
     // 팝업 검색 결과 타입 설정(single: radio, multi: checkbox)
-    popupSearchType: 'radio',
+    popupGridType: 'radio',
     // form 유효성 여부
     isValidForm: true,
     popupSearchItem: '',
@@ -488,8 +472,7 @@ export default {
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
     woPlanDate: null,
     workDate: null,
-    exSupplier: [], // 외주업체 서비스
-    exSupplierTitles: {},
+    // exSupplierTitles: {},
     workerOrOccupationItems: [], // TODO : 작업인력 또는 직종정보를 담고있는 배열
     outsourcingItems: [],
     employeeList: [],
@@ -538,19 +521,19 @@ export default {
     }
   },
   beforeMount() {
-    this.exSupplierTitles = {
-      title: 'exSupplierNm',
-      pk: 'exSupplierPk',
-      cardItems: [
-        'exSupplierNm',
-        'phone',
-        'fax',
-        'address1',
-        'address2',
-        'homepage',
-        'exSupplierDsc'
-      ]
-    }
+    // this.exSupplierTitles = {
+    //   title: 'exSupplierNm',
+    //   pk: 'exSupplierPk',
+    //   cardItems: [
+    //     'exSupplierNm',
+    //     'phone',
+    //     'fax',
+    //     'address1',
+    //     'address2',
+    //     'homepage',
+    //     'exSupplierDsc'
+    //   ]
+    // }
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -567,7 +550,7 @@ export default {
       this.getImagePks(pk)
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
-    this.getExsupplier()
+    // this.getExsupplier()
     
     // 업로드가 완료되면 업로드 이미지 정보 초기화
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
@@ -612,7 +595,7 @@ export default {
     },
     openSearchPopup() {
       this.popupSearchItem = 'equipment'
-      this.popupSearchType = 'radio'
+      this.popupGridType = 'radio'
       this.isOpenPopup = true
       this.eventForReturn = 'bindEquipmentData'
     },
@@ -622,14 +605,14 @@ export default {
     },
     openWoPopup() {
       this.popupSearchItem = 'wo'
-      this.popupSearchType = 'radio'
+      this.popupGridType = 'radio'
       this.isOpenPopup = true
       this.eventForReturn = 'bindWoData'
     },
     closePopup() {
       this.popupSearchItem = ''
       this.isOpenPopup = false
-      this.popupSearchType = ''
+      this.popupGridType = ''
     },
     /**
      * 저장전 유효성 검사
@@ -907,14 +890,14 @@ export default {
         })   
       })
     },
-    getExsupplier() {
-      this.$ajax.url = selectConfig.exSupplier.url
-      this.$ajax.param = selectConfig.exSupplier.searchData
-      let self = this
-      this.$ajax.requestGet((_result) => {
-        self.exSupplier = _result.content
-      })
-    },
+    // getExsupplier() {
+    //   this.$ajax.url = selectConfig.exSupplier.url
+    //   this.$ajax.param = selectConfig.exSupplier.searchData
+    //   let self = this
+    //   this.$ajax.requestGet((_result) => {
+    //     self.exSupplier = _result.content
+    //   })
+    // },
     btnCompleteClicked() {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음

@@ -305,7 +305,7 @@
       </y-dialog> -->
       <y-popup 
         :search-item="popupSearchItem"
-        :search-type="popupSearchType"
+        :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
         @closePopup="closePopup"
@@ -351,7 +351,7 @@ export default {
     // 검색용 팝업
     isOpenPopup: false,
     // 팝업 검색 결과 타입 설정(single: radio, multi: checkbox)
-    popupSearchType: 'radio',
+    popupGridType: 'radio',
     // form 유효성 여부
     isValidForm: true,
     popupSearchItem: '',
@@ -458,7 +458,7 @@ export default {
     },
     openSearchPopup() {
       this.popupSearchItem = 'equipment'
-      this.popupSearchType = 'radio'
+      this.popupGridType = 'radio'
       this.isOpenPopup = true
       this.eventForReturn = 'bindEquipmentData'
     },
@@ -468,14 +468,14 @@ export default {
     },
     openWoPopup() {
       this.popupSearchItem = 'wo'
-      this.popupSearchType = 'radio'
+      this.popupGridType = 'radio'
       this.isOpenPopup = true
       this.eventForReturn = 'bindWoData'
     },
     closePopup() {
       this.popupSearchItem = ''
       this.isOpenPopup = false
-      this.popupSearchType = ''
+      this.popupGridType = ''
     },
     /**
      * 저장전 유효성 검사

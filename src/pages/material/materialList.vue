@@ -26,15 +26,15 @@
                                 @input="onSearch">
                               </v-text-field>
                           </v-flex>
+                          <!-- 자재 종류 -->
                           <v-flex sm6 class="py-0">
-                              <v-text-field
-                                label="설비위치" 
-                                class="mr-2"
-                                lazy
-                                clearable
-                                v-model="searchData.equipStatus"
-                                @input="onSearch">
-                              </v-text-field>
+                            <y-select
+                              :label="$t('title.materialType')"
+                              item-search-key="mtrlClass"
+                              name="mtrlClass"
+                              v-model="searchData.mtrlClass"
+                            >
+                            </y-select>
                           </v-flex>
                       </v-layout>
                       
@@ -64,7 +64,7 @@
           :loading="gridLoading"
           :editable="isGridEditable"
           :grid-type="gridType"
-          @selectedData="selectedData"
+          item-key="mtrlCd"
           >
           </y-data-table>
         </v-flex>
@@ -75,21 +75,6 @@
 
 <script>
 import selectConfig from '@/js/selectConfig'
-// 확장검색 옵션
-var expandSearchOption = [ 
-  {name: 'equipStatus', label: '설비상태', type: 'select', key: 'equipStatus'}, // selectConfig.js의 key값 입력
-  {name: 'locPk', label: '설비위치', type: 'select', key: 'equipLoc'}, // selectConfig.js의 key값 입력
-  {name: 'importRankPk', label: '중요도', type: 'select', key: 'equipImptRnk'},
-  {name: 'supplierPk', label: '공급업체', type: 'select', key: 'supplier'},
-]
-
-var gridHeaderOptions = [
-  { text: '설비코드', align: 'center', name: 'equipCd', width: '15%', columnAlign: 'right' },
-  { text: '설비명', name: 'equipNm', width: '20%', align: 'center' },
-  { text: '위치', name: 'locNm', width: '15%', align: 'center' },
-  { text: '설비상태', name: 'equipStatusNm', width: '20%', align: 'center' },
-  { text: '설비중요도', name: 'importRankNm', width: '10%', align: 'center', columnAlign: 'center' }
-]
 
 export default {
   /* attributes: name, components, props, data */
@@ -107,34 +92,46 @@ export default {
   data() {
     return {
       msg: '컨트롤',
-      expandSearchOption: expandSearchOption,
+      expandSearchOption: [], // 확장검색 옵션
       isGridEditable: false,  // 그리드 수정 가능여부(권한에 따라 변경됨)
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: selectConfig.equipmentList[0].url,
-      searchData: selectConfig.equipmentList[0].searchData,
+      gridUrl: selectConfig.material.materialList.url,
+      searchData: null,
       gridLoading: false,
       gridData: [],
-      gridHeaderOptions: gridHeaderOptions
+      gridHeaderOptions: [],
+      item: null  // 그리드에서 선택한 item
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
+    this.expandSearchOption = [ 
+      {name: 'mtrlLoc', label: this.$t('title.materialLocation'), type: 'select', key: 'mtrlLoc'}, // selectConfig.js의 key값 입력
+      {name: 'supplierNm', label: this.$t('title.exSupplierNm'), type: 'text', key: 'exSupplierNm'}, 
+      {name: 'makerNm', label: this.$t('title.manufacturer'), type: 'text', key: 'makerNm'},
+      {name: 'mtrlDsc', label: this.$t('title.materialSpec'), type: 'text', key: 'mtrlDsc'},
+    ]
+
+    this.gridHeaderOptions = [
+      { text: this.$t('title.mtrlCd'), align: 'center', name: 'mtrlCd', width: '15%', columnAlign: 'right' },
+      { text: this.$t('title.mtrlNm'), name: 'mtrlNm', width: '20%', align: 'center' },
+      { text: this.$t('title.materialType'), name: 'mtrlClassNm', width: '15%', align: 'center' },
+      { text: this.$t('title.manufacturer'), name: 'makerNm', width: '20%', align: 'center' },
+      { text: this.$t('title.aStockAmt'), name: 'aStockAmt', width: '10%', align: 'center', columnAlign: 'center' },
+      { text: this.$t('title.bStockAmt'), name: 'bStockAmt', width: '10%', align: 'center', columnAlign: 'center' },
+      { text: this.$t('title.materialLocation'), name: 'mtrlLocNm', width: '10%', align: 'center', columnAlign: 'center' }
+    ]
+
+    this.searchData = this.$comm.clone(selectConfig.material.materialList.searchData)
     this.isGridEditable = this.isGridEditableByParent
-    this.gridHeaderOptions = gridHeaderOptions
-    // page rendering 후 조회
-    this.$nextTick(() => {
-      this.onSearch()
-    })
+  },
+  mounted() {
+    this.onSearch()
   },
   /* methods */
   methods: {
-    init() {
-    },
-    rowDblClick() {
-      console.log('row double click');
-    },
     editItem() {
       this.$emit('edit');
     },
@@ -151,15 +148,25 @@ export default {
         self.gridData = typeof _result.content !== 'undefined' ? _result.content : _result
         self.$refs.dataTable.hideLoading()
       }, (_error) => {
-        self.gridLoading = false
         self.$refs.dataTable.hideLoading()
       })
     },
     /**
      * datatable에서 선택된 정보를 eventBus로 부모에 넘긴다.
      */
-    selectedData(_item) {
-      this.$emit('selectedData', _item)
+    // selectedData(_item) {
+    //   this.item = this.$comm.clone(_item)
+    //   this.item.aUseAmt = 0;
+    //   this.item.bUseAmt = 0;
+    //   // this.$emit('selectedData', _item)
+    // },
+    /**
+     * datatable에서 선택된 정보를 부모에 넘긴다.
+     */
+    getCheckedData() {
+      var checkedItems = this.$refs.dataTable.getCheckedData()
+      this.$refs.dataTable.clearSelected()
+      return checkedItems
     }
   }
 }

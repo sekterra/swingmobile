@@ -17,6 +17,7 @@
       "maintenanceType": "Maintenance type",
       "conditionType": "Condition",
       "causeType": "Cause",
+      "remedy": "Remedy",
       "project": "Project",
       "woImageFileUpload": "Uploading the Equipment Status Picture",
       "workDate": "Workdate",
@@ -118,7 +119,7 @@
       "address2": "Address2",
       "homepage": "Homepage url",
       "exSupplierDsc": "Remark",
-      "title": "things",
+      "things": "things",
       "selectedOutsourcing": "Selected outsourcing Co.",
       "showDetail": "View details",
       "readOnlyMode": "Read mode",
@@ -130,10 +131,28 @@
       "AddWorkerOrOccupation": "Add worker or occupation",
       "numberOfThings": "Number of things",
       "searchForWokerOccupation": "Search for a worker / an Occupation",
-      "employee": "man",
-      "jobClass": "job",
+      "employee": "Worker",
+      "jobClass": "Job",
       "totalHours": "Total of hours",
-      "woList": "WO List"
+      "woList": "WO List",
+      "warrantyDate": "Date of warranty",
+      "requestUser": "Request User",
+      "woEndDate": "WO end date",
+      "woEndTime": "WO end time",
+      "woEndDateTime": "WO end date & time",
+      "woMaterial": "Material for WO",
+      "mtrlCd": "Material Code",
+      "mtrlNm": "Material Name",
+      "unitPrice": "Unit price",
+      "planAmt": "Planned quantity",
+      "aStockAmt": "A Class quantity",
+      "bStockAmt": "B Class quantity",
+      "materialType": "Material type",
+      "materialLocation": "Location of material",
+      "materialSpec": "Material specification",
+      "manufacturer": "Manufacturer",
+      "inventoryDate": "Inventory Date",
+      "woMaterialInput": "Material usage"
     },
     "message": {
       "woNo": "Will be automatically generated.",
@@ -150,12 +169,17 @@
       "inspectionFail": "This equipment has been failed.",
       "retryFileUpload": "There are some failed files to upload. Do you want to try again?",
       "uploadFailedFileRemoved": "Upload failed files has been removed.",
-      "noDocumentUpload": "Does not support to upload files for a document on a mobile."
+      "noDocumentUpload": "Does not support to upload files for a document on a mobile.",
+      "aAmountInput": "Class A usage",
+      "bAmountInput": "Class B usage",
+      "inputAmount": "Input usage",
+      "inputMaterialUsage": "Input material usage"
     },
     "error": {
       "requestError": "An error occurred during data processing.",
       "validError": "There is an error in the value entered.",
-      "noCamera": "No camera available in this device."
+      "noCamera": "No camera available in this device.",
+      "duplicated": "Duplicate data has been existed"
     },
     "menu": {
       "Dashboard": "Dashboard",

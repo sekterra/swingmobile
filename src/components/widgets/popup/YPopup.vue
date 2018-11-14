@@ -24,19 +24,24 @@ examples:
         </v-toolbar>
         <wo-list 
           v-if="searchItem.toLowerCase() === 'wo'"
-          :search-type="searchType" 
+          :grid-type="gridType" 
           @selectedData="selectedData">
         </wo-list>
         <equipment-list
           v-if="searchItem.toLowerCase() === 'equipment'"
-          :search-type="searchType" 
+          :grid-type="gridType" 
           @selectedData="selectedData"
         >
         </equipment-list>
-
+        <material-list 
+          v-if="searchItem.toLowerCase() === 'material'"
+          ref="checkboxList"
+          :grid-type="gridType"
+          @selectedData="selectedData"
+        />
         <div class="text-xs-center">
           <y-btn
-            v-if="searchType !== 'radio'"
+            v-if="gridType !== 'radio'"
             type="select"
             title="confirm"
             @btnClicked="sendDataToParent"
@@ -57,6 +62,7 @@ examples:
 <script>
 import woList from '@/pages/wo/woList'
 import equipmentList from '@/pages/equipment/equipmentList'
+import materialList from '@/pages/material/materialList'
 
 export default {
   /* attributes: components, props, data */
@@ -64,10 +70,11 @@ export default {
   components: {
     'wo-list': woList,
     'equipment-list': equipmentList,
+    'material-list': materialList
   },
   props: {
     // 검색용 팝업
-    searchType: {
+    gridType: {
       type: String,
       default: '',
       validator: function (_value) {
@@ -101,6 +108,7 @@ export default {
   watch: {
     isOpenPopup() {
       this.dialog = this.isOpenPopup
+      if (this.isOpenPopup) this.selectedItems = []
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
@@ -118,17 +126,19 @@ export default {
      */
     selectedData(_item) {
       if (!_item) return
-      if (this.searchType === 'radio') {
+      if (this.gridType === 'radio') {
         this.selectedItems.push(_item)
-        this.sendDataToParent()
       }
-      // checkbox일 경우
-      else this.$comm.getFilteredArray(this.selectedItems, _item)
+      this.sendDataToParent()
     },
     /**
      * 부모에게 선택된 정보 전달
      */
     sendDataToParent() {
+      if (this.gridType === 'checkbox') {
+        this.selectedItems = this.$refs.checkboxList.getCheckedData()
+      }
+
       if (!this.selectedItems || this.selectedItems.length <= 0) return
       this.$emit(this.eventForReturn, this.selectedItems)
       this.selectedItems = []

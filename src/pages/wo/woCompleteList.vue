@@ -65,12 +65,12 @@ examples:
         <v-flex xs12>
           <y-data-table 
             :title="$t('title.woCompleteList')"
+            grid-type="edit"
             ref="dataTable"
             :headers="gridHeaderOptions"
             :items="gridData"
             :loading="gridLoading"
             :editable="isGridEditable"
-            :search-type="searchType"
             @selectedData="selectedData"
             @editItem="editItem"
           >
@@ -93,7 +93,7 @@ export default {
       type: Boolean,
       default: true
     },
-    searchType: {
+    gridType: {
       type: String,
       default: ''
     }
@@ -124,8 +124,15 @@ export default {
       searchData: this.$comm.clone(selectConfig.woList[0].searchData),
       gridLoading: false,
       gridData: [],
-      gridHeaderOptions: [
-        { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
+      gridHeaderOptions: []
+    }
+  },
+  /* Vue lifecycle: created, mounted, destroyed, etc */
+  created() {
+    this.onSearch()
+    this.isGridEditable = this.isGridEditableByParent
+    this.gridHeaderOptions = [
+        // { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
         { text: this.$t('title.woNo'), align: 'center', name: 'workOrderNo', width: '15%', columnAlign: 'right' },
         { text: this.$t('title.woTitle'), name: 'workTitle', width: '20%', align: 'center' },
         { text: this.$t('title.equipmentCode'), name: 'equipCd', width: '15%', align: 'center' },
@@ -134,14 +141,6 @@ export default {
         { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' },
         { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
       ]
-    }
-  },
-  /* Vue lifecycle: created, mounted, destroyed, etc */
-  created() {
-    this.onSearch()
-    this.isGridEditable = this.isGridEditableByParent
-    // popup 여부에 따라 그리드 헤더 옵션변경
-    this.gridHeaderOptions[0].type = this.searchType ? this.searchType : 'edit'
   },
   /* methods */
   methods: {
