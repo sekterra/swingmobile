@@ -30,7 +30,7 @@ import VueCordovaDevice from 'vue-cordova-device'
 // import Keyboard from 'cordova-plugin-keyboard'
 
 // TODO : global components imports
-import YButton from '@/components/widgets/YButton'
+import YBtn from '@/components/widgets/YBtn'
 import YDatepicker from '@/components/widgets/YDatepicker'
 import YExpandSearch from '@/components/widgets/YExpandSearch'
 import YDataTable from '@/components/widgets/YDataTable'
@@ -116,7 +116,7 @@ Vue.filter('truncate', Truncate);
 
 // TODO: Global Custom Component
 Vue.component(YDatepicker.name, YDatepicker);
-Vue.component(YButton.name, YButton);
+Vue.component(YBtn.name, YBtn);
 Vue.component(YExpandSearch.name, YExpandSearch);
 Vue.component(YDataTable.name, YDataTable);
 Vue.component(YSelect.name, YSelect);

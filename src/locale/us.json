@@ -76,7 +76,7 @@
       "pmCompleteRate": "PM complete rate",
       "complete": "Complete",
       "InspectionCompleteRate": "Inspection complete rate",
-      "equipment": "설비",
+      "equipment": "Equipment",
       "number": "Numbers",
       "installedEquipment": "Installed Equipment",
       "breakdownEquipment": "Breakdown equipments",
@@ -154,7 +154,10 @@
       "inventoryDate": "Inventory Date",
       "woMaterialInput": "Material usage",
       "inputMaterialUsage": "Input material usage",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "wageUnitPrice": "Wage unit price",
+      "tenantId": "Name of Your Site",
+      "etcCost": "ETC Cost"
     },
     "message": {
       "woNo": "Will be automatically generated.",
@@ -177,7 +180,8 @@
       "aAmountInput": "Class A usage",
       "bAmountInput": "Class B usage",
       "inputAmount": "Input usage",
-      "inputMaterialUsage": "Input material usage"
+      "inputMaterialUsage": "Input material usage",
+      "tenantHint": "The URL  you entered when signing up"
     },
     "error": {
       "requestError": "An error occurred during data processing.",
@@ -197,7 +201,8 @@
       "woStatistics": "Statistics for WO",
       "pmStatistics": "Statistics for PM",
       "equipmentStatistics": "Statistics for equipment",
-      "inspectionStatistics": "Statistics for inspection"
+      "inspectionStatistics": "Statistics for inspection",
+      "serverError": "Sorry, the server is down."
     },
     "button": {
       "save": "Save",
@@ -207,7 +212,8 @@
       "complete": "Complete",
       "list": "Back to list",
       "confirm": "Confirm",
-      "close": "Close"
+      "close": "Close",
+      "home": "Go Home"
     }
   }
 }

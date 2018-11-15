@@ -14,12 +14,15 @@
               <v-layout row>
                 <v-flex xs12>
                   <v-card>
-                    <v-img
-                      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                    <v-img v-if="woImage"
+                      :src="woImage"
                       height="200px"
-                    >
-                    </v-img>
-            
+                    />
+                    <v-img 
+                      v-else 
+                      src="static/no-image-icon.png"
+                      height="200px"
+                    />
                     <v-card-title primary-title>
                       <div>
                         <div class="headline">{{ '[' + requestData.equipCd + '] ' + requestData.equipNm }}</div>
@@ -218,6 +221,7 @@
                         icon="location_city"
                         :editable="editable"
                         :items="outsourcingItems"
+                        @registListChanged="outsourceListChanged"
                       >
                       </y-regist-list>
                     </v-flex>
@@ -233,12 +237,16 @@
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
                         :combo-placeholder="$t('message.workHour')"
-                        selectItemKey="employee"
+                        select-item-key="employee"
+                        hint-item-key="jobClass"
+                        hint-pk="jobClassPk"
                         hint-key="wageCost"
-                        hint-unit=""
+                        :hint-title="$t('title.wageUnitPrice')"
+                        :is-hint-number="true"
                         icon="people"
                         :editable="editable"
                         :items="employeeList"
+                        @registListChanged="employListChanged"
                       >
                       </y-regist-list>
                     </v-flex>
@@ -256,10 +264,12 @@
                         :combo-placeholder="$t('message.workHour')"
                         selectItemKey="jobClass"
                         hint-key="wageCost"
-                        hint-unit=""
+                        :hint-title="$t('title.wageUnitPrice')"
+                        :is-hint-number="true"
                         icon="business_center"
                         :editable="editable"
                         :items="jobClassList"
+                        @registListChanged="jobClassListChanged"
                       >
                       </y-regist-list>
                     </v-flex>
@@ -277,8 +287,60 @@
                         :title-of-total="$t('title.cost')"
                         icon="category"
                         @openSearchPopup="openSearchPopup"
+                        @registListChanged="materialListChanged"
                       >
                       </y-material-info-list>
+                    </v-flex>
+                  </v-layout>
+                  <!-- 요약 -->
+                  <v-layout row wrap fill-height>
+                    <v-flex xs12>
+                      <v-card>
+                        <v-card-title class="pa-0 ma-0">
+                          <v-toolbar color="primary" flat  dark>
+                            <v-toolbar-side-icon>
+                              <v-icon v-if="editable">event_note</v-icon>
+                              <v-icon v-else>https</v-icon>
+                            </v-toolbar-side-icon>
+                            <v-toolbar-title>{{$t('title.summary')}}</v-toolbar-title>
+                          </v-toolbar>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-layout row wrap align-center justify-start>
+                              <v-flex xs6>
+                                <div>
+                                  <v-icon>location_city</v-icon> {{$t('title.outsourcingCost')}}: {{$comm.setNumberSeperator(outsourcingTotalCost)}}
+                                </div>
+                              </v-flex>
+                              <v-flex xs6>
+                                <div>
+                                  <v-icon>people</v-icon><v-icon>business_center</v-icon> {{$t('title.laborCost')}}: {{$comm.setNumberSeperator(laborTotalCost)}}
+                                </div>
+                              </v-flex>
+                              <v-flex xs6>
+                                <div>
+                                  <v-icon>category</v-icon> {{$t('title.materialCost')}}: {{$comm.setNumberSeperator(materialTotalCost)}}
+                                </div>
+                              </v-flex>
+                              <v-flex xs6>
+                                <div>
+                                  <v-text-field
+                                  prepend-icon="scatter_plot"
+                                  :label="$t('title.etcCost')"
+                                  hide-detail
+                                  v-model="etcCost"
+                                  />
+                                </div>
+                              </v-flex>
+                              <v-divider></v-divider>
+                              <v-flex xs12>
+                                <div class="title indigo--text text-xs-right">                                 
+                                  {{$t('title.totalCost')}}: {{$comm.setNumberSeperator(totalCost)}}
+                                </div>
+                              </v-flex>
+                            </v-layout>
+                          </v-card-text>
+                      </v-card>
                     </v-flex>
                   </v-layout>
                   
@@ -322,18 +384,20 @@
                   </v-layout>
               </v-form>
                 <v-flex xs12>
-                  <div class="text-xs-center" lazy>
+                  <div class="text-xs-center">
                     <y-btn
-                       v-if="requestData.workOrderApproval.woStatusCd !== 'WO_STATUS_X' && requestData.workOrderApproval.woStatusCd !== 'WO_STATUS_C'"
+                       v-if="woStatusCd !== 'WO_STATUS_X' && woStatusCd !== 'WO_STATUS_C'"
                        type="test"
                       :title="$t('button.save')"
                       :action-url="url"
                       :action-type="requestType"
                       :param="saveData"
                       :is-valid-by-parent = "isValid"
+                      :is-submit="isSubmit"
+                      beforeSubmit = "beforeSubmit"
                       @btnClicked="btnSaveClicked" 
                       @btnClickedError="btnClickedError"
-                      @checkValidation="checkValidation"
+                      @beforeSubmit="beforeSubmit"
                     ></y-btn>
                     <!-- <y-btn
                       v-if="workOrderApproval.woStatusCd === 'WO_STATUS_P'"
@@ -418,6 +482,7 @@ export default {
     saveData: {},
     url: null,
     requestType: null,
+    isSubmit: false,
     // completeUrl: transaction.complete.url,
     // completeRequestType: transaction.complete.requestType,
     // WO 요청정보
@@ -461,7 +526,14 @@ export default {
     materialList: [],
     show: true,
     finishDate: null,
-    finishTime: null
+    finishTime: null,
+    woStatusCd: null,
+    outsourcingTotalCost: 0,
+    employeeTotalCost: 0,
+    jobClassTotalCost: 0,
+    materialTotalCost: 0,
+    etcCost: 0,
+    woImage: null  // WO 이미지 정보
   }),
   watch: {
     breakdownDate() {
@@ -494,9 +566,16 @@ export default {
         this.breakdownTime = null
       }
       return isBreak
+    },
+    laborTotalCost() {
+      return this.employeeTotalCost + this.jobClassTotalCost
+    },
+    totalCost() {
+      return this.outsourcingTotalCost + this.employeeTotalCost + this.materialTotalCost +  Number(this.etcCost)
     }
   },
   beforeMount() {
+    Object.assign(this.$data, this.$options.data());
     this.saveData = this.$comm.clone(transaction.complete.param)
     this.url = transaction.complete.url
     this.requestType = transaction.complete.requestType
@@ -530,7 +609,9 @@ export default {
       this.$ajax.url = 'workorder/request/' + _pk
       this.$ajax.requestGet((_result) => {
         this.requestData = _result
+        this.woStatusCd = this.requestData.workOrderApproval.woStatusCd
         this.mappedWoData(_result)
+        this.getWoImagePk(_result.equipPk)
       })
     },
     /**
@@ -540,14 +621,19 @@ export default {
       this.$ajax.url = selectConfig.wo.outsource.url + _pk
       var self = this
       this.$ajax.requestGet((_result) => {
+        var outsourcingItems = []
         $.each(_result, (_i, _item) => {
-          self.outsourcingItems.push({
+          // TODO : 여기에 추가되는 항목은 YRegistList의 addDataToList함수의 item 항목과 동일해야 함
+          outsourcingItems.push({
             pk: _item.exSupplierPk,
             name: _item.exSupplierNm,
-            cost: _item.cost,
+            hint: null,
+            hintDisplay: null,
+            value: _item.cost,
             isCancel: false
           })
         })
+        this.$set(this, 'outsourcingItems', outsourcingItems)
       })
     },
     /**
@@ -557,23 +643,32 @@ export default {
       this.$ajax.url = selectConfig.wo.labors.url + _pk
       var self = this
       this.$ajax.requestGet((_result) => {
+        var employeeList = []
+        var jobClassList = []
         $.each(_result, (_i, _item) => {
+          // TODO : 여기에 추가되는 항목은 YRegistList의 addDataToList함수의 item 항목과 동일해야 함
           if (_item.userPk) {
-            self.employeeList.push({
+            employeeList.push({
               pk: _item.userPk,
               name: _item.userNm,
-              cost: _item.workHr,
+              hint: null,
+              hintDisplay: null,
+              value: _item.workHr,
               isCancel: false
             })
           } else if (_item.jobClassPk) {
-            self.jobClassList.push({
+            jobClassList.push({
               pk: _item.jobClassPk,
               name: _item.jobClassNm,
-              cost: _item.workHr,
+              hint: _item.wageCost,
+              hintDisplay: this.$comm.setNumberSeperator(_item.wageCost),
+              value: _item.workHr,
               isCancel: false
             })
           }
-        })
+        })       
+        this.$set(this, 'employeeList', employeeList)
+        this.$set(this, 'jobClassList', jobClassList)
       })
     },
     /**
@@ -603,7 +698,7 @@ export default {
     btnSaveClicked(_result) {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
-      this.mappedSubItems()
+      this.mappedSaveData()
       // if (!this.isValid) return
       
       // this.uploadImages(_result.returnResult.workOrderPk)
@@ -629,13 +724,17 @@ export default {
       this.isOpenPopup = false
       this.popupGridType = ''
     },
+    beforeSubmit() {
+      this.mappedSaveData()
+      this.checkValidation()
+    },
     /**
      * 저장전 유효성 검사
      */
     checkValidation() {
-      this.mappedSubItems()
       this.$validator.validateAll().then((_result) => {
         this.isValid = _result
+        this.isSubmit = false // 테스트 용 : 원래 _result가 와야 함.
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
         if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
@@ -644,9 +743,9 @@ export default {
       });
     },
     /**
-     * saveData 공급업체, 직원, 직종 목록 설정
+     * 저장전 saveData 공급업체, 직원, 직종 목록 설정
      */
-    mappedSubItems() {
+    mappedSaveData() {
       this.saveData.workOrderSuppliers = []
       this.saveData.woLabors = []
       this.saveData.woMtrls = []
@@ -830,6 +929,26 @@ export default {
         })   
       })
     },
+    getWoImagePk(_pk) {
+      this.$ajax.url = selectConfig.img.fileList.url
+      this.$ajax.param = this.$comm.clone(selectConfig.img.fileList.searchData)
+      this.$ajax.param.attachType = 'EQUIP_PHOTO'
+      this.$ajax.param.attachPk = _pk
+      let self = this
+      this.$ajax.requestGet((_result) => {
+        console.log(_result)
+        if (_result.length) self.getWogetImageFile(_result[0].filePk)
+      })
+    },
+    getWogetImageFile(_filePk) {
+      ajaxFile.url = selectConfig.img.imageDown.url + '?filePk=' + _filePk     
+      let self = this
+      ajaxFile.requestFileGet((_result) => {
+        self.$nextTick(() => {
+          self.woImage = window.URL.createObjectURL(_result)
+        })   
+      })
+    },
     // getExsupplier() {
     //   this.$ajax.url = selectConfig.exSupplier.url
     //   this.$ajax.param = selectConfig.exSupplier.searchData
@@ -863,6 +982,38 @@ export default {
       }, () => {
         // self.$refs.dataTable.hideLoading()
       })
+    },
+    outsourceListChanged() {
+      if (!this.$refs.outsourcing) return 0
+      var list = this.$refs.outsourcing.getSelectedItems()
+      var totalCost = list.reduce(function (sum, _item) {
+          return sum + (_item.value ? _item.value : 0)
+      }, 0);
+      this.outsourcingTotalCost = totalCost
+    },
+    employListChanged () {
+      if (!this.$refs.employee) return 0
+      var list = this.$refs.employee.getSelectedItems()
+      var totalCost = list.reduce(function (sum, _item) {
+          return sum + ((_item.value ? _item.value : 0) * _item.hint)
+      }, 0);
+      this.employeeTotalCost = totalCost
+    },
+    jobClassListChanged () {
+      if (!this.$refs.jobClass) return 0
+      var list = this.$refs.jobClass.getSelectedItems()
+      var totalCost = list.reduce(function (sum, _item) {
+          return sum + ((_item.value ? _item.value : 0) * _item.hint)
+      }, 0);
+      this.jobClassTotalCost = totalCost
+    },
+    materialListChanged () {
+      if (!this.$refs.materialList) return 0
+      var list = this.$refs.materialList.getSelectedItems()
+      var totalCost = list.reduce(function (sum, _item) {
+          return sum + ((_item.aAmt ? _item.aAmt : 0) * Number(_item.unitPrice))
+      }, 0);
+      this.materialTotalCost = totalCost
     },
     editItem() {
 

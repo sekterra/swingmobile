@@ -153,7 +153,10 @@
       "inventoryDate": "재고기준일",
       "woMaterialInput": "작업자재 입력",
       "inputMaterialUsage": "자재 사용량 입력",
-      "confirm": "승인"
+      "confirm": "승인",
+      "wageUnitPrice": "노임단가",
+      "tenantId": "사이트명",
+      "etcCost": "기타 비용"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
@@ -177,13 +180,15 @@
       "aAmountInput": "A급 사용량",
       "bAmountInput": "B급 사용량",
       "inputAmount": "사용량 입력",
-      "inputMaterialUsage": "자재 사용량 입력"
+      "inputMaterialUsage": "자재 사용량 입력",
+      "tenantHint": "회원가입시 입력한 주소"
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",
       "validError": "입력된 값에 오류가 있습니다.",
       "noCamera": "카메라를 사용할 수 없습니다.",
-      "duplicated": "중복된 데이터가 존재합니다."
+      "duplicated": "중복된 데이터가 존재합니다.",
+      "serverError": "현재 서버에 문제가 발생하였습니다. 잠시 후 이용 바랍니다."
     },
     "menu": {
       "Dashboard": "대쉬보드",
@@ -207,7 +212,8 @@
       "complete": "완료",
       "list": "목록",
       "confirm": "승인",
-      "close": "닫기"
+      "close": "닫기",
+      "home": "홈으로"
     }
   }
 }

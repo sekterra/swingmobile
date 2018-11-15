@@ -208,7 +208,7 @@ export default {
     },
     getEquipmentImage() {
       this.$ajax.url = selectConfig.img.fileList.url
-      this.$ajax.param = selectConfig.img.fileList.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.img.fileList.searchData)
       this.$ajax.param.attachType = 'EQUIP_PHOTO'
       this.$ajax.param.attachPk = this.pk // 417
 

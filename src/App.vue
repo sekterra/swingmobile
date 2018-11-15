@@ -19,7 +19,7 @@
           <v-footer height="auto" class="white pa-3 app--footer">
             <span class="caption">swing cmms &copy; {{ new Date().getFullYear() }}</span>
             <v-spacer></v-spacer>
-            <span class="caption mr-1"> Yullin Technologies </span> <v-icon color="pink" small>favorite</v-icon>
+            <span class="caption mr-1"> Yullin Technologies </span>
           </v-footer>
         </v-content>
         <!-- Go to top -->
@@ -126,7 +126,7 @@ export default {
     });
     window.getApp = this;
     this.$ajax.isAuthCheck = false;
-    this.userPk = localStorage.userPk
+    // this.userPk = localStorage.userPk
   },
   beforeMount () {
     this.changeLocale(this.$i18n.locale);
@@ -142,9 +142,7 @@ export default {
   },
   mounted() {
     this.$vuetify.goTo(0);
-    this.userPk = null;
-    this.userPk = localStorage.userPk;
-    console.log('mounted:' + this.userPk)
+    // this.userPk = localStorage.userPk;
   },
   methods: {
     /**
@@ -189,12 +187,12 @@ export default {
       this.userPk = _userPk
     },
     setUserInfo() {
+      console.log('this.userPk:' + this.userPk)
       if (!this.userPk) return
       this.$ajax.url = selectConfig.userInfo.url + this.userPk
       let self = this
       this.$ajax.requestGet((_result) => {
         self.userInfo = _result
-        console.log('user info:' + JSON.stringify(self.userInfo))
       })
     },
     getUserInfo() {

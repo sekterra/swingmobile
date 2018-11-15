@@ -155,10 +155,12 @@ export default {
         })
       }
     },
-    getSelectItem() {
-      if (!this.vValue) return null
+    getSelectItem(_pk) {
+      var pk = _pk
+      pk = _pk ? _pk : this.vValue
+      if (!pk) return null
       var filter = this.items.filter((_item) => {
-        return _item[this.item.itemKey] === this.vValue
+        return _item[this.item.itemKey] === pk
       })
 
       if (filter.length <= 0) return null

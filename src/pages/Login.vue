@@ -13,10 +13,21 @@
                 </div>                
                 <v-form>
                   <v-text-field 
+                    append-icon="web" 
+                    name="login" 
+                    :label="$t('title.tenantId')"
+                    :hint="$t('message.tenantHint')"
+                    persistent-hint
+                    type="text" 
+                    clearable
+                    v-model="userInfo.tenantId">
+                  </v-text-field>
+                  <v-text-field 
                     append-icon="person" 
                     name="login" 
-                    :label="$t('title.id')" 
+                    :label="$t('title.id')"
                     type="text" 
+                    clearable
                     v-model="userInfo.username">
                   </v-text-field>
                   <v-text-field 
@@ -25,25 +36,13 @@
                     :label="$t('title.password')" 
                     id="password" 
                     type="password" 
+                    clearable
                     v-model="userInfo.password">
                   </v-text-field>
-                  <!-- <v-menu offset-y>
-      <v-btn
-        slot="activator"
-        color="primary"
-        dark
-      >
-        Dropdown
-      </v-btn>
-      <v-list>
-        <v-list-tile
-          v-for="(item, index) in items"
-          :key="index"
-        >
-          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-menu> -->
+                  <v-switch
+                    :label="cloudLabel"
+                    v-model="isCloudAccess"
+                  ></v-switch>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -64,6 +63,7 @@
 <script>
 import jwt from '@/js/jwtToken'
 import YI18n from '@/components/widgets/YI18n'
+import config from '@/js/config'
 // https://vuejsexamples.com/vue-component-for-country-flags/
 
 export default {
@@ -73,19 +73,41 @@ export default {
   data: () => ({
     loading: false,
     userInfo: {
-      username: 'cmms',
-      password: 'cmms'
+      tenantId: '',
+      username: '',
+      password: ''
     },
     locale: null,
-    items: [
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me' },
-        { title: 'Click Me 2' }
-      ]
+    isCloudAccess: true,
+    cloudLabel: 'cloud 접속'
   }),
   mounted() {
     this.locale = localStorage.locale
+    this.userInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
+    this.isCloudAccess = localStorage.isCloudAccess ? localStorage.isCloudAccess : true
+    if (localStorage.isCloudAccess) this.isCloudAccess = localStorage.isCloudAccess === 'true' ? true : false
+    else this.isCloudAccess = true
+
+    if (this.isCloudAccess) config.settingForReleaseSite()
+    else config.settingForDevSite()
+  },
+  watch: {
+    'userInfo.tenantId': function() {
+      if (!this.userInfo.tenantId) return
+      localStorage.tenantId = this.userInfo.tenantId
+      config.tenantId = this.userInfo.tenantId
+    },
+    isCloudAccess() {
+      // this.cloudLabel = this.isCloudAccess ? 'cloud 접속' : '테스트 사이트 접속'
+      if (this.isCloudAccess) {
+        config.settingForReleaseSite()
+        this.$set(this, 'cloudLabel', 'cloud 접속')
+      } else {
+        config.settingForDevSite()
+        this.$set(this, 'cloudLabel', '테스트 사이트 접속')
+      }
+      localStorage.isCloudAccess = Boolean(this.isCloudAccess)
+    }
   },
   methods: {
     login () {

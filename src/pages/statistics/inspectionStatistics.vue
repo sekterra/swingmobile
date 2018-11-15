@@ -264,6 +264,7 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   beforeMount() {
+    Object.assign(this.$data, this.$options.data());
     // 올해의 점검 수행률
     this.getInspectionCompleteRate();
     // 이상 발견 설비 개수

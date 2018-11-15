@@ -112,7 +112,6 @@ export default {
       this.searchDataChanged()
     },
     searchDataChanged() {
-      console.log('this.searchData:' + JSON.stringify(this.searchData))
       this.$emit('searchDataChanged', this.searchData)
     }
   }

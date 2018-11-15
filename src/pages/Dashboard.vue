@@ -627,6 +627,7 @@ export default {
   beforeMount() {
     // TODO : 배포시에는 바로 아래 문장을 활성화 시켜야 함
     // this.loadDashboardSettings()
+    Object.assign(this.$data, this.$options.data());
     this.getWoTotalCostAndHour()
     this.getPmCompleteRate()
     this.getInspectionCompleteRate()

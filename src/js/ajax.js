@@ -24,7 +24,8 @@ var ajax = {
   requestPut: null,
   requestFile: null,
   defaultErrorHandler: null,
-  getErrorMessage: null
+  getErrorMessage: null,
+  backUpInfo: {}
 }
 
 var orgAjax = {
@@ -78,30 +79,13 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         xhr.setRequestHeader('accept', ajax.accept)
       }
       xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-      xhr.setRequestHeader('X-TenantID', 'yullin') // 개발버전
+      // xhr.setRequestHeader('X-TenantID', 'yullin') // 개발버전
+      xhr.setRequestHeader('X-TenantID', config.tenantId)
     },
     success: function (xhr, status, req) {
-      // ajax.url = null
-      // ajax.param = null
-      // ajax.accept = null
-      // ajax.contentType = 'application/json;charset=utf-8'
-      // ajax.processData = true
-
       for(var key in orgAjax) {
         ajax[key] = orgAjax[key]
       }
-
-      // if (xhr.hasOwnProperty('token')) {
-      //   jwt.checkValidToken((data) => {
-      //     if (data === '' || data === 'undefined') {
-      //       window.alert('jwt error')
-      //       comm.movePage('/')
-      //       return
-      //     }
-      //     console.log('user info:' + JSON.stringify(data))
-      //     appVue.setUserPk(data.userpk)
-      //   })
-      // }
 
       if (typeof _callbackSuccess === 'function') _callbackSuccess(xhr, status, req)
       else return xhr
@@ -115,13 +99,13 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       for(var key in orgAjax) {
         ajax[key] = orgAjax[key]
       }
-
-      if (xhr.status >= 400) {
+      var errorCode = Number(xhr.status)
+      console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
+      if (errorCode >= 400 && errorCode < 500) {
         // status code : 500 -> _fnFail 함수를 못 가져옴!
         if (xhr.hasOwnProperty('error') && xhr.error.needLogin) {
           console.log(':::::::::::: ajax :' + JSON.stringify(xhr))
         }
-        
         
         // TODO : 전역 에러처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
@@ -134,6 +118,11 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         } else {
           return xhr
         }
+      } else if (status === 'error') {
+        if (typeof _callbackFail === 'function') {
+          _callbackFail(xhr, status, err)
+        } 
+        // appVue.$comm.movePage(appVue.$router, '/500')
       }
     }
   }

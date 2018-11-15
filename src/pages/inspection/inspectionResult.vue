@@ -349,6 +349,9 @@ export default {
       return this.$t('title.pass') + ' : ' + this.inspectionInfo.okCount + '  ' + this.$t('title.fail') + ' : ' + this.inspectionInfo.failCount
     }
   },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
     // 참고 : @/router/path.js의 props 속성에서 설정된 방식으로 처리됨

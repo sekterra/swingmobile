@@ -130,6 +130,9 @@ export default {
   mounted() {
     this.onSearch()
   },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
   /* methods */
   methods: {
     editItem() {

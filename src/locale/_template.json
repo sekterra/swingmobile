@@ -153,7 +153,9 @@
       "manufacturer": "",
       "inventoryDate": "",
       "woMaterialInput": "",
-      "confirm": ""
+      "confirm": "",
+      "wageUnitPrice": "",
+      "tenantUrl": ""
     },
     "message": {
       "woNo": "",
@@ -178,13 +180,16 @@
       "aAmountInput": "",
       "bAmountInput": "",
       "inputAmount": "",
-      "inputMaterialUsage": ""
+      "inputMaterialUsage": "",
+      "tenantId": "",
+      "etcCost": ""
     },
     "error": {
       "requestError": "",
       "validError": "",
       "noCamera": "",
-      "duplicated": ""
+      "duplicated": "",
+      "serverError": ""
     },
     "menu": {
       "Dashboard": "",
@@ -208,7 +213,8 @@
       "complete": "",
       "list": "",
       "confirm": "",
-      "close": ""
+      "close": "",
+      "home": ""
     }
   }
 }

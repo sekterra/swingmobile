@@ -219,10 +219,12 @@
                       <y-regist-list
                         ref="outsourcing"
                         :title="$t('title.outsourcingList')"
-                        :subTitle="$t('title.numberOfSelects')"
+                        :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalCost')"
+                        :combo-placeholder="$t('message.enterCost')"
                         selectItemKey="exSupplier"
+                        icon="location_city"
                         :editable="editable"
                         :items="outsourcingItems"
                       >
@@ -249,12 +251,17 @@
                       <y-regist-list
                         ref="employee"
                         :title="$t('title.employee')"
-                        :subTitle="$t('title.numberOfSelects')"
+                        :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
-                        selectItemKey="employee"
+                        :combo-placeholder="$t('message.workHour')"
+                        select-item-key="employee"
+                        hint-item-key="jobClass"
+                        hint-pk="jobClassPk"
                         hint-key="wageCost"
-                        hint-unit=""
+                        :hint-title="$t('title.wageUnitPrice')"
+                        :is-hint-number="true"
+                        icon="people"
                         :editable="editable"
                         :items="employeeList"
                       >
@@ -268,12 +275,15 @@
                       <y-regist-list
                         ref="jobClass"
                         :title="$t('title.jobClass')"
-                        :subTitle="$t('title.numberOfSelects')"
+                        :sub-title="$t('title.numberOfSelects')"
                         :controlTitle="$t('title.searchForOutsourcing')"
                         :title-of-total="$t('title.totalHours')"
+                        :combo-placeholder="$t('message.workHour')"
                         selectItemKey="jobClass"
                         hint-key="wageCost"
-                        hint-unit=""
+                        :hint-title="$t('title.wageUnitPrice')"
+                        :is-hint-number="true"
+                        icon="business_center"
                         :editable="editable"
                         :items="jobClassList"
                       >
@@ -344,7 +354,7 @@
                 <v-flex xs12>
                   <div class="text-xs-center" lazy>
                     <y-btn
-                       v-if="saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_X' && saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_C'"
+                       v-if="woStatusCd !== 'WO_STATUS_X' && woStatusCd !== 'WO_STATUS_C'"
                        type="save"
                       :title="$t('button.save')"
                       :action-url="url"
@@ -476,7 +486,8 @@ export default {
     workerOrOccupationItems: [], // TODO : 작업인력 또는 직종정보를 담고있는 배열
     outsourcingItems: [],
     employeeList: [],
-    jobClassList: []
+    jobClassList: [],
+    woStatusCd: ''
   }),
   watch: {
     breakdownDate() {
@@ -521,19 +532,7 @@ export default {
     }
   },
   beforeMount() {
-    // this.exSupplierTitles = {
-    //   title: 'exSupplierNm',
-    //   pk: 'exSupplierPk',
-    //   cardItems: [
-    //     'exSupplierNm',
-    //     'phone',
-    //     'fax',
-    //     'address1',
-    //     'address2',
-    //     'homepage',
-    //     'exSupplierDsc'
-    //   ]
-    // }
+    Object.assign(this.$data, this.$options.data());
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -643,8 +642,9 @@ export default {
       if (workOrderSuppliers.length) {
         $.each(workOrderSuppliers, (_i, _item) => {
           this.saveData.workOrderSuppliers.push({
-            exSupplier: _item.pk,
-            cost: _item.cost
+            // workOrder: Number(pk),
+            exSupplier: Number(_item.pk),
+            cost: Number(_item.value)
           })
         })
       }
@@ -653,9 +653,9 @@ export default {
       if (employeeList.length) {
         $.each(employeeList, (_i, _item) => {
           this.saveData.woLabors.push({
-            userInfo: _item.pk,
+            userInfo: Number(_item.pk),
             jobClass: null,
-            workHr: _item.cost
+            workHr: Number(_item.value)
           })
         })
       }
@@ -665,8 +665,8 @@ export default {
         $.each(jobClassList, (_i, _item) => {
           this.saveData.woLabors.push({
             userInfo: null,
-            jobClass: _item.pk,
-            workHr: _item.cost
+            jobClass: Number(_item.pk),
+            workHr: Number(_item.value)
           })
         })
       }
@@ -716,15 +716,19 @@ export default {
       this.$ajax.url = selectConfig.wo.outsource.url + _pk
       var self = this
       this.$ajax.requestGet((_result) => {
+        var outsourcingItems = []
         $.each(_result, (_i, _item) => {
+          // TODO : 여기에 추가되는 항목은 YRegistList의 addDataToList함수의 item 항목과 동일해야 함
           self.outsourcingItems.push({
             pk: _item.exSupplierPk,
             name: _item.exSupplierNm,
-            cost: _item.cost,
+            hint: null,
+            hintDisplay: null,
+            value: _item.cost,
             isCancel: false
           })
         })
-        console.log(JSON.stringify(_result))
+        this.$set(this, 'outsourcingItems', outsourcingItems)
       })
     },
     /**
@@ -735,21 +739,30 @@ export default {
       var self = this
       this.$ajax.requestGet((_result) => {
         $.each(_result, (_i, _item) => {
+          var employeeList = []
+          var jobClassList = []
+           // TODO : 여기에 추가되는 항목은 YRegistList의 addDataToList함수의 item 항목과 동일해야 함
           if (_item.userPk) {
-            self.employeeList.push({
+            employeeList.push({
               pk: _item.userPk,
               name: _item.userNm,
-              cost: _item.workHr,
+              hint: null,
+              hintDisplay: null,
+              value: _item.workHr,
               isCancel: false
             })
           } else if (_item.jobClassPk) {
-            self.jobClassList.push({
+            jobClassList.push({
               pk: _item.jobClassPk,
               name: _item.jobClassNm,
-              cost: _item.workHr,
+              hint: _item.wageCost,
+              hintDisplay: this.$comm.setNumberSeperator(_item.wageCost),
+              value: _item.workHr,
               isCancel: false
             })
           }
+          this.$set(this, 'employeeList', employeeList)
+          this.$set(this, 'jobClassList', jobClassList)
         })
       })
     },
@@ -757,6 +770,7 @@ export default {
      * WO의 조회된 데이터와 저장하는 데이터를 mapping 하는 함수
      */
     mappedWoData(_woData, _isWorkCopy) {
+      console.log('_woData:' + JSON.stringify(_woData))
       var workOrder = {}
       for (var key in this.saveData.workOrder) {
         if (_woData.hasOwnProperty(key)) {
@@ -786,6 +800,8 @@ export default {
         workOrder.workOrderApproval.rqstUser = _woData.workOrderApproval.rqstUserPk
       }
 
+      this.woStatusCd = workOrder.workOrderApproval.woStatusCd
+
       if (workOrder.breakdownDt) {
         var tmpDate = workOrder.breakdownDt.substring(0, 8)
         var tmpTime = workOrder.breakdownDt.substring(8, workOrder.breakdownDt.length)
@@ -795,7 +811,6 @@ export default {
         this.breakdownTime = time.format('HH:mm')
         this.$forceUpdate()
       }
-      console.log('workOrder:' + JSON.stringify(_woData))
       
       this.$set(this.saveData, 'workOrder', workOrder)
       // 팝업에서 전달된 값에 대한 유효성 재검사
@@ -863,6 +878,7 @@ export default {
       window.getApp.$emit('APP_REQUEST_SUCCESS', this.upload.uploadedImagesCount + ' files');
       this.upload.uploadedImagesCount = 0;
     },
+    // Image 관련 PK를 가져온다.
     getImagePks(_pk) {
       this.$ajax.url = selectConfig.img.fileList.url
       this.$ajax.param = this.$comm.clone(selectConfig.img.fileList.searchData)
@@ -881,6 +897,7 @@ export default {
         })
       })
     },
+    // getImagePks에서 가져온 이미지 정보(byte array)를 가져와서 localurl 형식으로 변환 후 tmpImageList에 담는다.
     getImageFile(_filePk) {
       ajaxFile.url = selectConfig.img.imageDown.url + '?filePk=' + _filePk     
       let self = this

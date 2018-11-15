@@ -65,6 +65,9 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
   mounted() {
     window.getApp.$on('LOCALE_CHANGE', (_localeCode) => {
       this.locale = this.$comm.moment().locale()

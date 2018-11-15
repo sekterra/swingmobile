@@ -134,6 +134,9 @@ export default {
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
   },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
   /* methods */
   methods: {
     init() {

@@ -92,7 +92,7 @@ export default {
       default: false
     },
     hint: {
-      type: String
+      type: [String, Number]
     }
   },
   data() {

@@ -47,6 +47,14 @@ export default {
     customColor: {
       type: String,
       default: null
+    },
+    beforeSubmit: { // 버튼 클릭 전에 사전 처리해야 할 경우 부모의 함수명
+      type: String,
+      default: null
+    },
+    isSubmit: { // 버튼 클릭 후 처리를 계속 진행할지 여부
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -60,6 +68,8 @@ export default {
   watch: {
     isValidByParent() {
       if (this.isValidByParent) this.callButtonAction()
+      if (this.isSubmit) this.callButtonAction()
+      else return this.$emit('btnClickedError', this.param)
     },
     actionType() {
       this.initButtonType()
@@ -114,7 +124,7 @@ export default {
       }
       // 저장일 경우 유효성 검사
       if (this.type.toLowerCase() === 'save') {
-        this.$emit('checkValidation')
+        this.$emit(this.beforeSubmit)
         return
       }
       this.callButtonAction()

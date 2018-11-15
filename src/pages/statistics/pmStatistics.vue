@@ -247,6 +247,7 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   beforeMount() {
+    Object.assign(this.$data, this.$options.data());
     // 올해 PM 완료율
     this.getPmCompleteRateThisYear()
     // 오늘의 PM 완료 현황

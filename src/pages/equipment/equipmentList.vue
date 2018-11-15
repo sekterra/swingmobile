@@ -128,6 +128,9 @@ export default {
       this.onSearch()
     })
   },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
   /* methods */
   methods: {
     init() {

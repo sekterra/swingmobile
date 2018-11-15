@@ -378,6 +378,9 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
   mounted() {
     // 오늘의 설비 현황
     this.getEquipmentStatusOfToday();

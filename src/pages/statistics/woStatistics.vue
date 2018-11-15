@@ -272,6 +272,7 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   beforeMount() {
+    Object.assign(this.$data, this.$options.data());
     // 이달의 WO 비용
     this.getWoTotalCostAndHour();
     // 오늘의 WO완료 현황

@@ -101,12 +101,7 @@ export default {
   data() {
     return {
       msg: '컨트롤',
-      expandSearchOption: [ 
-        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '3m'},
-        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
-        {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
-        {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
-      ],
+      expandSearchOption: [],
       isGridEditable: false,  // 그리드 수정 가능여부(권한에 따라 변경됨)
       date: null,
       menu2: null,
@@ -141,6 +136,15 @@ export default {
         { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' },
         { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
       ]
+      this.expandSearchOption = [
+        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '3m'},
+        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
+        {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
+        {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
+      ]
+  },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
   },
   /* methods */
   methods: {
@@ -148,9 +152,6 @@ export default {
     },
     dateChanged(_date) {
       this.debug = '[parent datepicker]:' + _date;
-    },
-    rowDblClick() {
-      console.log('row double click');
     },
     editItem(_item) {
       var url = '/woComplete?pk=' + _item.workOrderPk
@@ -191,7 +192,6 @@ export default {
      * eventBus로 선택된 정보를 부모로 넘긴다.
      */
     selectedData(_item) {
-      console.log(':::::::::::: [woList] select item ::::::::::::' + JSON.stringify(_item))
       this.$emit('selectedData', _item)
     }
   }

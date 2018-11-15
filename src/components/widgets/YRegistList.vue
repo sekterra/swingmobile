@@ -54,9 +54,10 @@
                 <v-list-tile-sub-title>
                   <div style="width:100%;">
                     <span
-                      v-if="itemTitle"
+                      v-if="item.hint"
+                      class="body-2"
                     >
-                      {{itemTitle}} : {{item.itemTitle}}
+                      {{hintTitle}}: {{item.hintDisplay}}
                     </span>
                     <v-text-field
                       :editable="editable"
@@ -65,11 +66,12 @@
                       :placeholder="comboPlaceholder"
                       :hint="item.hint"
                       v-model="item.value"
+                      :clearable="editable"
                       hide-details
                       class="ma-0 pa-0"
                       @input="(_value) => {
                         item.value = Number(_value)
-                        setTotalCost()
+                        setSummary()
                       }"
                     />
                   </div>
@@ -96,7 +98,7 @@
         <v-card-actions>
           <div class="caption indigo--text">{{subTitle}} : {{selectCount}} {{$t('title.things')}}</div>
           <v-spacer></v-spacer>
-          <div class="caption indigo--text">{{titleOfTotal}} : {{totalCost}}</div>
+          <div class="caption indigo--text">{{titleOfTotal}} : {{summary}}</div>
         </v-card-actions>
       </v-card>
   </v-card>
@@ -104,6 +106,9 @@
 </template>
 
 <script>
+import comboConfig from '@/js/comboConfig'
+import $ from 'jquery'
+
 var baseHeight=88
 export default {
   /* attributes: name, components, props, data */
@@ -136,6 +141,7 @@ export default {
     titleOfTotal: {
       type: String
     },
+    // 힌트에 사용할 키
     hintKey: {
       type: String
     },
@@ -153,29 +159,62 @@ export default {
     comboPlaceholder: {
       type: String,
       default: ''
+    },
+    // 임금계산등 hint에 표시할 내용이 있을 경우 기준정보 조회
+    hintItemKey: {
+      type: String,
+      default: ''
+    },
+    // hint 내용을 비교할 pk
+    hintPk: {
+      type: String,
+      default: ''
+    },
+    // hint와 함께 표시되는 타이틀
+    hintTitle: {
+      type: String,
+      default: ''
+    },
+    isHintNumber: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     selectValue: null,
     selectedList: [],
     selectCount: 0,
-    totalCost: 0,
+    summary: 0,
     height: baseHeight,
     baseHeight: baseHeight,
     twoLine: true,   
+    hintItems: [],
     hint: null
   }),
   watch: {
     // 선택값이 변경되면 중복여부를 확인후 없으면 추가 있으면 추가하지 않음
     selectValue() {
-      if (this.selectValue) this.addDataToList()
+      var hint = null
+      
+      if (this.selectValue) {
+        var selectItem = this.$refs.select.getSelectItem()
+        // 다른 기준정보에서 데이터를 가져와야 할 경우
+        if (this.hintItemKey) {
+          if (selectItem) hint = this.setHint(selectItem.item)
+        } else if (this.hintKey) {  // 현재 정보에서 데이터를 가져와야 할 경우
+          if (selectItem) {
+            hint = selectItem.item[this.hintKey]
+          }
+        }
+        this.addDataToList(hint)
+      }
     },
     items() {
       if (this.items) {
-        this.selectedList = this.$comm.clone(this.items)
+        this.init()
         this.height = this.selectedList.length * baseHeight
         this.selectCount = this.selectedList.length;
-        this.setTotalCost()
+        this.setSummary()
       }
     },
     threeLine() {
@@ -183,11 +222,29 @@ export default {
     }
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
-  mounted() {
+  beforeMount() {
+    // 힌트에 사용할 키가 있다면 조회해서 hintItems에 담아둔다.
+    if (this.hintItemKey) this.getHintItems()
   },
   //* methods */
   methods: {
-    addDataToList() {
+    // 초기화 : 기존 등록된 정보를 가져옴
+    init() {
+      var selectedList = []
+      $.each(this.items, (_i, _item) => {
+        var selectItem = this.$refs.select.getSelectItem(_item.pk)
+        // 다른 기준정보에서 데이터를 가져와야 할 경우
+        if (this.hintItemKey) {
+          if (selectItem) hint = this.setHint(selectItem.item)
+          _item.hint = hint
+          _item.hintDisplay = this.isHintNumber ? this.$comm.setNumberSeperator(hint) : hint
+        }
+        selectedList.push(_item)
+      })
+      this.$set(this, 'selectedList', selectedList)
+    },
+    addDataToList(_hint) {
+      // 중복여부 확인
       var filter = []
       if (this.selectedList.length) {
         filter = this.selectedList.filter((_item) => {
@@ -200,12 +257,14 @@ export default {
       var item = selectedItem.item
       var itemInfo = selectedItem.itemInfo
       var name = item[itemInfo.key]
-      var hint = ''
-      if (this.hintKey && item.hasOwnProperty(this.hintKey)) hint = item[this.hintKey]
+
+      var hintDisplay = this.isHintNumber ? this.$comm.setNumberSeperator(_hint) : _hint
+      
       var item = {
         pk: this.selectValue,
         name: name,
-        hint: hint.toString(),
+        hint: _hint,
+        hintDisplay: hintDisplay,
         value: null,
         isCancel: false // 취소선 표시여부
       };
@@ -216,7 +275,7 @@ export default {
     // 추가한 내용을 취소할 경우
     setCancel(_item) {
       _item.isCancel = !_item.isCancel
-      this.setTotalCost()
+      this.setSummary()
       this.selectCount = this.getSelectedItems().length
     },
     // 선택한 내용을 부모에게 반환(취소된 것 제외)
@@ -225,17 +284,35 @@ export default {
         return !_item.isCancel
       })
     },
-    // 총 합계 비용 계산
-    setTotalCost() {
-      var totalCost = this.selectedList.reduce(function (sum, _item) {
+    // 요약 설정
+    setSummary() {
+      var summary = this.selectedList.reduce(function (sum, _item) {
           if (!_item.isCancel) return sum + (_item.value ? _item.value : 0)
           else return sum
       }, 0);
-      this.totalCost = this.$comm.setNumberSeperator(isNaN(totalCost) ? 0 : totalCost)
+      this.summary = this.$comm.setNumberSeperator(isNaN(summary) ? 0 : summary)
+      this.$emit('registListChanged')
     },
     // 콤보박스의 전체 정보를 가져오는 함수
     getAllInfoOfCombo() {
       return this.$refs.select.getItems()
+    },
+    // 힌트에 사용할 키가 있다면 조회해서 hintItems에 담아둔다.
+    getHintItems() {
+      this.$ajax.url = comboConfig[this.hintItemKey].url
+      this.$ajax.param = null
+      let self = this
+      this.$ajax.requestGet((_result) => {
+        self.hintItems = typeof _result.content !== 'undefined' ? _result.content : _result
+      })
+    },
+    // 힌트 정보를 가져와서 세팅
+    setHint(_currentSelectInfo) {
+      var filter = this.hintItems.filter((_item) => {
+        return _item[this.hintPk] === _currentSelectInfo[this.hintPk]
+      })
+      var hint = filter.length > 0 ? filter[0][this.hintKey].toString() : null
+      return hint
     }
   }
 }

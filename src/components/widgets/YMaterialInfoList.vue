@@ -211,12 +211,11 @@ export default {
     // 총 합계 비용 계산
     setTotalCost() {
       var totalCost = this.selectedList.reduce(function (sum, _item) {
-          if (!_item.isCancel) {
-            return sum + ((_item.aAmt ? _item.aAmt : 0) * Number(_item.unitPrice))
-          }
+          if (!_item.isCancel) return sum + ((_item.aAmt ? _item.aAmt : 0) * Number(_item.unitPrice))
           else return sum
       }, 0);
       this.totalCost = this.$comm.setNumberSeperator(isNaN(totalCost) ? 0 : totalCost)
+      this.$emit('registListChanged')
     },
     /**
      * 자재 검색 팝업창 호출

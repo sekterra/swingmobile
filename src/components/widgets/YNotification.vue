@@ -119,7 +119,8 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
-  created() {
+  mounted() {
+    console.log('YNotification mounted')
     this.onSearch()
   },
   /* methods */
