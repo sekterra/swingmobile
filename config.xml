@@ -40,7 +40,7 @@
         <icon height="29" src="res/icon/ios/Icon-small.png" width="29" />
         <icon height="58" src="res/icon/ios/Icon-small@2x.png" width="58" />
         <icon height="50" src="res/icon/ios/Icon-Small-50.png" width="50" />
-        <icon height="100" src="res/icon/ios/Icon-Small-50@2x@2x.png" width="100" />
+        <icon height="100" src="res/icon/ios/Icon-Small-50@2x.png" width="100" />
     </platform>
     <allow-navigation href="*" />
     <feature name="Camera">
