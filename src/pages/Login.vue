@@ -43,6 +43,9 @@
                     :label="cloudLabel"
                     v-model="isCloudAccess"
                   ></v-switch>
+                  <v-btn @click="btnAutoIdSet">
+                    테스트 ID 세팅
+                  </v-btn>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -140,6 +143,17 @@ export default {
         console.log('_error:' + JSON.stringify(_error))
         this.loading = false
       })
+    },
+    btnAutoIdSet() {
+      if (this.isCloudAccess) {
+        this.userInfo.tenantId = 'cmmstest'
+        this.userInfo.username = 'cmms1234'
+        this.userInfo.password = 'cmms1234'
+      } else {
+        this.userInfo.tenantId = 'yullin'
+        this.userInfo.username = 'cmms'
+        this.userInfo.password = 'cmms'
+      }
     }
   },
   

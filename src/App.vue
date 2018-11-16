@@ -12,7 +12,7 @@
           <!-- Page Header -->
           <!-- TODO : Current Page Direction -->
           <page-header v-if="$route.meta.breadcrumb"></page-header>
-          <div class="page-wrapper">
+          <div class="page-wrapper">            
             <router-view></router-view>
           </div>
            <!-- App Footer -->
@@ -22,6 +22,7 @@
             <span class="caption mr-1"> Yullin Technologies </span>
           </v-footer>
         </v-content>
+        
         <!-- Go to top -->
         <app-fab></app-fab>
         <!-- theme setting -->
@@ -43,6 +44,9 @@
           <theme-settings v-if="!isSearchPopup"></theme-settings>
           <y-right-popup v-else></y-right-popup>
         </v-navigation-drawer>
+        <!-- test -->
+        
+        
       </v-app>
     </template>
     <template v-else>
@@ -85,6 +89,7 @@ import ThemeSettings from '@/components/ThemeSettings';
 import AppEvents from  './event';
 import CountryFlag from 'vue-country-flag'
 import selectConfig from '@/js/selectConfig'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 let localeMapper = require('@/locale/localeMapper.json');
 
 export default {
@@ -111,7 +116,7 @@ export default {
       show: false,
       text: '',
       type: ''
-    }
+    },
   }),
   watch: {
     userPk() {
@@ -201,6 +206,12 @@ export default {
     hideKeyboard() {
       // IOS, Android 둘 다 정상적으로 동작
       if (Keyboard && typeof Keyboard.hide === 'function') Keyboard.hide()
+    },
+    swipeAtEnd() {
+      this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Reach End');
+    },
+    swipeUp() {
+      this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Up');
     }
   },
 };
