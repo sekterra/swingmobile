@@ -50,7 +50,7 @@ export default {
     },
     beforeSubmit: { // 버튼 클릭 전에 사전 처리해야 할 경우 부모의 함수명
       type: String,
-      default: null
+      default: 'checkValidation'
     },
     isSubmit: { // 버튼 클릭 후 처리를 계속 진행할지 여부
       type: Boolean,
@@ -68,6 +68,9 @@ export default {
   watch: {
     isValidByParent() {
       if (this.isValidByParent) this.callButtonAction()
+      else return this.$emit('btnClickedError', this.param)
+    },
+    isSubmit() {
       if (this.isSubmit) this.callButtonAction()
       else return this.$emit('btnClickedError', this.param)
     },

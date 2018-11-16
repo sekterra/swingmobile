@@ -13,7 +13,7 @@
             :iconTitle="$t('title.installedEquipment')"
             :title="dataset.equipment.totalCount"
             :sub-title="$t('title.number')"
-            color="success"      
+            color="success  darken-1"      
           >
           </mini-statistic>  
         </v-flex>
@@ -25,7 +25,7 @@
             :iconTitle="$t('title.breakdownEquipment')"
             :title="dataset.equipment.totalBreakdownCount"
             :sub-title="$t('title.number')"
-            color="red darken-3"      
+            color="red darken-1"      
           >
           </mini-statistic>  
         </v-flex>
@@ -37,7 +37,7 @@
             iconTitle="WO"
             :title="dataset.wo.totalCosts"
             :sub-title="$t('title.cost') + '(' + $t('title.unit') + ':' + costDivider + ')'"
-            color="indigo"      
+            color="indigo darken-1"      
           >
           </mini-statistic>  
         </v-flex>
@@ -49,7 +49,7 @@
             iconTitle="WO"
             :title="dataset.wo.totalHours"
             :sub-title="$t('title.workHours')"
-            color="purple"    
+            color="purple darken-1"    
           >
           </mini-statistic>
         </v-flex>
@@ -61,7 +61,7 @@
             iconTitle="Inspection"
             :title="dataset.inspection.completeRate"
             :sub-title="$t('title.complete')"
-            color="red"      
+            color="teal darken-1"      
           >
           </mini-statistic>           
         </v-flex>          
@@ -73,7 +73,7 @@
             iconTitle="PM"
             :title="dataset.pm.completeRate"
             :sub-title="$t('title.complete')"
-            color="light-blue"      
+            color="cyan darken-1"      
           >
           </mini-statistic>            
         </v-flex>        

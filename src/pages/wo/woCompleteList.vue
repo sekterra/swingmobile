@@ -115,8 +115,8 @@ export default {
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: selectConfig.woList[0].url,
-      searchData: this.$comm.clone(selectConfig.woList[0].searchData),
+      gridUrl: null,
+      searchData: null,
       gridLoading: false,
       gridData: [],
       gridHeaderOptions: []
@@ -124,7 +124,13 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
-    this.onSearch()
+  },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+    this.gridUrl = selectConfig.woList[0].url
+    this.searchData = this.$comm.clone(selectConfig.woList[0].searchData)
+  },
+  mounted() {
     this.isGridEditable = this.isGridEditableByParent
     this.gridHeaderOptions = [
         // { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
@@ -142,9 +148,7 @@ export default {
         {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
         {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
       ]
-  },
-  beforeMount() {
-    Object.assign(this.$data, this.$options.data());
+      this.onSearch()
   },
   /* methods */
   methods: {

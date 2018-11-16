@@ -404,6 +404,13 @@
           </v-card>
         </v-flex>           
       </v-layout>
+
+      <v-layout row wrap>
+        <VuePerfectScrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
+          <img src="/static/background.jpg'" height="720" width="1280" alt="">
+        </VuePerfectScrollbar>
+      </v-layout>
+
       <y-popup 
         :search-item="popupSearchItem"
         :grid-type="popupGridType"
@@ -429,6 +436,7 @@ import jwt from '@/js/jwtToken.js'
 import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 let transaction = transactionConfig.wo.woCreate
 export default {
@@ -436,9 +444,13 @@ export default {
     validator: 'new'
   },
   components: {
+    VuePerfectScrollbar
   },
   data: () => (
   {
+    settings: {
+      maxScrollbarLength: 60
+    },
     // wo 저장
     saveData: transaction.insert.param,
     url: transaction.insert.url,
@@ -557,6 +569,9 @@ export default {
     });
   },  
   methods: {
+    scrollHanle(evt) {
+      console.log(evt)
+    },
     // 버그 있음 : 수정 필요
     btnClearClicked () {
       this.saveData = this.$comm.clone(this.defaultSaveData);
@@ -933,3 +948,13 @@ export default {
   }
 };
 </script>
+
+</script> 
+<style lang="scss">
+.scroll-area {
+  position: relative;
+  margin: auto;
+  width: 400px;
+  height: 300px;
+}
+</style> 

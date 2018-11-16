@@ -126,7 +126,10 @@ export default {
       type: Number,
       default: 5
     },
-    items: Array,
+    items: {
+      type: Array,
+      default: null
+    },
     editable: { // 수정 가능여부
       type: Boolean,
       default: true
@@ -160,42 +163,23 @@ export default {
     // },
     items() {
       if (this.items) {
-        this.selectedList = this.$comm.clone(this.items)
-        this.height = this.selectedList.length * baseHeight
-        this.selectCount = this.selectedList.length;
-        this.setTotalCost()
+        this.init()
       }
     }
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
+  mounted() {
+    console.log('------------> mounted' + this.items)
+    if (!this.selectedList.length) this.init()
+  },
   //* methods */
   methods: {
-    // addDataToList() {
-    //   var filter = []
-    //   if (this.selectedList.length) {
-    //     filter = this.selectedList.filter((_item) => {
-    //       return this.selectValue === _item.pk
-    //     })
-    //   }
-    //   // 기존에 추가되었으면 추가 안함
-    //   if (filter.length > 0) return
-    //   var selectedItem = this.$refs.select.getSelectItem()
-    //   var item = selectedItem.item
-    //   var itemInfo = selectedItem.itemInfo
-    //   var name = item[itemInfo.key]
-    //   var hint = ''
-    //   if (this.hintKey && item.hasOwnProperty(this.hintKey)) hint = item[this.hintKey]
-    //   var item = {
-    //     pk: this.selectValue,
-    //     name: name,
-    //     hint: hint.toString(),
-    //     cost: null,
-    //     isCancel: false // 취소선 표시여부
-    //   };
-    //   this.selectedList.unshift(item)
-    //   this.height = this.selectedList.length * baseHeight
-    //   this.selectCount = this.getSelectedItems().length
-    // },
+    init() {
+      this.selectedList = this.$comm.clone(this.items)
+      this.height = this.selectedList.length * baseHeight
+      this.selectCount = this.selectedList.length;
+      this.setTotalCost()
+    },
     // 추가한 내용을 취소할 경우
     setCancel(_item) {
       _item.isCancel = !_item.isCancel

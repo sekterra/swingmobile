@@ -64,7 +64,7 @@
                       custom-class="pt-0"
                       name="workTitle"
                       :placeholder="comboPlaceholder"
-                      :hint="item.hint"
+                      :hint="item.hint ? item.hint.toString() : null"
                       v-model="item.value"
                       :clearable="editable"
                       hide-details
@@ -123,7 +123,10 @@ export default {
       type: Number,
       default: 5
     },
-    items: Array,
+    items: {
+      type: Array,
+      default: null
+    },
     // grid 항목 정보
     itemInfo: {
       type: Object,
@@ -211,6 +214,7 @@ export default {
     },
     items() {
       if (this.items) {
+        console.log('------------> YRegist Init')
         this.init()
         this.height = this.selectedList.length * baseHeight
         this.selectCount = this.selectedList.length;
@@ -226,11 +230,16 @@ export default {
     // 힌트에 사용할 키가 있다면 조회해서 hintItems에 담아둔다.
     if (this.hintItemKey) this.getHintItems()
   },
+  mounted() {
+    console.log('------------> mounted' + this.items)
+    if (!this.selectedList.length) this.init()
+  },
   //* methods */
   methods: {
     // 초기화 : 기존 등록된 정보를 가져옴
     init() {
       var selectedList = []
+      var hint = null
       $.each(this.items, (_i, _item) => {
         var selectItem = this.$refs.select.getSelectItem(_item.pk)
         // 다른 기준정보에서 데이터를 가져와야 할 경우
@@ -266,6 +275,7 @@ export default {
         hint: _hint,
         hintDisplay: hintDisplay,
         value: null,
+        workHr: null,
         isCancel: false // 취소선 표시여부
       };
       this.selectedList.unshift(item)

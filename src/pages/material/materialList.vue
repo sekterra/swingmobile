@@ -97,7 +97,7 @@ export default {
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: selectConfig.material.materialList.url,
+      gridUrl: null,
       searchData: null,
       gridLoading: false,
       gridData: [],
@@ -106,7 +106,14 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
-  created() {
+  created() {   
+  },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+    this.searchData = this.$comm.clone(selectConfig.material.materialList.searchData)
+    this.gridUrl = selectConfig.material.materialList.url
+  },
+  mounted() {
     this.expandSearchOption = [ 
       {name: 'mtrlLoc', label: this.$t('title.materialLocation'), type: 'select', key: 'mtrlLoc'}, // selectConfig.js의 key값 입력
       {name: 'supplierNm', label: this.$t('title.exSupplierNm'), type: 'text', key: 'exSupplierNm'}, 
@@ -123,15 +130,9 @@ export default {
       { text: this.$t('title.bStockAmt'), name: 'bStockAmt', width: '10%', align: 'center', columnAlign: 'center' },
       { text: this.$t('title.materialLocation'), name: 'mtrlLocNm', width: '10%', align: 'center', columnAlign: 'center' }
     ]
-
-    this.searchData = this.$comm.clone(selectConfig.material.materialList.searchData)
     this.isGridEditable = this.isGridEditableByParent
-  },
-  mounted() {
+
     this.onSearch()
-  },
-  beforeMount() {
-    Object.assign(this.$data, this.$options.data());
   },
   /* methods */
   methods: {

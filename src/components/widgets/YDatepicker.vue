@@ -158,7 +158,6 @@ export default {
       else this.vValue = this.$comm.getToday()
     } else {
       this.vValue = this.$comm.getPrevDate(this.defaultType)
-      console.log('getPrevDate:' + this.vValue)
     }
   },
   /* methods */

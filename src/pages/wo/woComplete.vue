@@ -55,7 +55,14 @@
                                 <v-flex xs12 sm6>
                                   <v-icon small>chevron_right</v-icon> {{$t('title.woRequestDate')}} : {{ requestData.workOrderApproval.rqstDt }}
                                 </v-flex>
-                              <!-- 고장 일시 -->
+                                <!-- 고장 일시 -->
+                                <v-flex 
+                                  v-if="requestData.maintTypeCd === 'MAINT_TYPE_BM'"
+                                  xs12 
+                                  sm6
+                                >
+                                  <v-icon small>domain_disabled</v-icon> {{$t('title.woRequestDate')}} : {{ breakdownDateTime }}
+                                </v-flex>
                             </v-layout>
                             </v-slide-y-transition>
                         </v-container>
@@ -129,6 +136,7 @@
                         :error-msg="errors.first('finishDate')"
                       >
                       </y-datepicker>
+                      {{finishDate}} : {{saveData.workOrder.finishDt}} : {{finishTime}}
                     </v-flex>
                     <!-- 작업종료 시간 -->
                     <v-flex 
@@ -154,7 +162,7 @@
                       v-if="!editable"
                     >
                       <v-text-field
-                        :value="finishDate"
+                        :value="finishDateTime"
                         :label="$t('title.equipmentOfDowndatetime')"
                         readonly
                       ></v-text-field>
@@ -309,17 +317,17 @@
                             <v-layout row wrap align-center justify-start>
                               <v-flex xs6>
                                 <div>
-                                  <v-icon>location_city</v-icon> {{$t('title.outsourcingCost')}}: {{$comm.setNumberSeperator(outsourcingTotalCost)}}
+                                  <v-icon>location_city</v-icon> {{$t('title.outsourcingCost')}}: {{$comm.setNumberSeperator(saveData.workOrder.outsideCost)}}
                                 </div>
                               </v-flex>
                               <v-flex xs6>
                                 <div>
-                                  <v-icon>people</v-icon><v-icon>business_center</v-icon> {{$t('title.laborCost')}}: {{$comm.setNumberSeperator(laborTotalCost)}}
+                                  <v-icon>people</v-icon><v-icon>business_center</v-icon> {{$t('title.laborCost')}}: {{$comm.setNumberSeperator(laborCost)}}
                                 </div>
                               </v-flex>
                               <v-flex xs6>
                                 <div>
-                                  <v-icon>category</v-icon> {{$t('title.materialCost')}}: {{$comm.setNumberSeperator(materialTotalCost)}}
+                                  <v-icon>category</v-icon> {{$t('title.materialCost')}}: {{$comm.setNumberSeperator(saveData.workOrder.mtrlCost)}}
                                 </div>
                               </v-flex>
                               <v-flex xs6>
@@ -328,14 +336,14 @@
                                   prepend-icon="scatter_plot"
                                   :label="$t('title.etcCost')"
                                   hide-detail
-                                  v-model="etcCost"
+                                  v-model="saveData.workOrder.etcCost"
                                   />
                                 </div>
                               </v-flex>
                               <v-divider></v-divider>
                               <v-flex xs12>
                                 <div class="title indigo--text text-xs-right">                                 
-                                  {{$t('title.totalCost')}}: {{$comm.setNumberSeperator(totalCost)}}
+                                  {{$t('title.totalCost')}}: {{$comm.setNumberSeperator(totCost)}}
                                 </div>
                               </v-flex>
                             </v-layout>
@@ -385,9 +393,10 @@
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center">
+                    {{woStatusCd}}
                     <y-btn
                        v-if="woStatusCd !== 'WO_STATUS_X' && woStatusCd !== 'WO_STATUS_C'"
-                       type="test"
+                       type="save"
                       :title="$t('button.save')"
                       :action-url="url"
                       :action-type="requestType"
@@ -500,8 +509,7 @@ export default {
     // TODO(중요) : 쓰기 권한 여부이며, 페이지내 컨트롤에 적용됨
     editable: true,
     isValid: false,
-    breakdownDate: null,
-    breakdownTime: null,
+    breakdownDateTime: null,  // 고장 일시
     imagePath: '',
     carouselIndex: 0,
     carouseImageList: [],
@@ -528,20 +536,14 @@ export default {
     finishDate: null,
     finishTime: null,
     woStatusCd: null,
-    outsourcingTotalCost: 0,
+    // outsourcingTotalCost: 0,
     employeeTotalCost: 0,
     jobClassTotalCost: 0,
-    materialTotalCost: 0,
-    etcCost: 0,
+    // materialTotalCost: 0,
+    // etcCost: 0,
     woImage: null  // WO 이미지 정보
   }),
   watch: {
-    breakdownDate() {
-      this.mappedBreakdownDt()
-    },
-    breakdownTime() {
-      this.mappedBreakdownDt()
-    },
     uploadedImagesCount() {
       if (this.upload.imageList.length && this.upload.uploadedImagesCount === this.upload.imageList.length) {
         this.completeImageUpload()
@@ -558,21 +560,20 @@ export default {
     }
   },
   computed: {
-    isBreakdown() {
-      var isBreak = this.saveData.workOrder.maintType === 'MAINT_TYPE_BM'
-      if (!isBreak) {
-        this.saveData.workOrder.breakdownDt = null
-        this.breakdownDate = null
-        this.breakdownTime = null
-      }
-      return isBreak
+    laborCost() {
+      this.saveData.workOrder.laborCost = this.employeeTotalCost + this.jobClassTotalCost
+      return this.saveData.workOrder.laborCost
     },
-    laborTotalCost() {
-      return this.employeeTotalCost + this.jobClassTotalCost
+    totCost() {
+      this.saveData.workOrder.totCost = this.saveData.workOrder.outsideCost + this.saveData.workOrder.laborCost + this.saveData.workOrder.mtrlCost +  Number(this.saveData.workOrder.etcCost)
+      return this.saveData.workOrder.totCost
     },
-    totalCost() {
-      return this.outsourcingTotalCost + this.employeeTotalCost + this.materialTotalCost +  Number(this.etcCost)
+    finishDateTime() {
+      return this.finishDate + ' ' + this.finishTime
     }
+  },
+  watch: {
+    
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
@@ -586,11 +587,13 @@ export default {
     if (this.$attrs.query) {
       var pk = this.$attrs.query
       this.pk = pk
-      this.onSearch(pk)
-      this.getOutsourceList(pk)
-      this.getLaborList(pk)
-      this.getImagePks(pk)
-      this.getMaterialList(pk)
+      this.$nextTick(() => {
+        this.onSearch(pk)
+        this.getOutsourceList(pk)
+        this.getLaborList(pk)
+        this.getImagePks(pk)
+        this.getMaterialList(pk)
+      })
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
     // this.getExsupplier()
@@ -630,6 +633,7 @@ export default {
             hint: null,
             hintDisplay: null,
             value: _item.cost,
+            workHr: null,
             isCancel: false
           })
         })
@@ -653,7 +657,8 @@ export default {
               name: _item.userNm,
               hint: null,
               hintDisplay: null,
-              value: _item.workHr,
+              value: _item.realWorkHr,
+              workHr: _item.workHr,
               isCancel: false
             })
           } else if (_item.jobClassPk) {
@@ -662,13 +667,17 @@ export default {
               name: _item.jobClassNm,
               hint: _item.wageCost,
               hintDisplay: this.$comm.setNumberSeperator(_item.wageCost),
-              value: _item.workHr,
+              value: _item.realWorkHr,
+              workHr: _item.workHr,
               isCancel: false
             })
           }
         })       
         this.$set(this, 'employeeList', employeeList)
         this.$set(this, 'jobClassList', jobClassList)
+        console.log('------------> employeeList' +  JSON.stringify(_result))
+        console.log('------------> employeeList' +  JSON.stringify(employeeList))
+        console.log('------------> jobClassList' +  JSON.stringify(jobClassList))
       })
     },
     /**
@@ -683,28 +692,34 @@ export default {
       this.saveData.workOrder.cause = _woData.causePk
       this.saveData.workOrder.dept = _woData.deptPk
       this.saveData.workOrder.project = _woData.prjPk
-      this.saveData.workOrder.remedy = _woData.remedyPk      
-      this.saveData.workOrder.finishDt = this.$comm.moment(this.finishDate + ' ' + this.finishTime).format('YYYYMMDDHHmm')
-
-      // this.$set(this, 'saveData', workOrder)
-      console.log(':::::::::::::: workOrder:' + JSON.stringify(this.saveData))
+      this.saveData.workOrder.remedy = _woData.remedyPk
+      
+      // YYYYMMDDHHmm 형식 예)201802041500
+      // 작업 종료시간 설정
+      if (_woData.finishDt) {
+        var finishDt = this.$comm.moment(_woData.finishDt, 'YYYYMMDDHHmm')
+        this.finishDate = finishDt.format('YYYY-MM-DD')
+        this.finishTime = finishDt.format('HH:mm')
+      }
+      // 고장시간 설정
+      // YYYYMMDDHHmm 형식 예)201803010000
+      if (_woData.breakdownDt) this.$set(this, 'breakdownDateTime', this.$comm.moment(_woData.breakdownDt, 'YYYYMMDDHHmm').format('YYYY-MM-DD HH:mm'))
     },
-    mappedBreakdownDt() {
-      if (this.breakdownDate && this.breakdownTime) {
-        var datetime = this.breakdownDate + ' ' + this.breakdownTime
-        this.saveData.workOrder.breakdownDt = this.$comm.moment(datetime).format('YYYYMMDDHHmm')
-      } else this.saveData.workOrder.breakdownDt = null
+    mappedFinishDate() {
+      if (this.finishDate && this.finishTime) this.saveData.workOrder.finishDt = this.$comm.moment(this.finishDate + this.finishTime, 'YYYY-MM-DDHH:mm').format('YYYYMMDDHHmm')
+      else this.saveData.workOrder.finishDt = null
+      console.log('mappedFinishDate:' + this.saveData.workOrder.finishDt)
     },
     btnSaveClicked(_result) {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
-      this.mappedSaveData()
-      // if (!this.isValid) return
+      if (!this.isSubmit) return
+      this.isSubmit = false
       
-      // this.uploadImages(_result.returnResult.workOrderPk)
-      // this.saveData = this.$comm.clone(this.defaultSaveData)
-      // window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
-      // this.$comm.movePage(this.$router, '/woList')
+      this.uploadImages(_result.returnResult.workOrderPk)
+      this.saveData = this.$comm.clone(this.defaultSaveData)
+      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
+      this.$comm.movePage(this.$router, '/woCompleteList')
     },
     btnDeleteClicked(_result) {
       console.log('::: delete clicked')
@@ -733,13 +748,13 @@ export default {
      */
     checkValidation() {
       this.$validator.validateAll().then((_result) => {
-        this.isValid = _result
-        this.isSubmit = false // 테스트 용 : 원래 _result가 와야 함.
+        // DELETE : this.isValid = _result
+        this.isSubmit = _result // 테스트 용 : 원래 _result가 와야 함.
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
-        if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
+        if (!this.isSubmit) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
       }).catch(() => {
-        this.isValid = false
+        this.isSubmit = false
       });
     },
     /**
@@ -749,6 +764,8 @@ export default {
       this.saveData.workOrderSuppliers = []
       this.saveData.woLabors = []
       this.saveData.woMtrls = []
+
+      this.mappedFinishDate()
 
       var workOrderSuppliers = this.$refs.outsourcing.getSelectedItems()
       var employeeList = this.$refs.employee.getSelectedItems()
@@ -772,11 +789,11 @@ export default {
       if (employeeList.length) {
         $.each(employeeList, (_i, _item) => {
           self.saveData.woLabors.push({
-            workOrder: pk,
-            employee: _item.pk,
+            workOrder: Number(pk),
+            userInfo: Number(_item.pk),
             jobClass: null,
-            // workHr: comm.removeNumberFormat(LaborGridData[i].workHr),
-            realWorkHr: _item.value
+            workHr: Number(_item.workHr),
+            realWorkHr: Number(_item.value)
           })
         })
       }
@@ -786,9 +803,9 @@ export default {
         $.each(jobClassList, (_i, _item) => {
           self.saveData.woLabors.push({
             workOrder: pk,
-            employee: null,
+            userInfo: null,
             jobClass: _item.pk,
-            // workHr: comm.removeNumberFormat(LaborGridData[i].workHr),
+            workHr: _item.workHr,
             realWorkHr: Number(_item.value)
           })
         })
@@ -798,8 +815,8 @@ export default {
       if (materialList.length) {
         $.each(materialList, (_i, _item) => {
           self.saveData.woMtrls.push({
-            workOrder: pk,
-            material: _item.materialPk,
+            workOrder: Number(pk),
+            material: Number(_item.materialPk),
             planAmt: Number(_item.planAmt),
             aAmt: Number(_item.aAmt),
             bAmt: Number(_item.bAmt),
@@ -807,6 +824,7 @@ export default {
           })
         })
       }
+      console.log('save data:' + JSON.stringify(this.saveData))
     },
     /**
      * Event Bus로 정보 수신(datatable > woList > popup > woCreate)
@@ -986,10 +1004,11 @@ export default {
     outsourceListChanged() {
       if (!this.$refs.outsourcing) return 0
       var list = this.$refs.outsourcing.getSelectedItems()
-      var totalCost = list.reduce(function (sum, _item) {
+      var cost = list.reduce(function (sum, _item) {
           return sum + (_item.value ? _item.value : 0)
       }, 0);
-      this.outsourcingTotalCost = totalCost
+      this.$set(this.saveData.workOrder, 'outsideCost', cost)
+      // this.saveData.outsideCost = totalCost // outsourcingTotalCost
     },
     employListChanged () {
       if (!this.$refs.employee) return 0
@@ -1010,16 +1029,17 @@ export default {
     materialListChanged () {
       if (!this.$refs.materialList) return 0
       var list = this.$refs.materialList.getSelectedItems()
-      var totalCost = list.reduce(function (sum, _item) {
+      var cost = list.reduce(function (sum, _item) {
           return sum + ((_item.aAmt ? _item.aAmt : 0) * Number(_item.unitPrice))
       }, 0);
-      this.materialTotalCost = totalCost
+      // this.materialTotalCost = totalCost
+      this.$set(this.saveData.workOrder, 'mtrlCost', cost)
     },
     editItem() {
 
     },
     btnClickedError(_error) {
-      // console.log('error:' + JSON.stringify(_error))
+      this.isSubmit = false
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김
