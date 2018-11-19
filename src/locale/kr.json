@@ -181,7 +181,9 @@
       "bAmountInput": "B급 사용량",
       "inputAmount": "사용량 입력",
       "inputMaterialUsage": "자재 사용량 입력",
-      "tenantHint": "회원가입시 입력한 주소"
+      "tenantHint": "회원가입시 입력한 주소",
+      "woComplete": "본 WO는 완료되었습니다.",
+      "woCancel": "본 WO는 취소되었습니다."
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",

@@ -63,6 +63,26 @@
                                 >
                                   <v-icon small>domain_disabled</v-icon> {{$t('title.woRequestDate')}} : {{ breakdownDateTime }}
                                 </v-flex>
+                                <v-flex 
+                                  v-if="woStatusCd === 'WO_STATUS_C'"
+                                  xs12>
+                                  <v-alert
+                                    :value="woStatusCd === 'WO_STATUS_C'"
+                                    type="success"
+                                  >
+                                    {{$t('message.woComplete')}}
+                                  </v-alert>
+                                </v-flex>
+                                <v-flex 
+                                  v-if="woStatusCd === 'WO_STATUS_X'"
+                                  xs12>
+                                  <v-alert
+                                    :value="woStatusCd === 'WO_STATUS_X'"
+                                    type="error"
+                                  >
+                                    {{$t('message.woCancel')}}
+                                  </v-alert>
+                                </v-flex>
                             </v-layout>
                             </v-slide-y-transition>
                         </v-container>
@@ -113,6 +133,7 @@
                     <!-- 작업 부서 -->
                     <v-flex sm6 class="py-0">
                       <y-select
+                        :editable="editable"
                         :label="$t('title.woDepartment')"
                         item-search-key="depart"
                         name="deptPk"
@@ -295,7 +316,8 @@
                         :title-of-total="$t('title.cost')"
                         icon="category"
                         @openSearchPopup="openSearchPopup"
-                        @registListChanged="materialListChanged"
+                        @registListChanged="materialListAdd"
+                        @materialInfoListChanged="materialInfoListChanged"
                       >
                       </y-material-info-list>
                     </v-flex>
@@ -393,9 +415,8 @@
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center">
-                    {{woStatusCd}}
                     <y-btn
-                       v-if="woStatusCd !== 'WO_STATUS_X' && woStatusCd !== 'WO_STATUS_C'"
+                       v-if="editable"
                        type="save"
                       :title="$t('button.save')"
                       :action-url="url"
@@ -438,7 +459,7 @@
                       @checkValidationComplete="checkValidation"
                     ></y-btn> -->
                     <y-btn
-                      v-if="pk"
+                      v-if="pk && editable"
                       type="delete"
                       :title="$t('button.delete')"
                       @btnClicked="btnDeleteClicked" 
@@ -535,7 +556,6 @@ export default {
     show: true,
     finishDate: null,
     finishTime: null,
-    woStatusCd: null,
     // outsourcingTotalCost: 0,
     employeeTotalCost: 0,
     jobClassTotalCost: 0,
@@ -555,7 +575,7 @@ export default {
         this.saveData.workOrder.endDt = null;
       } else {
         this.saveData.workOrder.startDt =  this.workDate.fromDate;
-        this.saveData.workOrder.endDt =  this.workDate.toDate;
+        this.saveData.workOrder.endDt =  this.workDateworkDate.toDate;
       }
     }
   },
@@ -588,6 +608,7 @@ export default {
       var pk = this.$attrs.query
       this.pk = pk
       this.$nextTick(() => {
+        this.url += this.pk
         this.onSearch(pk)
         this.getOutsourceList(pk)
         this.getLaborList(pk)
@@ -612,7 +633,8 @@ export default {
       this.$ajax.url = 'workorder/request/' + _pk
       this.$ajax.requestGet((_result) => {
         this.requestData = _result
-        this.woStatusCd = this.requestData.workOrderApproval.woStatusCd
+        this.woStatusCd = this.requestData.woStatusCd
+        this.editable = (this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C')
         this.mappedWoData(_result)
         this.getWoImagePk(_result.equipPk)
       })
@@ -779,7 +801,7 @@ export default {
         $.each(workOrderSuppliers, (_i, _item) => {
           self.saveData.workOrderSuppliers.push({
             workOrder: Number(pk),
-            exSupplier: _item.pk,
+            exSupplier: Number(_item.pk),
             cost: Number(_item.value)
           })
         })
@@ -834,6 +856,7 @@ export default {
       var materialItems = []      
       var item = {}
       var isDuplicated = false; // 중복 데이터 여부
+      console.log('this.materialList:' + JSON.stringify(this.materialList))
       $.each(_items, (_i, _item) => {
         var filter = this.materialList.filter((_item2) => {
           return _item.mtrlPk === _item2.materialPk
@@ -1026,7 +1049,7 @@ export default {
       }, 0);
       this.jobClassTotalCost = totalCost
     },
-    materialListChanged () {
+    materialListAdd () {
       if (!this.$refs.materialList) return 0
       var list = this.$refs.materialList.getSelectedItems()
       var cost = list.reduce(function (sum, _item) {
@@ -1034,6 +1057,9 @@ export default {
       }, 0);
       // this.materialTotalCost = totalCost
       this.$set(this.saveData.workOrder, 'mtrlCost', cost)
+    },
+    materialInfoListChanged(_items) {
+      this.materialList = _items
     },
     editItem() {
 

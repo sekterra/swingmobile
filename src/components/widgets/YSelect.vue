@@ -25,8 +25,8 @@ examples:
     ></v-autocomplete>
     <v-text-field
       v-else
-      v-model="value"
-      :placeholder="value ? null : $t('message.noData')"
+      v-model="text"
+      :placeholder="text ? null : $t('message.noData')"
       :label="label"
       readonly
       ></v-text-field>
@@ -96,6 +96,7 @@ export default {
       itemValue: null,
       itemSubValue: null,
       vValue: null,
+      text: null,
       orgItems: []
     }
   },
@@ -139,6 +140,7 @@ export default {
           item[this.item.itemKey] = null
           self.items.unshift(item)
         }
+        if (!this.editable) this.getSelectedText()
       }, (_error) => {
         console.log('_error' + JSON.stringify(_error))
       })
@@ -175,6 +177,16 @@ export default {
     },
     getItems() {
       return this.items
+    },
+    getSelectedText() {
+      if (!this.value) this.text = null
+      else {
+        var filter = this.items.filter((_item) => {
+          return _item[this.item.itemKey] === this.value
+        })
+        if (filter.length > 0) this.text = filter[0][this.item.itemName]
+        else this.text = null
+      }
     }
   }
 }

@@ -95,12 +95,7 @@ export default {
   data() {
     return {
       msg: '컨트롤',
-      expandSearchOption: [ 
-        {name: 'startDate', label: this.$t('title.inspectionFromDate'), type: 'datepicker', defaultType: '1y'},
-        {name: 'endDate', label: this.$t('title.inspectionToDate'), type: 'datepicker', defaultType: 'today'},        
-        {name: 'chkStatus', label: this.$t('title.inspectionStatus'), type: 'select', key: 'chkStatus'}, // selectConfig.js의 key값 입력
-        {name: 'deptPk', label: this.$t('title.inspectionDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
-      ],
+      expandSearchOption: [],
       isGridEditable: true,  // 그리드 수정 가능여부(권한에 따라 변경됨)
       date: null,
       menu2: null,
@@ -114,11 +109,25 @@ export default {
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: selectConfig.inspectionList[0].url,
-      searchData: this.$comm.clone(selectConfig.inspectionList[0].searchData),
+      gridUrl: null,
+      searchData: null,
       gridLoading: false,
       gridData: [],
-      gridHeaderOptions: [
+      gridHeaderOptions: []
+    }
+  },
+  /* Vue lifecycle: created, mounted, destroyed, etc */
+  created() {
+  },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+    this.expandSearchOption = [ 
+      {name: 'startDate', label: this.$t('title.inspectionFromDate'), type: 'datepicker', defaultType: '1m'},
+      {name: 'endDate', label: this.$t('title.inspectionToDate'), type: 'datepicker', defaultType: 'today'},        
+      {name: 'chkStatus', label: this.$t('title.inspectionStatus'), type: 'select', key: 'chkStatus'}, // selectConfig.js의 key값 입력
+      {name: 'deptPk', label: this.$t('title.inspectionDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
+    ]
+    this.gridHeaderOptions = [
         { text: this.$t('title.inspectionNo'), align: 'center', name: 'chkPlanNo', width: '15%', columnAlign: 'right' },
         { text: this.$t('title.inspectionTitle'), name: 'chkMastNm', width: '20%', align: 'center' },
         { text: this.$t('title.inspectionDepartment'), name: 'deptNm', width: '15%', align: 'center' },
@@ -126,16 +135,12 @@ export default {
         { text: this.$t('title.inspectionDate'), name: 'chkDt', width: '15%', align: 'center', columnAlign: 'center' },
         { text: this.$t('title.inspectionResult'), name: 'chkResult', width: '20%', align: 'center' },
         { text: this.$t('title.inspectionStatus'), name: 'chkStatusNm', width: '10%', align: 'center' }
-      ]
-    }
-  },
-  /* Vue lifecycle: created, mounted, destroyed, etc */
-  created() {
+    ]
+    this.gridUrl = selectConfig.inspectionList[0].url
+    this.searchData = this.$comm.clone(selectConfig.inspectionList[0].searchData)
+
     this.onSearch()
     this.isGridEditable = this.isGridEditableByParent
-  },
-  beforeMount() {
-    Object.assign(this.$data, this.$options.data());
   },
   /* methods */
   methods: {
@@ -160,8 +165,8 @@ export default {
       let self = this
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
-      this.$ajax.param.startDate = this.$comm.getPrevDate('3m')
-      this.$ajax.param.endDate = this.$comm.getToday()
+      // this.$ajax.param.startDate = this.
+      // this.$ajax.param.endDate = this.$comm.getToday()
       this.gridLoading = true
       this.$ajax.requestGet((_result) => {
         self.gridData = typeof _result.content !== 'undefined' ? _result.content : _result

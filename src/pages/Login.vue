@@ -142,6 +142,8 @@ export default {
       }, (_error) => {
         console.log('_error:' + JSON.stringify(_error))
         this.loading = false
+        this.$ajax.isAuthCheck = true
+        this.$ajax.isSetHeader = false
       })
     },
     btnAutoIdSet() {
@@ -152,7 +154,7 @@ export default {
       } else {
         this.userInfo.tenantId = 'yullin'
         this.userInfo.username = 'cmms'
-        this.userInfo.password = 'cmms'
+        this.userInfo.password = 'yullin@7033'
       }
     }
   },

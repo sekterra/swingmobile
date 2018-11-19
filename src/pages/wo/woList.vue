@@ -95,12 +95,7 @@ export default {
   data() {
     return {
       msg: '컨트롤',
-      expandSearchOption: [ 
-        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '3m'},
-        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
-        {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
-        {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
-      ],
+      expandSearchOption: [],
       isGridEditable: false,  // 그리드 수정 가능여부(권한에 따라 변경됨)
       date: null,
       menu2: null,
@@ -114,29 +109,41 @@ export default {
       pagination: {},
       selected: [],
       offsetTop: 0,
-      gridUrl: selectConfig.woList[0].url,
-      searchData: this.$comm.clone(selectConfig.woList[0].searchData),
+      gridUrl: '',
+      searchData: null,
       gridLoading: false,
       gridData: [],
-      gridHeaderOptions: [
-        // { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
-        { text: this.$t('title.woNo'), align: 'center', name: 'workOrderNo', width: '15%', columnAlign: 'right' },
-        { text: this.$t('title.woTitle'), name: 'workTitle', width: '20%', align: 'center' },
-        { text: this.$t('title.equipmentCode'), name: 'equipCd', width: '15%', align: 'center' },
-        { text: this.$t('title.equipmentName'), name: 'equipNm', width: '20%', align: 'center' },
-        { text: this.$t('title.woRequestDate'), name: 'rqstDt', width: '10%', align: 'center', columnAlign: 'center' },
-        { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' },
-        { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
-      ]
+      gridHeaderOptions: []
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
-    this.onSearch()
-    this.isGridEditable = this.isGridEditableByParent
+    
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
+    this.searchData = this.$comm.clone(selectConfig.woList[0].searchData)
+    this.gridUrl = selectConfig.woList[0].url
+    this.expandSearchOption = [
+      {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '1m'},
+      {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
+      {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
+      {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'} // selectConfig.js의 key값 입력
+    ]
+    this.gridHeaderOptions = [
+      // { text: this.$t('title.edit'), name: 'name', sortable: false, type: 'edit', width: '10%', align: 'center', columnAlign: 'center' },
+      { text: this.$t('title.woNo'), align: 'center', name: 'workOrderNo', width: '15%', columnAlign: 'right' },
+      { text: this.$t('title.woTitle'), name: 'workTitle', width: '20%', align: 'center' },
+      { text: this.$t('title.equipmentCode'), name: 'equipCd', width: '15%', align: 'center' },
+      { text: this.$t('title.equipmentName'), name: 'equipNm', width: '20%', align: 'center' },
+      { text: this.$t('title.woRequestDate'), name: 'rqstDt', width: '10%', align: 'center', columnAlign: 'center' },
+      { text: this.$t('title.woDepartment'), name: 'deptNm', width: '20%', align: 'center' },
+      { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
+    ]
+    this.onSearch()
+    this.isGridEditable = this.isGridEditableByParent
+  },
+  mounted() {
   },
   /* methods */
   methods: {
@@ -162,8 +169,8 @@ export default {
       let self = this
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
-      this.$ajax.param.startDate = this.searchData.startDate
-      this.$ajax.param.endDate = this.searchData.endDate
+      // this.$ajax.param.startDate = this.searchData.startDate
+      // this.$ajax.param.endDate = this.searchData.endDate
       this.gridLoading = true
       if(!this.searchData.startDate || !this.searchData.endDate) return
       this.$ajax.requestGet((_result) => {

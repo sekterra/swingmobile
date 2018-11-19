@@ -231,19 +231,6 @@
                       </y-regist-list>
                     </v-flex>
                   </v-layout>
-                  <!-- 확장 검색 사용예제
-                    <v-layout row wrap fill-height>
-                    <v-flex xs12>
-                      <y-expantion-grid
-                        :title="$t('title.exSupplierSelect')"
-                        :items="exSupplier"
-                        :item-title="exSupplierTitles"
-                        :summary-title="$t('title.selectedOutsourcing')"
-                      >
-                      </y-expantion-grid>
-                      <v-divider></v-divider>
-                    </v-flex>
-                  </v-layout> -->
 
                   <!-- 작업 인력 -->
                   <v-layout row wrap fill-height>
@@ -360,10 +347,11 @@
                       :action-url="url"
                       :action-type="requestType"
                       :param="saveData"
-                      :is-valid-by-parent = "isValid"
+                      :is-submit="isSubmit"
+                      beforeSubmit = "beforeSubmit"
                       @btnClicked="btnSaveClicked" 
                       @btnClickedError="btnClickedError"
-                      @checkValidation="checkValidation"
+                      @beforeSubmit="beforeSubmit"
                     ></y-btn>
                     <!-- <y-btn
                       v-if="saveData.workOrder.workOrderApproval.woStatusCd === 'WO_STATUS_P'"
@@ -475,7 +463,7 @@ export default {
     popupSearchItem: '',
     // TODO(중요) : 쓰기 권한 여부이며, 페이지내 컨트롤에 적용됨
     editable: true,
-    isValid: false,
+    isSubmit: false,
     breakdownDate: null,
     breakdownTime: null,
     imagePath: '',
@@ -586,11 +574,13 @@ export default {
     },
     btnClickedError(_error) {
       // console.log('error:' + JSON.stringify(_error))
+      this.isSubmit = false
     },
     btnSaveClicked(_result) {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
-      if (!this.isValid) return
+      if (!this.isSubmit) return
+      this.isSubmit = false
       
       this.uploadImages(_result.returnResult.workOrderPk)
       this.saveData = this.$comm.clone(this.defaultSaveData)
@@ -606,6 +596,10 @@ export default {
     dialogResult() {
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
       this.isOpenDialog = false
+    },
+     beforeSubmit() {
+      this.mappedSaveData()
+      this.checkValidation()
     },
     openSearchPopup() {
       this.popupSearchItem = 'equipment'
@@ -632,20 +626,19 @@ export default {
      * 저장전 유효성 검사
      */
     checkValidation() {
-      this.mappedSubItems()
       this.$validator.validateAll().then((_result) => {
-        this.isValid = _result
+        this.isSubmit = _result
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
-        if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
+        if (!this.isSubmit) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
       }).catch(() => {
-        this.isValid = false
+        this.isSubmit = false
       });
     },
     /**
      * saveData 공급업체, 직원, 직종 목록 설정
      */
-    mappedSubItems() {
+    mappedSaveData() {
       this.saveData.workOrderSuppliers = []
       this.saveData.woLabors = []
 
@@ -734,15 +727,17 @@ export default {
         var outsourcingItems = []
         $.each(_result, (_i, _item) => {
           // TODO : 여기에 추가되는 항목은 YRegistList의 addDataToList함수의 item 항목과 동일해야 함
-          self.outsourcingItems.push({
+          outsourcingItems.push({
             pk: _item.exSupplierPk,
             name: _item.exSupplierNm,
             hint: null,
             hintDisplay: null,
             value: _item.cost,
+            workHr: null,
             isCancel: false
           })
         })
+        console.log('getOutsourceList:' + JSON.stringify(_result))
         this.$set(this, 'outsourcingItems', outsourcingItems)
       })
     },
@@ -753,9 +748,9 @@ export default {
       this.$ajax.url = selectConfig.wo.labors.url + _pk
       var self = this
       this.$ajax.requestGet((_result) => {
+        var employeeList = []
+        var jobClassList = []
         $.each(_result, (_i, _item) => {
-          var employeeList = []
-          var jobClassList = []
            // TODO : 여기에 추가되는 항목은 YRegistList의 addDataToList함수의 item 항목과 동일해야 함
           if (_item.userPk) {
             employeeList.push({
@@ -776,9 +771,10 @@ export default {
               isCancel: false
             })
           }
-          this.$set(this, 'employeeList', employeeList)
-          this.$set(this, 'jobClassList', jobClassList)
         })
+        this.$set(this, 'employeeList', employeeList)
+        this.$set(this, 'jobClassList', jobClassList)
+        console.log('getLaborList' + JSON.stringify(_result))
       })
     },
     /**
@@ -831,6 +827,7 @@ export default {
       // 팝업에서 전달된 값에 대한 유효성 재검사
       this.$validator.validate('equipment', this.equipment.equipNm)
       if (_isWorkCopy) {
+        this.getOutsourceList(_woData.workOrderPk)
         this.getLaborList(_woData.workOrderPk)
         this.getImagePks(_woData.workOrderPk)
       }
@@ -921,25 +918,6 @@ export default {
           self.tmpImageList.unshift(window.URL.createObjectURL(_result))
         })   
       })
-    },
-    // getExsupplier() {
-    //   this.$ajax.url = selectConfig.exSupplier.url
-    //   this.$ajax.param = selectConfig.exSupplier.searchData
-    //   let self = this
-    //   this.$ajax.requestGet((_result) => {
-    //     self.exSupplier = _result.content
-    //   })
-    // },
-    btnCompleteClicked() {
-      // TODO : 전역 성공 메시지 처리
-      // 이벤트는 ./event.js 파일에 선언되어 있음
-      if (!this.isValid) return
-      console.log(':::: btnCompleteClicked ::::')
-      
-      this.uploadImages(_result.returnResult.workOrderPk)
-      this.saveData = this.$comm.clone(this.defaultSaveData)
-      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
-      this.$comm.movePage(this.$router, '/woCompleteList')
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김

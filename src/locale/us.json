@@ -181,7 +181,9 @@
       "bAmountInput": "Class B usage",
       "inputAmount": "Input usage",
       "inputMaterialUsage": "Input material usage",
-      "tenantHint": "The URL  you entered when signing up"
+      "tenantHint": "The URL  you entered when signing up",
+      "woComplete": "This WO has been completed",
+      "woCancel": "This WO has been canceled"
     },
     "error": {
       "requestError": "An error occurred during data processing.",

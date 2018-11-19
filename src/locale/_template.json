@@ -182,7 +182,9 @@
       "inputAmount": "",
       "inputMaterialUsage": "",
       "tenantId": "",
-      "etcCost": ""
+      "etcCost": "",
+      "woComplete": "",
+      "woCancel": ""
     },
     "error": {
       "requestError": "",

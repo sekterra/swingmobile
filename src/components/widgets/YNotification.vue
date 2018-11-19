@@ -120,7 +120,6 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    console.log('YNotification mounted')
     this.onSearch()
   },
   /* methods */
@@ -130,13 +129,15 @@ export default {
       this.$comm.movePage(this.$router, url)
     },
     moveToListPage() {
-      console.log('moveListUrl:' + this.moveListUrl)
       this.$comm.movePage(this.$router, this.moveListUrl)
     },
     onSearch() {
       let self = this
       this.$ajax.url = this.url
       this.$ajax.param = this.searchData
+
+      console.log('this.url : ' + this.url)
+      console.log('this.searchData : ' + JSON.stringify(this.searchData))
 
       this.$ajax.requestGet((_result) => {
         self.orgItems = typeof _result.content !== 'undefined' ? _result.content : _result

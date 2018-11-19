@@ -18,7 +18,7 @@
         <v-toolbar-title class="hidden-sm-and-down">{{controlTitle}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <y-select
-          v-if="editable"
+          v-show="editable"
           ref="select"
           color="grey lighten-3"
           :is-clear-text="true"
@@ -29,7 +29,7 @@
           v-model="selectValue"
         >
         </y-select>
-        <span v-else>
+        <span v-show="!editable">
           {{$t('title.readOnlyMode')}}
         </span>
       </v-toolbar>

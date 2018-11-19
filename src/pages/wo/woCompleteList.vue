@@ -143,7 +143,7 @@ export default {
         { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
       ]
       this.expandSearchOption = [
-        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '3m'},
+        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '1m'},
         {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
         {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
         {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
@@ -167,12 +167,12 @@ export default {
     },
     onSearch() {
       let self = this
-      this.searchData.woStatus = ['WO_STATUS_P', , 'WO_STATUS_C']
+      this.searchData.woStatus = ['WO_STATUS_P', 'WO_STATUS_C']
       this.searchData.woStatusEx = ['WO_STATUS_X']
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
-      this.$ajax.param.startDate = this.searchData.startDate
-      this.$ajax.param.endDate = this.searchData.endDate
+      // this.$ajax.param.startDate = this.searchData.startDate
+      // this.$ajax.param.endDate = this.searchData.endDate
       if(!this.searchData.startDate || !this.searchData.endDate) return
       this.gridLoading = true
       this.$ajax.requestGet((_result) => {

@@ -75,11 +75,11 @@
                         :label="$t('message.aAmountInput')"
                         name="aStockAmt"
                         :placeholder="$t('message.inputAmount')"
+                        type="number"
                         hide-details
                         v-model="item.aAmt"
                         @input="(_value) => {
-                          item.aAmt = Number(_value)
-                          setTotalCost()
+                          validateAvalue(item, _value)
                         }"
                       />
                     </v-flex>
@@ -88,8 +88,12 @@
                         :label="$t('message.bAmountInput')"
                         name="bStockAmt"
                         :placeholder="$t('message.inputAmount')"
+                        type="number"
                         hide-details
                         v-model="item.bAmt"
+                        @input="(_value) => {
+                          validateBvalue(item, _value)
+                        }"
                       />
                   </v-flex>
                 </v-layout>
@@ -169,7 +173,6 @@ export default {
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    console.log('------------> mounted' + this.items)
     if (!this.selectedList.length) this.init()
   },
   //* methods */
@@ -185,6 +188,7 @@ export default {
       _item.isCancel = !_item.isCancel
       this.setTotalCost()
       this.selectCount = this.getSelectedItems().length
+      this.$emit('materialInfoListChanged', this.selectedList)
     },
     // 선택한 내용을 부모에게 반환(취소된 것 제외)
     getSelectedItems() {
@@ -206,6 +210,22 @@ export default {
      */
     openSearchPopup() {
       this.$emit('openSearchPopup')
+    },
+    validateAvalue(_item, _value) {
+      if (_item.aStockAmt >= _value) {
+        _item.aAmt = Number(_value)
+        this.setTotalCost()
+      } else {
+        _item.aAmt = null
+      }
+      this.$forceUpdate()
+    },
+    validateBvalue(_item, _value) {
+      if (_item.bStockAmt >= _value) {
+        _item.bAmt = Number(_value)
+      } else {
+        _item.bAmt = null
+      }
     }
   }
 }

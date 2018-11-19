@@ -124,11 +124,11 @@ export default {
         pageSize: 100,            // 한 페이지당 보여지는 paging 개수
         pageRange: 0,            // 현재 page의 범위, 1~10 또는 11~20 등
         endPageRange: 0,         // 마지막 page Range 값, 83개의 데이터면 10개 row씩 9페이지가 나옴, 기본값은 pageSize
-        sort: 'rqstDt,workOrderSort,desc',     // 정렬조건 [형식 &sort=menuNm,asc&sort=menuLevel,desc]
+        sort: 'startDt,workOrderSort,desc',     // 정렬조건 [형식 &sort=menuNm,asc&sort=menuLevel,desc]
         searchText: null,        // 작업제목, 작업내역
         deptPk: null,            // 작업부서
         reqDeptPk: null,
-        woStatus: null,
+        woStatus: ['WO_STATUS_P'],
         woStatusEx: [],
         nextApprLine: null,
         workOrderNo: null,
@@ -136,9 +136,9 @@ export default {
         causePk: null,
         remedyPk: null,
         maintTypeCd: null,
-        dateConds: 'rqstdt',
-        startDate: '2017-01-01',         // 요청기간시작일(필수)
-        endDate: '2018-12-31'            // 요청기간마침일(필수)
+        dateConds: 'startdt',
+        startDate: null,         // 요청기간시작일(필수)
+        endDate: null            // 요청기간마침일(필수)
       },
       matchItem: {
         icon: 'maintTypeNm',
@@ -161,8 +161,8 @@ export default {
         searchText: '',
         sort: 'chkPlanDt,desc',
         deptPk: null,
-        startDate: '2017-01-01',         // 요청기간시작일(필수)
-        endDate: '2018-10-31',           // 요청기간마침일(필수)
+        startDate: null,         // 요청기간시작일(필수)
+        endDate: null,           // 요청기간마침일(필수)
         chkStatus: null,
         chkPlanNo: null
       },
@@ -234,6 +234,12 @@ export default {
       // 업로드 정보 초기화
       this.upload = this.$comm.clone(this.initUpload)
     }
+  },
+  beforeMount() {
+    this.wo.searchData.startDate = this.$comm.getPrevDate('1m')
+    this.wo.searchData.endDate = this.$comm.getToday()
+    this.inspection.searchData.startDate = this.$comm.getPrevDate('1m')
+    this.inspection.searchData.endDate = this.$comm.getToday()
   },
   mounted() {
     window.getApp.$on('APP_IMAGE_UPLOAD', (_fileInfo) => {

@@ -99,8 +99,8 @@
     </v-menu>
     <v-text-field
       v-else
-      v-model="vValue"
-      :placeholder="vValue ? null : $t('message.noData')"
+      v-model="localFormattedDate"
+      :placeholder="localFormattedDate ? null : $t('message.noData')"
       :label="label"
       readonly
       ></v-text-field>
