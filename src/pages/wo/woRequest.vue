@@ -213,10 +213,10 @@
                       </v-btn>
                       </v-subheader>
                       <v-carousel
-                        v-if="isShowCarousel"
+                        v-if="carouselImageList.length"
                       >
                         <v-carousel-item
-                          v-for="(item, i) in carouseImageList"
+                          v-for="(item, i) in carouselImageList"
                           :key="i"
                           :src="item"
                           lazy
@@ -362,7 +362,7 @@ export default {
     breakdownTime: null,
     imagePath: '',
     carouselIndex: 0,
-    carouseImageList: [],
+    carouselImageList: [],  // 카메라 이미지 또는 기존 등록된 이미지 미리 보기
     upload: {
       imageList: [],
       loaded: 0,
@@ -370,8 +370,8 @@ export default {
       uploadedImagesCount: 0  
     },
     attachType: 'WO_PRE_PHOTO',
-    isShowCarousel: false,
-    tmpImageList: [],
+    // isShowCarousel: false,
+    cameraImageList: [],  // 카메라 이미지
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
   }),
@@ -598,9 +598,9 @@ export default {
     // this action will automatically update the view.
     setPicture(imagePath){
       this.imagePath = imagePath;
-      this.isShowCarousel = false;
+      // this.isShowCarousel = false;
       this.upload.imageList.push(imagePath)
-      this.carouseImageList.unshift(imagePath)
+      this.carouselImageList.unshift(imagePath)
       // TODO : 참고 소스
       // try {
       //   // 사진이미지 local 저장
@@ -613,7 +613,7 @@ export default {
       //   window.getApp.$emit('APP_REQUEST_SUCCESS', 'error:' + e.message);
       // }
       this.$nextTick(() => {
-        this.isShowCarousel = true
+        // this.isShowCarousel = true
       })
     },
     error(_msg){
@@ -638,14 +638,15 @@ export default {
       this.$ajax.param.attachType = this.attachType
       this.$ajax.param.attachPk = _pk
       let self = this
-      this.isShowCarousel = false
+      // this.isShowCarousel = false
       this.$ajax.requestGet((_result) => {
         $.each(_result, (_i, _item) => {
           self.getImageFile(_item.filePk)
         })
-        self.carouseImageList = self.tmpImageList
+        // self.carouselImageList = self.cameraImageList
+        // console.log('self.carouselImageList:' + JSON.stringify(self.carouselImageList))
         self.$nextTick(() => {
-          self.isShowCarousel = self.carouseImageList.length > 0
+          // self.isShowCarousel = self.carouselImageList.length > 0
           self.carouselIndex = 0
         })
       })
@@ -655,13 +656,14 @@ export default {
       let self = this
       ajaxFile.requestFileGet((_result) => {
         self.$nextTick(() => {
-          self.tmpImageList.unshift(window.URL.createObjectURL(_result))
+          self.cameraImageList.unshift(window.URL.createObjectURL(_result))
+          self.carouselImageList.unshift(window.URL.createObjectURL(_result))
         })   
       })
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김
-      window.getApp.$emit('APP_KEYBOARD_HIDE')
+      // window.getApp.$emit('APP_KEYBOARD_HIDE')
     }
   }
 };

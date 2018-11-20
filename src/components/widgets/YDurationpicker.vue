@@ -36,10 +36,15 @@
       </v-text-field>
       <template>
         <v-card>
-          <v-container fluid grid-list-sm text-xs-center>
-            <v-layout row wrap fill-height>
-            <v-flex xs12 sm6>
-              <v-layout column>
+          <v-container fluid grid-list-sm text-xs-center
+            py-0  my-0>
+            <v-layout row wrap fill-height
+              py-0  my-0>
+            <v-flex xs12 sm6 pa-0
+                  ma-0>
+              <v-layout column 
+                  pa-0
+                  ma-0>
                 <div class="text-xs-left title">
                   <v-icon color="indigo">date_range</v-icon>From
                 </div>
@@ -54,12 +59,16 @@
                   full-width
                   no-title
                   scrollable
-                  autosave>
+                  autosave
+                  >
                 </v-date-picker>
               </v-layout>
             </v-flex>
-            <v-flex xs12 sm6>
-              <v-layout column>
+            <v-flex xs12 sm6 pa-0
+                  ma-0>
+              <v-layout column
+              pa-0
+                  ma-0>
               <div class="text-xs-left title">
                 <v-icon color="indigo">date_range</v-icon>To
               </div>
@@ -74,23 +83,37 @@
                 full-width
                 no-title
                 scrollable
-                autosave>
+                autosave
+                pa-0
+                ma-0>
               </v-date-picker>
               </v-layout>
             </v-flex>
-            <v-flex xs12>
-              <div>
+            <v-flex 
+              xs12 
+              py-0
+              my-0>
+              <!-- <div>
               <v-btn 
                 dark
                 round
                 color="indigo lighten-1"
                 @click="durationSelect">
-                <v-icon color="indigo darken-3">
+                <v-icon color="indigo darken-1">
                   done
                 </v-icon>
                  {{localFormattedDate}}
               </v-btn>
-              </div>
+              </div> -->
+              <v-chip 
+              color="teal lighten-1" 
+              text-color="white"
+              @click="durationSelect">
+                  <v-avatar>
+                    <v-icon>check_circle</v-icon>
+                  </v-avatar>
+                  {{localFormattedDate}}
+                </v-chip>
             </v-flex>
           </v-layout>
           </v-container>
@@ -224,6 +247,8 @@ export default {
         toDate: this.vValueTo
       }
       this.$emit('input', this.vValue);
+      this.inputFrom();
+      this.inputTo();
     }
   },
   /* methods */

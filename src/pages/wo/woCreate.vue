@@ -296,10 +296,10 @@
                       </v-btn>
                       </v-subheader>
                       <v-carousel
-                        v-if="isShowCarousel"
+                        v-if="carouselImageList.length"
                       >
                         <v-carousel-item
-                          v-for="(item, i) in carouseImageList"
+                          v-for="(item, i) in carouselImageList"
                           :key="i"
                           :src="item"
                           lazy
@@ -393,11 +393,11 @@
         </v-flex>           
       </v-layout>
 
-      <v-layout row wrap>
+      <!-- <v-layout row wrap>
         <VuePerfectScrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
           <img src="/static/background.jpg'" height="720" width="1280" alt="">
         </VuePerfectScrollbar>
-      </v-layout>
+      </v-layout> -->
 
       <y-popup 
         :search-item="popupSearchItem"
@@ -468,7 +468,7 @@ export default {
     breakdownTime: null,
     imagePath: '',
     carouselIndex: 0,
-    carouseImageList: [],
+    carouselImageList: [],
     upload: {
       imageList: [],
       loaded: 0,
@@ -477,7 +477,7 @@ export default {
     },
     attachType: 'WO_PRE_PHOTO',
     isShowCarousel: false,
-    tmpImageList: [],
+    cameraImageList: [],
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
     woPlanDate: null,
@@ -856,9 +856,9 @@ export default {
     // this action will automatically update the view.
     setPicture(imagePath){
       this.imagePath = imagePath;
-      this.isShowCarousel = false;
+      // this.isShowCarousel = false;
       this.upload.imageList.push(imagePath)
-      this.carouseImageList.unshift(imagePath)
+      this.carouselImageList.unshift(imagePath)
       // TODO : 참고 소스
       // try {
       //   // 사진이미지 local 저장
@@ -870,9 +870,9 @@ export default {
       // } catch(e) {
       //   window.getApp.$emit('APP_REQUEST_SUCCESS', 'error:' + e.message);
       // }
-      this.$nextTick(() => {
-        this.isShowCarousel = true
-      })
+      // this.$nextTick(() => {
+      //   this.isShowCarousel = true
+      // })
     },
     error(_msg){
       window.getApp.$emit('APP_REQUEST_ERROR', _msg);
@@ -897,25 +897,26 @@ export default {
       this.$ajax.param.attachType = this.attachType
       this.$ajax.param.attachPk = _pk
       let self = this
-      this.isShowCarousel = false
+      // this.isShowCarousel = false
       this.$ajax.requestGet((_result) => {
         $.each(_result, (_i, _item) => {
           self.getImageFile(_item.filePk)
         })
-        self.carouseImageList = self.tmpImageList
+        // self.carouselImageList = self.cameraImageList
         self.$nextTick(() => {
-          self.isShowCarousel = self.carouseImageList.length > 0
+          // self.isShowCarousel = self.carouselImageList.length > 0
           self.carouselIndex = 0
         })
       })
     },
-    // getImagePks에서 가져온 이미지 정보(byte array)를 가져와서 localurl 형식으로 변환 후 tmpImageList에 담는다.
+    // getImagePks에서 가져온 이미지 정보(byte array)를 가져와서 localurl 형식으로 변환 후 cameraImageList에 담는다.
     getImageFile(_filePk) {
       ajaxFile.url = selectConfig.img.imageDown.url + '?filePk=' + _filePk     
       let self = this
       ajaxFile.requestFileGet((_result) => {
         self.$nextTick(() => {
-          self.tmpImageList.unshift(window.URL.createObjectURL(_result))
+          self.cameraImageList.unshift(window.URL.createObjectURL(_result))
+          self.carouselImageList.unshift(window.URL.createObjectURL(_result))
         })   
       })
     },

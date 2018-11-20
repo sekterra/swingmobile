@@ -169,6 +169,7 @@ export default {
       let self = this
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
+      this.$ajax.param.sort = 'workOrderSort,desc'
       // this.$ajax.param.startDate = this.searchData.startDate
       // this.$ajax.param.endDate = this.searchData.endDate
       this.gridLoading = true
