@@ -72,6 +72,7 @@
                   </v-flex>
                   <v-flex xs6 pt-0>
                       <v-text-field
+                        v-if="editable"
                         :label="$t('message.aAmountInput')"
                         name="aStockAmt"
                         :placeholder="$t('message.inputAmount')"
@@ -82,9 +83,18 @@
                           validateAvalue(item, _value)
                         }"
                       />
+                      <v-text-field
+                        v-else
+                        :label="$t('message.aAmountInput')"
+                        name="aStockAmt"
+                        hide-details
+                        readonly
+                        :value="$comm.setNumberSeperator(item.aAmt)"
+                     />
                     </v-flex>
                     <v-flex xs6 pt-0>
                       <v-text-field
+                        v-if="editable"
                         :label="$t('message.bAmountInput')"
                         name="bStockAmt"
                         :placeholder="$t('message.inputAmount')"
@@ -95,6 +105,14 @@
                           validateBvalue(item, _value)
                         }"
                       />
+                      <v-text-field
+                        v-else
+                        :label="$t('message.bAmountInput')"
+                        name="bStockAmt"
+                        hide-details
+                        readonly
+                        :value="$comm.setNumberSeperator(item.bAmt)"
+                     />
                   </v-flex>
                 </v-layout>
               </div>

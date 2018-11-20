@@ -315,6 +315,7 @@
                         :sub-title="$t('title.numberOfSelects')"
                         :title-of-total="$t('title.cost')"
                         icon="category"
+                        :editable="editable"
                         @openSearchPopup="openSearchPopup"
                         @registListChanged="materialListAdd"
                         @materialInfoListChanged="materialInfoListChanged"
@@ -355,11 +356,15 @@
                               <v-flex xs6>
                                 <div>
                                   <v-text-field
+                                  v-if="editable"
                                   prepend-icon="scatter_plot"
                                   :label="$t('title.etcCost')"
                                   hide-detail
                                   v-model="saveData.workOrder.etcCost"
                                   />
+                                  <span v-else>
+                                    {{$comm.setNumberSeperator(saveData.workOrder.etcCost)}}
+                                  </span>
                                 </div>
                               </v-flex>
                               <v-divider></v-divider>

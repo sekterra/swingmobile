@@ -16,6 +16,10 @@ examples:
       :placeholder="placeholder"
       :append-outer-icon="icon"
       clearable
+      :background-color="backgroundColor"
+      :color="color"
+      :outline="outline"
+      :solo="solo"
       :hide-details="hideDetail"
       :hint="hint"
       :class="customClass"
@@ -93,6 +97,22 @@ export default {
     },
     hint: {
       type: [String, Number]
+    },
+    backgroundColor: {
+      type: String,
+      default: null
+    },
+    color: {
+      type: String,
+      default: null
+    },
+    outline: {
+      type: Boolean,
+      default: false
+    },
+    solo: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

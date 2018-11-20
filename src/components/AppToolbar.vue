@@ -373,12 +373,14 @@ export default {
               // 전송실패한 파일은 localStorage에 저장하고, 나중에 다시 처리한다.
               // failedFileList.push(filePath)
               // localStorage.failedFileList = JSON.stringify(failedFileList)
+              window.alert('upload error:' + JSON.stringify(error) + ' : ' + _i);
               window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + JSON.stringify(error) + ' : ' + _i);
             }, options);
             // 파일업로드 시작 / 완료
         });
       } catch (e) {
-        window.getApp.$emit('APP_REQUEST_ERROR', 'error:' + e.message);
+        // window.getApp.$emit('APP_REQUEST_ERROR', 'error:' + e.message);
+        window.alert('error:' + e.message);
       }
     }
   }

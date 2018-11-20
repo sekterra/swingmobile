@@ -60,7 +60,7 @@
                       {{hintTitle}}: {{item.hintDisplay}}
                     </span>
                     <v-text-field
-                      :editable="editable"
+                      v-if="editable"
                       custom-class="pt-0"
                       name="workTitle"
                       :placeholder="comboPlaceholder"
@@ -73,6 +73,15 @@
                         item.value = Number(_value)
                         setSummary()
                       }"
+                    />
+                    <v-text-field
+                      v-else
+                      custom-class="pt-0"
+                      name="workTitle"
+                      :value="$comm.setNumberSeperator(item.value)"
+                      hide-details
+                      readonly
+                      class="ma-0 pa-0"
                     />
                   </div>
                 </v-list-tile-sub-title>

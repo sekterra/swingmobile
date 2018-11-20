@@ -23,6 +23,7 @@
             placeholder="검색어를 입력하세요."
             append-line
             full-width
+            type="number"
             @input="search"
         ></v-text-field>
         </v-toolbar-title>
