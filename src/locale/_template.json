@@ -184,7 +184,8 @@
       "tenantId": "",
       "etcCost": "",
       "woComplete": "",
-      "woCancel": ""
+      "woCancel": "",
+      "imageUploadStart": ""
     },
     "error": {
       "requestError": "",

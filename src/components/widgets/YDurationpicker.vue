@@ -106,7 +106,7 @@
               </v-btn>
               </div> -->
               <v-chip 
-              color="teal lighten-1" 
+              color="success lighten-1" 
               text-color="white"
               @click="durationSelect">
                   <v-avatar>

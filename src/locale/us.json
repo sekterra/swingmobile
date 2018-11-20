@@ -183,7 +183,8 @@
       "inputMaterialUsage": "Input material usage",
       "tenantHint": "The URL  you entered when signing up",
       "woComplete": "This WO has been completed",
-      "woCancel": "This WO has been canceled"
+      "woCancel": "This WO has been canceled",
+      "imageUploadStart": "Image uploading has been started."
     },
     "error": {
       "requestError": "An error occurred during data processing.",

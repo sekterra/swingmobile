@@ -211,9 +211,9 @@ export default {
     'upload.isAllUploaded': function () {
       if (!this.upload.isAllUploaded) return
       // 업로드 완료 정보 전송
-      window.getApp.$emit('APP_IMAGE_UPLOAD_COMPLETE', this.$comm.clone(this.upload));
+      // window.getApp.$emit('APP_IMAGE_UPLOAD_COMPLETE', this.$comm.clone(this.upload));
       // 업로드 완료 팝업 표시
-      window.getApp.$emit('APP_REQUEST_SUCCESS', 'init upload Info');
+      // window.getApp.$emit('APP_REQUEST_SUCCESS', 'init upload Info');
 
       // 업로드 실패한 파일이 있을 경우 다시 업로드 가능하도록 처리
       // var failedFileList = JSON.parse(localStorage.failedFileList)
@@ -243,8 +243,8 @@ export default {
   },
   mounted() {
     window.getApp.$on('APP_IMAGE_UPLOAD', (_fileInfo) => {
-      window.getApp.$emit('APP_REQUEST_SUCCESS', 'upload Request');
       this.uploadImages(_fileInfo);
+      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.imageUploadStart'));
     });
   },
   methods: {
