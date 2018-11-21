@@ -46,7 +46,7 @@
                   <v-btn @click="btnAutoIdSet">
                     테스트 ID 세팅
                   </v-btn>
-                  <span>void ssl 코드 적용X ssl 인증서 추가</span>
+                  <span>void ssl 코드 적용X ssl 인증서 추가2</span>
                 </v-form>
               </v-card-text>
               <v-card-actions>
