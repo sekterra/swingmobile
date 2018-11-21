@@ -16,6 +16,7 @@ var ajax = {
   isAuthCheck: false,
   processData: true,
   dataType: 'json',
+  // jsonpCallback: 'jsonpCallback',
   contentType: 'application/json;charset=utf-8',
   accept: null,
   request: null,
@@ -37,6 +38,7 @@ var orgAjax = {
   isAuthCheck: false,
   processData: true,
   dataType: 'json',
+  // jsonpCallback: 'jsonpCallback',
   contentType: 'application/json;charset=utf-8'
 }
 
@@ -100,7 +102,11 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         ajax[key] = orgAjax[key]
       }
       var errorCode = Number(xhr.status)
-      console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
+      var message = appVue.$t('error.requestError')
+      var responseText = JSON.parse(xhr.responseText)
+       if (responseText.hasOwnProperty('errorMessage')) message = responseText.errorMessage
+      // console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
+      window.alert('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
       if (errorCode >= 400 && errorCode < 500) {
         // status code : 500 -> _fnFail 함수를 못 가져옴!
         if (xhr.hasOwnProperty('error') && xhr.error.needLogin) {
@@ -109,10 +115,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         
         // TODO : 전역 에러처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
-        var message = appVue.$t('error.requestError')
-        var responseText = JSON.parse(xhr.responseText)
-        if (responseText.hasOwnProperty('errorMessage')) message = responseText.errorMessage
-        appVue.$emit('APP_REQUEST_ERROR', message)
+        appVue.$emit('APP_REQUEST_ERROR', message)        
         if (typeof _callbackFail === 'function') {
           _callbackFail(xhr, status, err)
         } else {
@@ -122,6 +125,8 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         if (typeof _callbackFail === 'function') {
           _callbackFail(xhr, status, err)
         } 
+        appVue.$emit('APP_REQUEST_ERROR', message)
+        // window.alert('xhr:' + JSON.stringify(xhr) + ':' + status + ':' + err)
         // appVue.$comm.movePage(appVue.$router, '/500')
       }
     }

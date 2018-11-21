@@ -81,7 +81,9 @@ ajaxFile.request = function (_callbackSuccess, _callbackFail) {
         // TODO : 전역 에러처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
         var message = appVue.$t('error.requestError')
-        appVue.$emit('APP_REQUEST_ERROR', message)
+        // appVue.$emit('APP_REQUEST_ERROR', message)
+        // window.alert('message')
+        window.alert('file upload error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
         if (typeof _callbackFail === 'function') {
           _callbackFail(xhr, status, err)
         } else {

@@ -13,10 +13,16 @@
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.yullin.swing"
     },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
     "cordova-plugin-file-transfer": {
       "PACKAGE_NAME": "com.yullin.swing"
     },
     "cordova-plugin-globalization": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-keyboard": {
       "PACKAGE_NAME": "com.yullin.swing"
     },
     "cordova-plugin-save-image": {
@@ -26,12 +32,6 @@
       "PACKAGE_NAME": "com.yullin.swing"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.yullin.swing"
-    },
-    "cordova-plugin-keyboard": {
-      "PACKAGE_NAME": "com.yullin.swing"
-    },
-    "cordova-plugin-dialogs": {
       "PACKAGE_NAME": "com.yullin.swing"
     }
   },
