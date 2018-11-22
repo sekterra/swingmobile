@@ -33,6 +33,12 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.yullin.swing"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.yullin.swing"
     }
   },
   "dependent_plugins": {

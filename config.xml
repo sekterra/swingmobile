@@ -18,8 +18,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <allow-navigation href="http://*/*" />
-    <allow-navigation href="http://*/*" />
-    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="res/icon/android/ldpi.png" />
@@ -51,7 +50,6 @@
         <icon height="50" src="res/icon/ios/Icon-Small-50.png" width="50" />
         <icon height="100" src="res/icon/ios/Icon-Small-50@2x.png" width="100" />
     </platform>
-    <allow-navigation href="http://*/*" />
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
@@ -84,6 +82,8 @@
     <plugin name="cordova-plugin-save-image" spec="~0.3.0" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
     <plugin name="cordova-plugin-dialogs" spec="^2.0.1" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="browser" spec="^5.0.4" />
     <engine name="ios" spec="^4.5.5" />
     <engine name="android" spec="^7.1.1" />

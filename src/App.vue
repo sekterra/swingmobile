@@ -112,6 +112,7 @@ export default {
     isLogin: false,
     userPk: null,
     userInfo: null,
+    document: document,
     snackbar: {
       show: false,
       text: '',
@@ -130,6 +131,10 @@ export default {
   },
   computed: {
   },
+  beforeCreate() {
+    // 앱 실행하기 전에 android / ios status bar 숨김
+    StatusBar.hide()
+  },
   created () {
     AppEvents.forEach(item => {
       this.$on(item.name, item.callback);
@@ -144,12 +149,18 @@ export default {
       this.changeLocale(_localeCode);
     });
     this.$on('USER_LOGIN', (_userPk) => {
-      console.log('USER_LOGIN:' + _userPk)
       this.userPk = _userPk;
       this.isLogin = true
     });
     this.$on('APP_KEYBOARD_HIDE', () => {
       this.hideKeyboard()
+    })
+
+    this.document.addEventListener('offline', () => {
+      // window.alert(':::::::::::::: network information offline ::::::::::::::::')
+    })
+    this.document.addEventListener('online', () => {
+      // window.alert(':::::::::::::: network information online ::::::::::::::::')
     })
   },
   mounted() {
@@ -223,7 +234,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="stylus" scoped>
   .setting-fab 
