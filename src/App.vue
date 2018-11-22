@@ -132,8 +132,8 @@ export default {
   computed: {
   },
   beforeCreate() {
-    // 앱 실행하기 전에 android / ios status bar 숨김
-    StatusBar.hide()
+    // TODO : 앱 실행하기 전에 android / ios status bar 숨김
+    // StatusBar.hide()
   },
   created () {
     AppEvents.forEach(item => {
