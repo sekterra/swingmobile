@@ -136,9 +136,6 @@ export default {
       this.$ajax.url = this.url
       this.$ajax.param = this.searchData
 
-      console.log('this.url : ' + this.url)
-      console.log('this.searchData : ' + JSON.stringify(this.searchData))
-
       this.$ajax.requestGet((_result) => {
         self.orgItems = typeof _result.content !== 'undefined' ? _result.content : _result
       }, (_error) => {

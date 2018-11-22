@@ -130,7 +130,7 @@ export default {
             return
           }
           localStorage.userPk = data.userpk
-          this.$emit('USER_LOGIN')
+          window.getApp.$emit('USER_LOGIN', data.userpk)
           // window.getApp.setUserPk(data.userpk)
         })
         setTimeout(() => { 

@@ -152,7 +152,8 @@ export default [
   },
   {
     name: 'USER_LOGIN',
-    callback: function () {
+    callback: function (_userPk) {
+      this.userPk = _userPk
     }
   },
   // keyboard 숨김 이벤트

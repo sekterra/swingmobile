@@ -28,8 +28,6 @@
             cloud_upload
           </v-icon>
           {{upload.transPercent}}%
-          <!-- {{upload.isAllStarted}}({{upload.transBytes}}bytes/{{upload.totalBytes}}bytes)<br>
-          {{upload.startCount}} : {{upload.transPercent}}%({{upload.completedCount}}/{{upload.failedCount}}) -->
         </span>
         
         <v-btn icon flat slot="activator">
@@ -42,6 +40,7 @@
           </v-badge>
         </v-btn>
         <y-notification
+          v-if="isLogin"
           :url="wo.url"
           :title="$t('title.recentWo')"
           :search-data="wo.searchData"
@@ -64,6 +63,7 @@
         </v-badge>
         </v-btn>
         <y-notification
+          v-if="isLogin"
           :url="inspection.url"
           :title="$t('title.recentInspection')"
           :search-data="inspection.searchData"
@@ -98,6 +98,12 @@ export default {
   components: {
     NotificationList,
     YNotification
+  },
+  props: {
+    isLogin: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
     // 파일 업로드 정보

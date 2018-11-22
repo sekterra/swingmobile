@@ -7,7 +7,11 @@
     <template v-if="!$route.meta.public">
       <v-app id="inspire" class="app">
         <app-drawer class="app--drawer"></app-drawer>
-        <app-toolbar class="app--toolbar" @openThemeSettings="openThemeSettings"></app-toolbar>
+        <app-toolbar 
+          class="app--toolbar" 
+          :is-login="isLogin"
+          @openThemeSettings="openThemeSettings">
+        </app-toolbar>
         <v-content>
           <!-- Page Header -->
           <!-- TODO : Current Page Direction -->
@@ -105,6 +109,7 @@ export default {
     rightDrawer: false,  // right slide popup 오픈 여부
     isSearchPopup: false,  // rightDrawer 구분자, true : 검색용 팝업, false : Theme 설정
     locale: null, // 현재 설정된 언어 locale
+    isLogin: false,
     userPk: null,
     userInfo: null,
     snackbar: {
@@ -138,8 +143,10 @@ export default {
     this.$on('LOCALE_CHANGE', (_localeCode) => {
       this.changeLocale(_localeCode);
     });
-    this.$on('USER_LOGIN', () => {
-      this.userPk = localStorage.userPk;
+    this.$on('USER_LOGIN', (_userPk) => {
+      console.log('USER_LOGIN:' + _userPk)
+      this.userPk = _userPk;
+      this.isLogin = true
     });
     this.$on('APP_KEYBOARD_HIDE', () => {
       this.hideKeyboard()
