@@ -132,7 +132,10 @@ export default {
   computed: {
   },
   beforeCreate() {
-    // TODO : 앱 실행하기 전에 android / ios status bar 숨김
+    // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
+    // 참고 url
+    // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
+    // - http://blog.eedler.com/5
     StatusBar.hide()
   },
   created () {
@@ -157,10 +160,10 @@ export default {
     })
 
     this.document.addEventListener('offline', () => {
-      // window.alert(':::::::::::::: network information offline ::::::::::::::::')
+      window.alert(':::::::::::::: network information offline ::::::::::::::::')
     })
     this.document.addEventListener('online', () => {
-      // window.alert(':::::::::::::: network information online ::::::::::::::::')
+      window.alert(':::::::::::::: network information online ::::::::::::::::')
     })
   },
   mounted() {
