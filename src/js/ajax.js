@@ -106,7 +106,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       var responseText = JSON.parse(xhr.responseText)
        if (responseText.hasOwnProperty('errorMessage')) message = responseText.errorMessage
       // console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
-      window.alert('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
+      // window.alert('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
       if (errorCode >= 400 && errorCode < 500) {
         // status code : 500 -> _fnFail 함수를 못 가져옴!
         if (xhr.hasOwnProperty('error') && xhr.error.needLogin) {
