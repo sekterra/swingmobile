@@ -276,13 +276,28 @@ export default {
         window.getApp.$emit('APP_REQUEST_ERROR', 'No pk')
         return
       }
+     
       this.initUpload = this.$comm.clone(this.upload)
       var fileList = _fileInfo.fileList
       if (!fileList || fileList.length <= 0) window.getApp.$emit('APP_REQUEST_ERROR', 'No files to upload');
-      else window.getApp.$emit('APP_REQUEST_SUCCESS', 'uploading:' + fileList.length);
+      // else window.getApp.$emit('APP_REQUEST_SUCCESS', 'uploading:' + fileList.length);
+
+      try {
+      let pid = this.$comm.moment().valueOf() // ajax 고유 프로세스 id millisecond 정보
+      
+      var thisRequest = null
+      // 현재의 요청을 필요시 App.vue에 백업해둔다.(네트워크 오류가 발생하면 복원하기 위함)
+      //  isRetry : network 커넥션 오류로 인해 재 업로드 요청 여부(true: 재전송 중, false: 일반 요청)
+      if (!_fileInfo.isRetry) {
+        thisRequest = {
+          pid: pid,
+          fileInfo: _fileInfo
+        };
+        window.getApp.addAjaxFileRequest(thisRequest)
+      }
 
       // window.alert(JSON.stringify(_fileInfo))
-      try {
+      
         var url = config.protocol + config.backEndFullUrl + 'file/image/upload/'
         var self = this
         // 1. 업로드 정보 초기화
@@ -311,10 +326,11 @@ export default {
 
         var options = new FileUploadOptions();
         options.mimeType="image/jpeg";
-        var headers={
+        var headers = {
           'X-Authorization': jwt.getJwtToken(),
           'Access-Control-Allow-Origin': '*',
-          'X-TenantID': 'yullin'
+          // 'X-TenantID': 'yullin'
+          'X-TenantID': config.tenantId
         };
         options.headers = headers;
         options.params = {
@@ -322,6 +338,8 @@ export default {
           attachPk: _fileInfo.pk
         }
         options.fileKey='file';
+
+        window.alert('파일 업로드 요청:' + config.tenantId)
 
         // var failedFileList = localStorage.failedFileList;  // 파일 업로드 실패 목록
         // if (!localStorage.failedFileList) failedFileList = [];
@@ -367,6 +385,10 @@ export default {
               transInfo.isSuccess = true;             
               transInfo.percent = 100;
               self.upload.isAllUploaded = self.upload.completedCount + self.upload.failedCount >= self.upload.fileCount;
+              // 재전송용 모든 파일 업로드 완료 시 알림 메시지 표시
+              if (self.upload.isAllUploaded && _fileInfo.isRetry) window.getApp.$emit('APP_REQUEST_SUCCESS', '파일 재 전송 작업이 성공적으로 이루어 졌습니다.')
+              // 성공한 요청은 삭제한다.
+              else window.getApp.removeAjaxFileRequest(pid)
               // window.getApp.$emit('APP_REQUEST_SUCCESS', "bytesSent = " + _result.bytesSent + ' : ' + _i);
             // 파일 전송 실패시
             }, (error) => {

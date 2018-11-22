@@ -16,8 +16,9 @@ var ajax = {
   isAuthCheck: false,
   processData: true,
   dataType: 'json',
-  // jsonpCallback: 'jsonpCallback',
   contentType: 'application/json;charset=utf-8',
+  ajaxPid: null,  // ajax 요청의 key값 millisecond 데이터
+  isRetry:  false,  // network 커넥션 오류로 인해 재전송 처리 요청 여부(true: 재전송 중, false: 일반 요청)
   accept: null,
   request: null,
   requestGet: null,
@@ -34,12 +35,13 @@ var orgAjax = {
   param: null,
   type: 'GET',
   async: true,
+  isRetry:  false,
   isSetHeader: true,
   isAuthCheck: false,
   processData: true,
   dataType: 'json',
-  // jsonpCallback: 'jsonpCallback',
-  contentType: 'application/json;charset=utf-8'
+  contentType: 'application/json;charset=utf-8',
+  ajaxPid: null
 }
 
 // 기본 ajax
@@ -54,8 +56,24 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
   // false : `data` are sent as "a[]=1&a[]=2&a[]=3"
   // 참고 url : https://stackoverflow.com/questions/31152130/is-it-good-to-use-jquery-ajax-with-traditional-true/31152304#31152304
   var traditional = ajax.type.toUpperCase() === 'GET'
+  let appVue = window.getApp  // App.vue Object
 
-  let appVue = window.getApp
+  let ajaxPid = comm.moment().valueOf() // ajax 고유 프로세스 id millisecond 정보
+  // 백업이 필요한 경우 : POST 또는 PUT request 이면서, 재전송 처리가 아닐 경우
+  let isNeedBackup = (ajax.type === 'POST' || ajax.type === 'PUT') && !ajax.isRetry
+  
+  // 현재의 요청을 필요시 App.vue에 백업해둔다.(네트워크 오류가 발생하면 복원하기 위함)
+  var thisRequest = null
+  if (isNeedBackup) {
+    thisRequest = {
+      ajaxPid: ajaxPid,
+      url: ajax.url,
+      param: ajax.param,
+      type: ajax.type
+    };
+    appVue.addAjaxRequest(thisRequest)
+  }
+  
   var ajaxOptions = {
     type: ajax.type,
     async: ajax.async,
@@ -85,6 +103,11 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       xhr.setRequestHeader('X-TenantID', config.tenantId)
     },
     success: function (xhr, status, req) {
+      // 복원처리시 알림 메시지 표시
+      if (ajax.isRetry) appVue.$emit('APP_REQUEST_SUCCESS', '복원작업이 성공적으로 이루어 졌습니다.')
+      // 성공한 요청은 삭제한다.
+      else if (isNeedBackup) appVue.removeAjaxRequest(ajaxPid)
+
       for(var key in orgAjax) {
         ajax[key] = orgAjax[key]
       }
@@ -93,11 +116,14 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       else return xhr
     },
     error: function (xhr, status, err) {
-      // ajax.url = null
-      // ajax.param = null
-      // ajax.accept = null
-      // ajax.contentType = 'application/json;charset=utf-8'
-      // ajax.processData = true
+      console.log(':::::::::::::::: error:' + JSON.stringify(xhr))
+      
+      // PUT/ POST 일 경우 현재 네트워크 상태를 가져와서 offline일 경우 후속 처리를 위해 localStorage에 저장한다.
+      // if (isNeedBackup &&  !appVue.getNetworkConnection()) {
+      //   window.alert('network error:' + )
+      //   appVue.addAjaxRequest(thisRequest)
+      // }
+
       for(var key in orgAjax) {
         ajax[key] = orgAjax[key]
       }
@@ -107,6 +133,8 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
        if (responseText.hasOwnProperty('errorMessage')) message = responseText.errorMessage
       // console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
       // window.alert('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
+
+      appVue.$emit('APP_REQUEST_ERROR', message)
       if (errorCode >= 400 && errorCode < 500) {
         // status code : 500 -> _fnFail 함수를 못 가져옴!
         if (xhr.hasOwnProperty('error') && xhr.error.needLogin) {
@@ -115,7 +143,6 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         
         // TODO : 전역 에러처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
-        appVue.$emit('APP_REQUEST_ERROR', message)        
         if (typeof _callbackFail === 'function') {
           _callbackFail(xhr, status, err)
         } else {
@@ -125,9 +152,6 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         if (typeof _callbackFail === 'function') {
           _callbackFail(xhr, status, err)
         } 
-        appVue.$emit('APP_REQUEST_ERROR', message)
-        // window.alert('xhr:' + JSON.stringify(xhr) + ':' + status + ':' + err)
-        // appVue.$comm.movePage(appVue.$router, '/500')
       }
     }
   }
@@ -139,7 +163,16 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       ajaxOptions.data = comm.trim(ajax.param)
     }
   }
+
   $.ajax(ajaxOptions)
+
+  // for test
+  // if (isNeedBackup) {
+  //   window.alert('disconnect wifi in 10sec')
+  //   setTimeout(() => {
+  //     $.ajax(ajaxOptions)
+  //   }, 10000);   
+  // } else $.ajax(ajaxOptions)
 }
 
 ajax.requestGet = function (_callbackSuccess, _callbackFail) {

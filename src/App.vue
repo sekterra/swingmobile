@@ -94,6 +94,8 @@ import AppEvents from  './event';
 import CountryFlag from 'vue-country-flag'
 import selectConfig from '@/js/selectConfig'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import $ from 'jquery'
+import { setTimeout } from 'timers';
 let localeMapper = require('@/locale/localeMapper.json');
 
 export default {
@@ -123,10 +125,20 @@ export default {
       text: '',
       type: ''
     },
+    networkInfo: {  // 현재 네트워크 정보
+      isConnect: true,
+      type: null  // 네트워크 접속 방식(wifi, 4g 등)
+    },
+    ajaxRequestList: [],  // 백업용 요청 목록
+    ajaxFileRequestList: [] // 백업용 파일 요청 목록
   }),
   watch: {
     userPk() {
       this.setUserInfo(this.userPk)
+    },
+    // 네트워크 상태가 변경되면 상황에 따라 백업 또는 복원처리 한다.
+    'networkInfo.isConnect': function () {
+      this.networkStatusIsChanged()
     }
   },
   computed: {
@@ -154,6 +166,25 @@ export default {
     this.$on('USER_LOGIN', (_userPk) => {
       this.userPk = _userPk;
       this.isLogin = true
+      // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
+      // setTimeout(function() {
+        window.alert('check:' + localStorage.ajaxRequestList + ':' + localStorage.ajaxFileRequestList)
+        if (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList) {
+          if(window.confirm('ajaxFileRequestList confirm')){
+            window.alert('재전송 시작')
+            // 재전송 정보를 처리
+            this.retryAjaxRequest()
+            this.retryAjaxFileRequest()
+          } else {
+            window.alert('기존 정보 초기화')
+            this.ajaxRequestList = []
+            localStorage.removeItem('ajaxRequestList');
+            this.ajaxFileRequestList = []
+            localStorage.removeItem('ajaxFileRequestList');
+          }
+          // this.$emit('APP_CONFIRM', '확인 테스트')
+        }
+      // }, 5000)
     });
     this.$on('APP_KEYBOARD_HIDE', () => {
       this.hideKeyboard()
@@ -161,13 +192,19 @@ export default {
 
     this.document.addEventListener('offline', () => {
       window.alert(':::::::::::::: network information offline ::::::::::::::::')
+      this.networkInfo.isConnect = false
+      this.networkInfo.type = null
     })
     this.document.addEventListener('online', () => {
-      window.alert(':::::::::::::: network information online ::::::::::::::::')
+      this.networkInfo.isConnect = true
+      this.networkInfo.type = navigator.connection.type
+      window.alert(':::::::::::::: network information online ::::::::::::::::\n' + JSON.stringify(this.networkInfo))
     })
   },
   mounted() {
-    this.$vuetify.goTo(0);
+    this.$nextTick(() => {
+      this.$vuetify.goTo(0);
+    })
     // this.userPk = localStorage.userPk;
   },
   methods: {
@@ -213,7 +250,6 @@ export default {
       this.userPk = _userPk
     },
     setUserInfo() {
-      console.log('this.userPk:' + this.userPk)
       if (!this.userPk) return
       this.$ajax.url = selectConfig.userInfo.url + this.userPk
       let self = this
@@ -233,6 +269,110 @@ export default {
     },
     swipeUp() {
       this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Up');
+    },
+    // 현재의 네트워크 상태를 반환
+    getNetworkConnection() {
+      return this.networkInfo.isConnect
+    },
+    // ajax 요청을 백업해둔다.
+    addAjaxRequest(_ajaxInfo) {
+      if (!this.isLogin) return
+      window.alert('addAjaxRequest' + JSON.stringify(_ajaxInfo))
+      this.ajaxRequestList.push(_ajaxInfo)
+    },
+    // 파일 업로드 요청을 백업해둔다.
+    addAjaxFileRequest(_ajaxInfo) {
+      if (!this.isLogin) return
+      this.ajaxFileRequestList.push(_ajaxInfo)
+      window.alert('addAjaxFileRequest:' + JSON.stringify(_ajaxInfo))
+    },
+    // ajax 요청 성공시 백업해둔 요청을 삭제
+    removeAjaxRequest(_ajaxPid) {
+      var filter = this.ajaxRequestList.filter((_item) => {
+        return _item.ajaxPid !== _ajaxPid
+      })
+      this.ajaxRequestList = filter
+    },
+    // 파일 업로드 성공시 백업해둔 파일 정보 삭제
+    removeAjaxFileRequest(_pid) {
+      var filter = this.ajaxFileRequestList.filter((_item) => {
+        return _item.pid !== _pid
+      })
+      this.ajaxFileRequestList = filter
+    },
+    /**
+     * 네트워크 상태가 변경되면 상황에 따라 업로드 또는 백업처리
+     */
+    networkStatusIsChanged() {
+      // 네트워크가 다시 연결될 경우, request, fileupload 처리
+      if (this.networkInfo.isConnect && this.userPk) {
+        // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
+        if (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList) {
+          // this.$emit('APP_CONFIRM', '확인 테스트')
+        }
+      // 네트워크가 연결이 끊어졌을 경우 로컬 스토리지에 백업
+      } else {
+        this.backupAjaxRequest()
+        this.backupAjaxFileRequest()
+      }
+    },
+    /**
+     * 네트워크 재연결시 ajax 요청 재실시
+     */
+    retryAjaxRequest() {
+      try {
+      window.alert('try rollback request on reconnect:' + localStorage.ajaxRequestList)
+      if (!localStorage.ajaxRequestList) return
+          var ajaxRequestList = JSON.parse(localStorage.ajaxRequestList)
+          $.each(ajaxRequestList, (_i, _item) => {
+            this.$ajax.url = _item.url
+            this.$ajax.param = _item.param
+            this.$ajax.isRetry = true
+
+            if (_item.type === 'POST') this.$ajax.requestPost()
+            else if (_item.type === 'PUT') this.$ajax.requestPut()
+          })
+          // 재요청은 1회만 한다.
+          this.ajaxRequestList = []
+          localStorage.removeItem('ajaxRequestList');
+        } catch (e) {
+          window.alert(e.message)
+        }
+    },
+    /**
+     * 네트워크 연결이 끊어졌을 경우 ajax 요청 재실시
+     */
+    backupAjaxRequest() {
+      localStorage.removeItem('ajaxRequestList');
+      if (this.ajaxRequestList.length > 0) localStorage.ajaxRequestList = JSON.stringify(this.ajaxRequestList)
+      window.alert('Backup requests:' + localStorage.ajaxRequestList)
+    },
+    /**
+     * 네트워크 연결시 파일업로드 요청 재실시
+     */
+    retryAjaxFileRequest() {
+      try {
+      window.alert('try files rollback request on reconnect:' + localStorage.ajaxFileRequestList)
+      if (!localStorage.ajaxFileRequestList) return
+          var ajaxRequestList = JSON.parse(localStorage.ajaxFileRequestList)
+          $.each(ajaxRequestList, (_i, _item) => {
+            _item.fileInfo.isRetry = true
+            this.$emit('APP_IMAGE_UPLOAD', _item.fileInfo);
+          })
+          // 재요청은 1회만 한다.
+          this.ajaxFileRequestList = []
+          localStorage.removeItem('ajaxFileRequestList');
+        } catch (e) {
+          window.alert(e.message)
+        }
+    },
+    /**
+     * 네트워크 연결이 끊어졌을 경우 파일업로드 정보 백업
+     */
+    backupAjaxFileRequest() {
+      localStorage.removeItem('ajaxFileRequestList');
+      if (this.ajaxFileRequestList.length > 0) localStorage.ajaxFileRequestList = JSON.stringify(this.ajaxFileRequestList)
+      window.alert('Backup file requests:' + localStorage.ajaxFileRequestList)
     }
   },
 };
