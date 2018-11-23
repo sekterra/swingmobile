@@ -123,13 +123,15 @@ export default {
   created() {
     this.isGridEditable = this.isGridEditableByParent
     this.gridHeaderOptions = gridHeaderOptions
+  },
+  beforeMount() {
+    Object.assign(this.$data, this.$options.data());
+  },
+  mounted() {
     // page rendering 후 조회
     this.$nextTick(() => {
       this.onSearch()
     })
-  },
-  beforeMount() {
-    Object.assign(this.$data, this.$options.data());
   },
   /* methods */
   methods: {

@@ -201,6 +201,14 @@
                       <v-subheader class="pa-0 mt-3">
                         {{$t('title.woImageFileUpload')}}
                         <v-spacer></v-spacer>
+                        <v-progress-circular
+                        v-show="pk && isLoadingImage"
+                        :size="20"
+                        :width="2"
+                        color="teal lighten-1"
+                        indeterminate
+                      ></v-progress-circular>
+                        <v-spacer></v-spacer>
                         <v-btn 
                         round
                         color="black" 
@@ -327,6 +335,7 @@ import jwt from '@/js/jwtToken.js'
 import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
+import { setTimeout } from 'timers';
 
 let transaction = transactionConfig.wo.request
 export default {
@@ -369,6 +378,7 @@ export default {
       buffer: 0,
       uploadedImagesCount: 0  
     },
+    isLoadingImage:  false, // 이미지 로딩 표시여부
     attachType: 'WO_PRE_PHOTO',
     // isShowCarousel: false,
     cameraImageList: [],  // 카메라 이미지
@@ -646,6 +656,7 @@ export default {
       this.$ajax.param.attachPk = _pk
       let self = this
       // this.isShowCarousel = false
+      this.isLoadingImage = true;
       this.$ajax.requestGet((_result) => {
         $.each(_result, (_i, _item) => {
           self.getImageFile(_item.filePk)
@@ -653,8 +664,9 @@ export default {
         // self.carouselImageList = self.cameraImageList
         // console.log('self.carouselImageList:' + JSON.stringify(self.carouselImageList))
         self.$nextTick(() => {
-          // self.isShowCarousel = self.carouselImageList.length > 0
+          // self.isShowCarousel = self.carouselImageList.length > 0          
           self.carouselIndex = 0
+          // self.isLoadingImage = false
         })
       })
     },
@@ -665,7 +677,8 @@ export default {
         self.$nextTick(() => {
           self.cameraImageList.unshift(window.URL.createObjectURL(_result))
           self.carouselImageList.unshift(window.URL.createObjectURL(_result))
-        })   
+          self.isLoadingImage = false
+        })
       })
     },
     onScroll(e) {
