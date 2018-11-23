@@ -141,6 +141,7 @@ export default [
         type: 'confirm',
         text: _message
       }
+      console.log(':::::::::: confirm :::::::::::' + _message)
     }
   },
   // 사용자 입력 요청

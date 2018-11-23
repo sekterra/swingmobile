@@ -135,9 +135,9 @@ export default {
       let self = this
       this.$ajax.url = this.url
       this.$ajax.param = this.searchData
-
       this.$ajax.requestGet((_result) => {
         self.orgItems = typeof _result.content !== 'undefined' ? _result.content : _result
+        // window.getApp.$emit('APP_CONFIRM', this.$t('message.requestsRemained'))
       }, (_error) => {
         console.log('_error:' + JSON.stringify(_error))
       })

@@ -883,7 +883,7 @@ export default {
 
       // TODO : 변경된 데이터를 localstorage에 저장
       localStorage.dashboard = JSON.stringify(this.dataset.keyList)
-    },
+    }
   }
 };
 </script>

@@ -49,9 +49,16 @@
           <theme-settings v-if="!isSearchPopup"></theme-settings>
           <y-right-popup v-else></y-right-popup>
         </v-navigation-drawer>
+        <!-- 다이얼로그 팝업 등록 -->
+        <y-dialog 
+          title="test"
+          :message="dialog.text"
+          :is-open-dialog="dialog.show"
+          :type="dialog.type"
+          @dialogResult="dialogResult"
+          >
+        </y-dialog>
         <!-- test -->
-        
-        
       </v-app>
     </template>
     <template v-else>
@@ -61,6 +68,7 @@
         </keep-alive>
       </transition>
     </template>
+
     <v-snackbar
       :timeout="3000"
       bottom
@@ -73,14 +81,7 @@
         <v-icon>close</v-icon>
       </v-btn>
     </v-snackbar>
-    <y-dialog 
-      title="test"
-      :message="dialog.text"
-      :is-open-dialog="dialog.show"
-      :type="dialog.type"
-      @dialogResult="dialogResult"
-      >
-    </y-dialog>
+    
   </div>
 </template>
 
@@ -126,6 +127,7 @@ export default {
       text: '',
       type: ''
     },
+    needToEmitForConfirm: true, // 사용자의 입력확인 창을 child 컴포넌트로 전달 해야 할지 여부(true: child로 전달, false: App.vue 자체 처리)
     networkInfo: {  // 현재 네트워크 정보
       isConnected: true,
       type: null  // 네트워크 접속 방식(wifi, 4g 등)
@@ -143,13 +145,16 @@ export default {
     }
   },
   computed: {
+    isRetry() {
+      return localStorage.ajaxRequestList || localStorage.ajaxFileRequestList
+    }
   },
   beforeCreate() {
     // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
     // 참고 url
     // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
     // - http://blog.eedler.com/5
-    StatusBar.hide()
+    // if (StatusBar) StatusBar.hide()
   },
   created () {
     AppEvents.forEach(item => {
@@ -168,38 +173,20 @@ export default {
       this.userPk = _userPk;
       this.isLogin = true
       // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
-      // setTimeout(function() {
-        window.alert('check:' + localStorage.ajaxRequestList + ':' + localStorage.ajaxFileRequestList)
-        if (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList) {
-          if(window.confirm('ajaxFileRequestList confirm')){
-            window.alert('재전송 시작')
-            // 재전송 정보를 처리
-            this.retryAjaxRequest()
-            this.retryAjaxFileRequest()
-          } else {
-            window.alert('기존 정보 초기화')
-            this.ajaxRequestList = []
-            localStorage.removeItem('ajaxRequestList');
-            this.ajaxFileRequestList = []
-            localStorage.removeItem('ajaxFileRequestList');
-          }
-          // this.$emit('APP_CONFIRM', '확인 테스트')
-        }
-      // }, 5000)
+      setTimeout(() => {
+        // App.vue 자체적으로 사용자의 확인을 받기 위해 false
+        this.checkRemainedRequest();
+      }, 1000)
     });
-    this.$on('APP_KEYBOARD_HIDE', () => {
-      this.hideKeyboard()
-    })
+    this.$on('APP_KEYBOARD_HIDE', this.hideKeyboard);
 
     this.document.addEventListener('offline', () => {
-      window.alert(':::::::::::::: network information offline ::::::::::::::::')
       this.networkInfo.isConnected = false
       this.networkInfo.type = null
     })
     this.document.addEventListener('online', () => {
       this.networkInfo.isConnected = true
       this.networkInfo.type = navigator.connection.type
-      window.alert(':::::::::::::: network information online ::::::::::::::::\n' + JSON.stringify(this.networkInfo))
     })
   },
   mounted() {
@@ -208,6 +195,11 @@ export default {
     })
     // this.userPk = localStorage.userPk;
   },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    // 모든 이벤트 제거
+    this.$off()
+ },
   methods: {
     /**
      *  테마 설정용 right 팝업 오픈
@@ -243,7 +235,16 @@ export default {
       this.$i18n.locale = localJson.language
     },
     dialogResult(_result) {
-      this.$emit('APP_CONFIRM_REPLY', _result);
+      if (this.needToEmitForConfirm) this.$emit('APP_CONFIRM_REPLY', _result);
+      else {
+        // 재 전송 상태인지 여부
+        if (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList) {
+          if (_result) this.allRequestRetry()
+          else this.initAllReqest()
+        }
+      }
+      // 사용자의 입력을 부모값으로 전달할 수 있도록 초기화(true)
+      this.needToEmitForConfirm = true;
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
       this.dialog.show = false
     },
@@ -279,14 +280,12 @@ export default {
     // ajax 요청을 백업해둔다.
     addAjaxRequest(_ajaxInfo) {
       if (!this.isLogin) return
-      window.alert('addAjaxRequest' + JSON.stringify(_ajaxInfo))
       this.ajaxRequestList.push(_ajaxInfo)
     },
     // 파일 업로드 요청을 백업해둔다.
     addAjaxFileRequest(_ajaxInfo) {
       if (!this.isLogin) return
       this.ajaxFileRequestList.push(_ajaxInfo)
-      window.alert('addAjaxFileRequest:' + JSON.stringify(_ajaxInfo))
     },
     // ajax 요청 성공시 백업해둔 요청을 삭제
     removeAjaxRequest(_ajaxPid) {
@@ -306,24 +305,19 @@ export default {
      * 네트워크 상태가 변경되면 상황에 따라 업로드 또는 백업처리
      */
     networkStatusIsChanged() {
+      // 툴바에 네트워크 변경 사항을 알림(icon 변경)
       this.$emit('NETWORK_STATUS_CHANGED', this.networkInfo.isConnected)
+
       // 네트워크가 다시 연결될 경우, request, fileupload 처리
       if (this.networkInfo.isConnected) {
-        this.$emit('APP_REQUEST_SUCCESS', this.$t('message.internetConnected'));
+        var test = (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList)
+        this.$emit('APP_REQUEST_SUCCESS', this.$t('message.internetConnected')  + ' : ' + test);
         // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
-        if (this.userPk && (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList)) {
-          if(window.confirm('ajaxFileRequestList confirm')){
-            window.alert('재전송 시작')
-            // 재전송 정보를 처리
-            this.retryAjaxRequest()
-            this.retryAjaxFileRequest()
-          } else {
-            window.alert('기존 정보 초기화')
-            this.ajaxRequestList = []
-            localStorage.removeItem('ajaxRequestList');
-            this.ajaxFileRequestList = []
-            localStorage.removeItem('ajaxFileRequestList');
-          }
+        if (this.userPk) {
+          this.checkRemainedRequest();
+          // App.vue 자체적으로 사용자의 확인을 받기 위해 false 처리
+          // this.needToEmitForConfirm = false;
+          // this.$emit('APP_CONFIRM', this.$t('message.requestsRemained'));
         }
       // 네트워크가 연결이 끊어졌을 경우 로컬 스토리지에 백업
       } else {
@@ -333,12 +327,54 @@ export default {
       }
     },
     /**
+     * 업무/파일 업로드 요청이 있는지 확인하고,
+     * 있을 경우 사용자의 입력을 통해 처리한다.
+     */
+    checkRemainedRequest() {
+       // App.vue 자체적으로 사용자의 확인을 받기 위해 false
+      if (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList) {
+        try {
+          this.needToEmitForConfirm = false;
+          var ajaxRequestList = []
+          var ajaxFileRequestList = []
+          var msg = this.$t('message.requestsRemained')
+          if (localStorage.ajaxRequestList) {
+            ajaxRequestList = JSON.parse(localStorage.ajaxRequestList);
+            msg += '<br/>' + this.$('title.workRequestCount') + ': ' + ajaxRequestList.length;
+          }
+          if (localStorage.ajaxFileRequestList) {
+            ajaxFileRequestList = JSON.parse(localStorage.ajaxFileRequestList);
+            msg += '<br/>' + this.$t('title.fileRequestCount') + ': ' + ajaxFileRequestList.length;
+          }          
+          this.$emit('APP_CONFIRM', msg);
+        } catch(e) {
+          window.alert(e.message)
+        }
+      }
+    },
+    /**
+     * ajax 요청 / 파일 업로드 요청을 재 전송 처리
+     */
+    allRequestRetry() {
+      this.retryAjaxRequest()
+      this.retryAjaxFileRequest()
+    },
+    /**
+     * 사용자가 재 처리를 원하지 않거나, 재 처리 완료 후
+     * ajax 요청 / 파일 업로드 요청을 초기화
+     */
+    initAllReqest() {
+      this.ajaxRequestList = [];
+      this.ajaxFileRequestList = [];
+      localStorage.removeItem('ajaxRequestList');
+      localStorage.removeItem('ajaxFileRequestList');
+    },
+    /**
      * 네트워크 재연결시 ajax 요청 재실시
      */
     retryAjaxRequest() {
       try {
-      window.alert('try rollback request on reconnect:' + localStorage.ajaxRequestList)
-      if (!localStorage.ajaxRequestList) return
+        if (!localStorage.ajaxRequestList) return
           var ajaxRequestList = JSON.parse(localStorage.ajaxRequestList)
           $.each(ajaxRequestList, (_i, _item) => {
             this.$ajax.url = _item.url
@@ -361,15 +397,13 @@ export default {
     backupAjaxRequest() {
       localStorage.removeItem('ajaxRequestList');
       if (this.ajaxRequestList.length > 0) localStorage.ajaxRequestList = JSON.stringify(this.ajaxRequestList)
-      window.alert('Backup requests:' + localStorage.ajaxRequestList)
     },
     /**
      * 네트워크 연결시 파일업로드 요청 재실시
      */
     retryAjaxFileRequest() {
       try {
-      window.alert('try files rollback request on reconnect:' + localStorage.ajaxFileRequestList)
-      if (!localStorage.ajaxFileRequestList) return
+        if (!localStorage.ajaxFileRequestList) return
           var ajaxRequestList = JSON.parse(localStorage.ajaxFileRequestList)
           $.each(ajaxRequestList, (_i, _item) => {
             _item.fileInfo.isRetry = true
@@ -388,7 +422,6 @@ export default {
     backupAjaxFileRequest() {
       localStorage.removeItem('ajaxFileRequestList');
       if (this.ajaxFileRequestList.length > 0) localStorage.ajaxFileRequestList = JSON.stringify(this.ajaxFileRequestList)
-      window.alert('Backup file requests:' + localStorage.ajaxFileRequestList)
     }
   },
 };

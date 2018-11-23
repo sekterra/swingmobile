@@ -97,6 +97,10 @@ export default {
       this.isConnected = _isConnected
     })
   },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    window.getApp.$off('NETWORK_STATUS_CHANGED')
+ },
   mounted() {
     this.locale = localStorage.locale
     this.userInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''

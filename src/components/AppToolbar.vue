@@ -228,27 +228,6 @@ export default {
     // 파일 업로드 완료시 초기화 작업 수행
     'upload.isAllUploaded': function () {
       if (!this.upload.isAllUploaded) return
-      // 업로드 완료 정보 전송
-      // window.getApp.$emit('APP_IMAGE_UPLOAD_COMPLETE', this.$comm.clone(this.upload));
-      // 업로드 완료 팝업 표시
-      // window.getApp.$emit('APP_REQUEST_SUCCESS', 'init upload Info');
-
-      // 업로드 실패한 파일이 있을 경우 다시 업로드 가능하도록 처리
-      // var failedFileList = JSON.parse(localStorage.failedFileList)
-      // if (this.upload.failedCount && failedFileList.length > 0) {
-      //   window.getApp.$emit('APP_CONFIRM', this.$t('message.retryFileUpload'));
-      //   window.getApp.$on('APP_CONFIRM_REPLY', (_retry) => {
-      //     if (_retry) {
-      //       var failedFileList = JSON.parse(localStorage.failedFileList)
-      //       this.uploadImages(failedFileList)
-      //     }
-      //     else {
-      //       localStorage.failedFileList = null
-      //       window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.uploadFailedFileRemoved'));
-      //     }
-      //   })
-      // }
-
       // 업로드 정보 초기화
       this.upload = this.$comm.clone(this.initUpload)
     }
@@ -258,19 +237,24 @@ export default {
     this.wo.searchData.endDate = this.$comm.getToday()
     this.inspection.searchData.startDate = this.$comm.getPrevDate('1m')
     this.inspection.searchData.endDate = this.$comm.getToday()
+    window.getApp.$on('APP_IMAGE_UPLOAD', this.handleFileUpload);
   },
   mounted() {
-    window.getApp.$on('APP_IMAGE_UPLOAD', (_fileInfo) => {
-      this.uploadImages(_fileInfo);
-      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.imageUploadStart'));
-    });
   },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    window.getApp.$off('APP_IMAGE_UPLOAD', this.handleFileUpload)
+ },
   methods: {
     handleDrawerToggle () {
       window.getApp.$emit('APP_DRAWER_TOGGLED');
     },
     handleFullScreen () {
       Util.toggleFullScreen();
+    },
+    handleFileUpload(_fileInfo) {
+      this.uploadImages(_fileInfo);
+      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.imageUploadStart'));
     },
     openThemeSettings () {
       this.$emit('openThemeSettings')
@@ -285,14 +269,13 @@ export default {
     },
     uploadImages(_fileInfo, _isRetry) {
       if (!_fileInfo || !_fileInfo.hasOwnProperty('pk')) {
-        window.getApp.$emit('APP_REQUEST_ERROR', 'No pk')
+        window.getApp.$emit('APP_REQUEST_ERROR', this.$t('message.imageUploadFail'))
         return
       }
      
       this.initUpload = this.$comm.clone(this.upload)
       var fileList = _fileInfo.fileList
-      if (!fileList || fileList.length <= 0) window.getApp.$emit('APP_REQUEST_ERROR', 'No files to upload');
-      // else window.getApp.$emit('APP_REQUEST_SUCCESS', 'uploading:' + fileList.length);
+      if (!fileList || fileList.length <= 0) window.getApp.$emit('APP_REQUEST_ERROR', this.$t('message.noImage'));
 
       try {
       let pid = this.$comm.moment().valueOf() // ajax 고유 프로세스 id millisecond 정보
@@ -350,8 +333,6 @@ export default {
           attachPk: _fileInfo.pk
         }
         options.fileKey='file';
-
-        window.alert('파일 업로드 요청:' + config.tenantId)
 
         // var failedFileList = localStorage.failedFileList;  // 파일 업로드 실패 목록
         // if (!localStorage.failedFileList) failedFileList = [];
@@ -413,8 +394,7 @@ export default {
               // 전송실패한 파일은 localStorage에 저장하고, 나중에 다시 처리한다.
               // failedFileList.push(filePath)
               // localStorage.failedFileList = JSON.stringify(failedFileList)
-              window.alert('upload error:' + JSON.stringify(error) + ' : ' + _i);
-              // window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + JSON.stringify(error) + ' : ' + _i);
+              window.getApp.$emit('APP_REQUEST_ERROR', this.$t('message.ImageUploadFailed'));
             }, options);
             // 파일업로드 시작 / 완료
         });

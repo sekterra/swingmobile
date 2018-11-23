@@ -631,7 +631,11 @@ export default {
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
       this.upload.imageList = []
     });
-  },  
+  },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    window.getApp.$off('APP_IMAGE_UPLOAD_COMPLETE')
+ },
   methods: {
     // 단일 WO 검색
     onSearch(_pk) {

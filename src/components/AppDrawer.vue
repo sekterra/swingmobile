@@ -114,6 +114,11 @@ export default {
       this.drawer = (!this.drawer);
     });
   },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    // 모든 이벤트 제거
+    this.$off('APP_DRAWER_TOGGLED')
+ },
   methods: {
     genChildTarget (item, subItem) {
       if (subItem.href) return;

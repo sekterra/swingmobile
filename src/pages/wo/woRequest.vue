@@ -264,7 +264,7 @@
                       :action-url="url"
                       :action-type="requestType"
                       :param="saveData"
-                      :is-valid-by-parent = "isValid"
+                      :is-valid-by-parent="isValid"
                       @btnClicked="btnSaveClicked" 
                       @btnClickedError="btnClickedError"
                       @checkValidation="checkValidation"
@@ -283,12 +283,12 @@
                       @btnClicked="btnClearClicked" 
                     ></y-btn>
                     
-                    <!-- <y-btn
+                    <y-btn
                       type="cancel"
                       :title="$t('button.cancel')"
                       @btnClicked="btnCancelClicked" 
                       @btnClickedError="btnClickedError"
-                    ></y-btn> -->
+                    ></y-btn>
                   </div>
                   </v-flex>
             </v-card-text>     
@@ -423,7 +423,11 @@ export default {
     window.getApp.$on('APP_IMAGE_UPLOAD_COMPLETE', (_upload) => {
       this.upload.imageList = []
     });
-  },  
+  },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    window.getApp.$off('APP_IMAGE_UPLOAD_COMPLETE')
+ },
   methods: {
     // 버그 있음 : 수정 필요
     btnClearClicked () {
@@ -439,6 +443,7 @@ export default {
     },
     btnClickedError(_error) {
       // console.log('error:' + JSON.stringify(_error))
+      this.isValid = false
     },
     btnSaveClicked(_result) {
       // TODO : 전역 성공 메시지 처리
@@ -453,7 +458,8 @@ export default {
     btnDeleteClicked(_result) {
     },
     btnCancelClicked() {
-      this.isOpenDialog = true
+      // this.isOpenDialog = true
+      window.getApp.$emit('APP_CONFIRM', this.$t('message.requestsRemained'))
     },
     dialogResult() {
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
@@ -626,6 +632,7 @@ export default {
         attachType: this.attachType,
         fileList: this.upload.imageList
       }
+      window.alert('APP_IMAGE_UPLOAD Request')
       window.getApp.$emit('APP_IMAGE_UPLOAD', uploadInfo);
     },
     completeImageUpload() {

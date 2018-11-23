@@ -157,7 +157,10 @@
       "confirm": "Confirm",
       "wageUnitPrice": "Wage unit price",
       "tenantId": "Name of Your Site",
-      "etcCost": "ETC Cost"
+      "etcCost": "ETC Cost",
+      "count": "Count",
+      "workRequestCount": "Work process counts",
+      "fileRequestCount": "File upload counts"
     },
     "message": {
       "woNo": "Will be automatically generated.",
@@ -186,7 +189,11 @@
       "woCancel": "This WO has been canceled",
       "imageUploadStart": "Image uploading has been started.",
       "internetConnected": "The internet has been connected.",
-      "internetDisconnected": "The internet has beend disconnected. Please check the connection status of your device"
+      "internetDisconnected": "The internet has beend disconnected. Please check the connection status of your device",
+      "requestsRemained": "You have remained requests those are not processed because disconnected. Do you want to process them now?",
+      "imageUploadFail": "There are some errors in the image upload information. Please try again.",
+      "noImage": "No photos to upload. Please take a picture again and upload it.",
+      "ImageUploadFailed": "There was an error uploading the picture. Please take a picture again and upload it."
     },
     "error": {
       "requestError": "An error occurred during data processing.",

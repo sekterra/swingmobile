@@ -187,7 +187,14 @@
       "woCancel": "",
       "imageUploadStart": "",
       "internetConnected": "",
-      "internetDisconnected": ""
+      "internetDisconnected": "",
+      "requestsRemained": "",
+      "count": "",
+      "workRequestCount": "",
+      "fileRequestCount": "",
+      "imageUploadFail": "",
+      "noImage": "",
+      "ImageUploadFailed": ""
     },
     "error": {
       "requestError": "",

@@ -156,7 +156,10 @@
       "confirm": "승인",
       "wageUnitPrice": "노임단가",
       "tenantId": "사이트명",
-      "etcCost": "기타 비용"
+      "etcCost": "기타 비용",
+      "count": "개",
+      "workRequestCount": "업무 미처리수",
+      "fileRequestCount": "파일업로드 미처리수"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
@@ -186,7 +189,11 @@
       "woCancel": "본 WO는 취소되었습니다.",
       "imageUploadStart": "이미지 업로드가 시작되었습니다.",
       "internetConnected": "인터넷이 다시 연결 되었습니다.",
-      "internetDisconnected": "인터넷 연결이 끊어졌습니다. 연결 상태를 확인하시기 바랍니다."
+      "internetDisconnected": "인터넷 연결이 끊어졌습니다. 연결 상태를 확인하시기 바랍니다.",
+      "requestsRemained": "처리하지 못한 요청 정보가 남아있습니다. 처리하시겠습니까?",
+      "imageUploadFail": "이미지 업로드 정보에 오류가 있습니다. 다시 시도하시기 바랍니다.",
+      "noImage": "업로드 대상 사진이 없습니다. 사진을 다시 찍어서 업로드하시기 바랍니다.",
+      "ImageUploadFailed": "사진 업로드 도중 에러가 발생하였습니다. 사진을 다시 찍어서 업로드하시기 바랍니다."
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",

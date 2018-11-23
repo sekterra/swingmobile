@@ -229,8 +229,11 @@ export default {
       this.setLocalFormattedDate()
     });
   },
+  beforeDestroy () {
+    // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
+    window.getApp.$off('LOCALE_CHANGE')
+ },
   mounted() {
-    console.log('Duration LOCALE_CHANGE :::: ' + this.locale + ' : ' + this.vValue + ' : ' + this.$comm.moment().locale())
     if (this.defaultType === 'today') {
       if (this.value) {
         this.vValueFrom = this.value.fromDate

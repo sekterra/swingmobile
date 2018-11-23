@@ -9,26 +9,9 @@ examples:
   <v-layout row justify-center fill-height>
     <v-dialog
       v-model="dialog"
-      :fullscreen="isFullscreen"
     >
       <v-card>
-        <v-toolbar card dark color="primary" v-if="isPopup">
-          <v-btn icon dark @click="noClicked">
-            <v-icon>close</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{title}}</v-toolbar-title>
-          <!-- <v-spacer></v-spacer>
-          <v-toolbar-items>
-            <v-btn dark flat @click.native="dialog = false">Save</v-btn>
-          </v-toolbar-items>
-          <v-menu bottom right offset-y>
-            <v-btn slot="activator" dark icon>
-              <v-icon>more_vert</v-icon>
-            </v-btn>
-          </v-menu> -->
-        </v-toolbar>
-
-        <v-card-title class="headline" v-else>
+        <v-card-title class="headline">
           <v-icon 
             large color="amber darken-4"
           >{{icon}}
@@ -36,21 +19,13 @@ examples:
           {{title}}
         </v-card-title>
         <v-card-text>
-          <slot name="body"></slot>
-          {{message}}
+          <slot name="body">
+            <span v-html="message"></span>
+          </slot>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            v-if="type === 'confirm'"
-            color="deep-orange darken-3"
-            flat="flat"
-            @click="noClicked"
-          >
-            No
-          </v-btn>
-
           <v-btn
             v-if="type === 'confirm'"
             color="green darken-1"
@@ -58,6 +33,14 @@ examples:
             @click="yesClicked"
           >
             Yes
+          </v-btn>
+          <v-btn
+            v-if="type === 'confirm'"
+            color="deep-orange darken-3"
+            flat="flat"
+            @click="noClicked"
+          >
+            No
           </v-btn>
 
           <v-btn
@@ -93,23 +76,19 @@ export default {
       type: String,
       default: 'info'
     },
-    isPopup: {
-      type: Boolean,
-      default: false
-    },
     // 부모창에서 팝업 제어할 때 사용되는 attribute
     isOpenDialog: {
-      type: Boolean,
-      default: false
-    },
-    isFullscreen: {
       type: Boolean,
       default: false
     }
   },
   watch: {
     isOpenDialog() {
-      this.dialog = this.isOpenDialog
+      this.$set(this, 'dialog', this.isOpenDialog)
+      // this.dialog = this.isOpenDialog
+      if (this.type === 'info') this.icon = 'info'
+      else if(this.type === 'error') this.icon = 'error'
+      else if(this.type === 'confirm') this.icon = 'help'
     }
   },
   data() {
@@ -119,8 +98,10 @@ export default {
     }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
-  mounted() {
-    this.dialog = this.isOpenDialog
+  beforeMount() {
+    console.log('YDialog mounted')
+    this.$set(this, 'dialog', this.isOpenDialog)
+    // this.dialog = this.isOpenDialog
     if (this.type === 'info') this.icon = 'info'
     else if(this.type === 'error') this.icon = 'error'
     else if(this.type === 'confirm') this.icon = 'help'
