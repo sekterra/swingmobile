@@ -659,7 +659,9 @@ export default {
       this.isLoadingImage = true;
       this.$ajax.requestGet((_result) => {
         $.each(_result, (_i, _item) => {
-          self.getImageFile(_item.filePk)
+          setTimeout(() => {
+            self.getImageFile(_item.filePk)
+          }, 5000)
         })
         // self.carouselImageList = self.cameraImageList
         // console.log('self.carouselImageList:' + JSON.stringify(self.carouselImageList))
