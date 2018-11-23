@@ -10,6 +10,7 @@
         <app-toolbar 
           class="app--toolbar" 
           :is-login="isLogin"
+          :is-connected="networkInfo.isConnected"
           @openThemeSettings="openThemeSettings">
         </app-toolbar>
         <v-content>
@@ -126,7 +127,7 @@ export default {
       type: ''
     },
     networkInfo: {  // 현재 네트워크 정보
-      isConnect: true,
+      isConnected: true,
       type: null  // 네트워크 접속 방식(wifi, 4g 등)
     },
     ajaxRequestList: [],  // 백업용 요청 목록
@@ -137,7 +138,7 @@ export default {
       this.setUserInfo(this.userPk)
     },
     // 네트워크 상태가 변경되면 상황에 따라 백업 또는 복원처리 한다.
-    'networkInfo.isConnect': function () {
+    'networkInfo.isConnected': function () {
       this.networkStatusIsChanged()
     }
   },
@@ -192,11 +193,11 @@ export default {
 
     this.document.addEventListener('offline', () => {
       window.alert(':::::::::::::: network information offline ::::::::::::::::')
-      this.networkInfo.isConnect = false
+      this.networkInfo.isConnected = false
       this.networkInfo.type = null
     })
     this.document.addEventListener('online', () => {
-      this.networkInfo.isConnect = true
+      this.networkInfo.isConnected = true
       this.networkInfo.type = navigator.connection.type
       window.alert(':::::::::::::: network information online ::::::::::::::::\n' + JSON.stringify(this.networkInfo))
     })
@@ -264,15 +265,16 @@ export default {
       // IOS, Android 둘 다 정상적으로 동작
       if (Keyboard && typeof Keyboard.hide === 'function') Keyboard.hide()
     },
-    swipeAtEnd() {
-      this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Reach End');
-    },
-    swipeUp() {
-      this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Up');
-    },
+    // TEST
+    // swipeAtEnd() {
+    //   this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Reach End');
+    // },
+    // swipeUp() {
+    //   this.$emit('APP_REQUEST_SUCCESS', 'Swipe!!! Up');
+    // },
     // 현재의 네트워크 상태를 반환
     getNetworkConnection() {
-      return this.networkInfo.isConnect
+      return this.networkInfo.isConnected
     },
     // ajax 요청을 백업해둔다.
     addAjaxRequest(_ajaxInfo) {
@@ -304,14 +306,28 @@ export default {
      * 네트워크 상태가 변경되면 상황에 따라 업로드 또는 백업처리
      */
     networkStatusIsChanged() {
+      this.$emit('NETWORK_STATUS_CHANGED', this.networkInfo.isConnected)
       // 네트워크가 다시 연결될 경우, request, fileupload 처리
-      if (this.networkInfo.isConnect && this.userPk) {
+      if (this.networkInfo.isConnected) {
+        this.$emit('APP_REQUEST_SUCCESS', this.$t('message.internetConnected'));
         // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
-        if (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList) {
-          // this.$emit('APP_CONFIRM', '확인 테스트')
+        if (this.userPk && (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList)) {
+          if(window.confirm('ajaxFileRequestList confirm')){
+            window.alert('재전송 시작')
+            // 재전송 정보를 처리
+            this.retryAjaxRequest()
+            this.retryAjaxFileRequest()
+          } else {
+            window.alert('기존 정보 초기화')
+            this.ajaxRequestList = []
+            localStorage.removeItem('ajaxRequestList');
+            this.ajaxFileRequestList = []
+            localStorage.removeItem('ajaxFileRequestList');
+          }
         }
       // 네트워크가 연결이 끊어졌을 경우 로컬 스토리지에 백업
       } else {
+        this.$emit('APP_REQUEST_ERROR', this.$t('message.internetDisconnected'));
         this.backupAjaxRequest()
         this.backupAjaxFileRequest()
       }

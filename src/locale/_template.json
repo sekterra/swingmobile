@@ -185,7 +185,9 @@
       "etcCost": "",
       "woComplete": "",
       "woCancel": "",
-      "imageUploadStart": ""
+      "imageUploadStart": "",
+      "internetConnected": "",
+      "internetDisconnected": ""
     },
     "error": {
       "requestError": "",

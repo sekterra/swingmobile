@@ -52,7 +52,14 @@
                 <v-layout align-center justify-space-between row fill-height>
                   <y-i18n></y-i18n>
                   <v-spacer></v-spacer>
-                  <v-btn block color="success" @click="login" :loading="loading">Login</v-btn>
+                  <v-btn 
+                    block
+                    color="success"
+                    :disabled="!isConnected" 
+                    @click="login" 
+                    :loading="loading">
+                    Login
+                  </v-btn>
                 </v-layout>
               </v-card-actions>
             </v-card>
@@ -82,8 +89,14 @@ export default {
     },
     locale: null,
     isCloudAccess: true,
-    cloudLabel: 'cloud 접속'
+    cloudLabel: 'cloud 접속',
+    isConnected: true
   }),
+  beforeMount() {
+    window.getApp.$on('NETWORK_STATUS_CHANGED', (_isConnected) => {
+      this.isConnected = _isConnected
+    })
+  },
   mounted() {
     this.locale = localStorage.locale
     this.userInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
@@ -93,6 +106,9 @@ export default {
 
     if (this.isCloudAccess) config.settingForReleaseSite()
     else config.settingForDevSite()
+
+    // App.vue에서 현재 연결 상태를 가져온다.
+    this.isConnected = window.getApp.getNetworkConnection()
   },
   watch: {
     'userInfo.tenantId': function() {

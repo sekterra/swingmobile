@@ -184,7 +184,9 @@
       "tenantHint": "The URL  you entered when signing up",
       "woComplete": "This WO has been completed",
       "woCancel": "This WO has been canceled",
-      "imageUploadStart": "Image uploading has been started."
+      "imageUploadStart": "Image uploading has been started.",
+      "internetConnected": "The internet has been connected.",
+      "internetDisconnected": "The internet has beend disconnected. Please check the connection status of your device"
     },
     "error": {
       "requestError": "An error occurred during data processing.",

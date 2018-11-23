@@ -184,7 +184,9 @@
       "tenantHint": "회원가입시 입력한 주소",
       "woComplete": "본 WO는 완료되었습니다.",
       "woCancel": "본 WO는 취소되었습니다.",
-      "imageUploadStart": "이미지 업로드가 시작되었습니다."
+      "imageUploadStart": "이미지 업로드가 시작되었습니다.",
+      "internetConnected": "인터넷이 다시 연결 되었습니다.",
+      "internetDisconnected": "인터넷 연결이 끊어졌습니다. 연결 상태를 확인하시기 바랍니다."
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",

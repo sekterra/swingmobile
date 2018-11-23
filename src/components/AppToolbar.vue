@@ -74,6 +74,8 @@
         >
         </y-notification>
       </v-menu>
+      <!-- network 연결 여부 icon -->
+      <v-icon :color="connectColor">{{connectIcon}}</v-icon>
       <!-- full screen 버튼 -->
       <!-- <v-btn icon>
         <v-icon>refresh</v-icon>
@@ -103,6 +105,10 @@ export default {
     isLogin: {
       type: Boolean,
       default: false
+    },
+    isConnected: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => ({
@@ -211,6 +217,12 @@ export default {
     toolbarColor () {
       return this.$vuetify.options.extra.mainNav;
     },
+    connectIcon () {
+      return this.isConnected ? 'wifi' : 'wifi_off'
+    },
+    connectColor() {
+      return this.isConnected ? '' : 'grey lighten-1'
+    }
   },
   watch: {
     // 파일 업로드 완료시 초기화 작업 수행
@@ -402,7 +414,7 @@ export default {
               // failedFileList.push(filePath)
               // localStorage.failedFileList = JSON.stringify(failedFileList)
               window.alert('upload error:' + JSON.stringify(error) + ' : ' + _i);
-              window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + JSON.stringify(error) + ' : ' + _i);
+              // window.getApp.$emit('APP_REQUEST_ERROR', 'upload error:' + JSON.stringify(error) + ' : ' + _i);
             }, options);
             // 파일업로드 시작 / 완료
         });

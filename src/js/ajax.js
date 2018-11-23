@@ -61,7 +61,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
   let ajaxPid = comm.moment().valueOf() // ajax 고유 프로세스 id millisecond 정보
   // 백업이 필요한 경우 : POST 또는 PUT request 이면서, 재전송 처리가 아닐 경우
   let isNeedBackup = (ajax.type === 'POST' || ajax.type === 'PUT') && !ajax.isRetry
-  
+
   // 현재의 요청을 필요시 App.vue에 백업해둔다.(네트워크 오류가 발생하면 복원하기 위함)
   var thisRequest = null
   if (isNeedBackup) {
@@ -116,13 +116,16 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       else return xhr
     },
     error: function (xhr, status, err) {
-      console.log(':::::::::::::::: error:' + JSON.stringify(xhr))
+      // console.log(':::::::::::::::: error:' + JSON.stringify(xhr))
       
       // PUT/ POST 일 경우 현재 네트워크 상태를 가져와서 offline일 경우 후속 처리를 위해 localStorage에 저장한다.
       // if (isNeedBackup &&  !appVue.getNetworkConnection()) {
       //   window.alert('network error:' + )
       //   appVue.addAjaxRequest(thisRequest)
       // }
+
+      // 네트워크 상태가 정상적이라면, 일반 오류로 판단하고 백업에서 제거한다.
+      if (appVue.getNetworkConnection()) appVue.removeAjaxRequest(ajaxPid)
 
       for(var key in orgAjax) {
         ajax[key] = orgAjax[key]
@@ -168,7 +171,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
 
   // for test
   // if (isNeedBackup) {
-  //   window.alert('disconnect wifi in 10sec')
+  //   window.alert('disConnected wifi in 10sec')
   //   setTimeout(() => {
   //     $.ajax(ajaxOptions)
   //   }, 10000);   
