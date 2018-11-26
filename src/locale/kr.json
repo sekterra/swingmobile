@@ -163,7 +163,9 @@
       "cancelReason": "취소사유 입력",
       "requestPeriod": "요청기간",
       "workStartDate": "작업시작일자",
-      "workEndDate": "작업종료일자"
+      "workEndDate": "작업종료일자",
+      "materialSearchPopup": "자재검색팝업",
+      "equipmentSearchPopup": "설비검색팝업"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

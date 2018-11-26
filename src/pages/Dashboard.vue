@@ -1,6 +1,6 @@
 <template>
   <div id="pageDashboard">
-    <v-container grid-list-xl fluid class="mt-0 pt-0">
+    <v-container grid-list-xl fluid class="ma-0 pa-0">
       <!-- TODO : summary -->
       <v-layout row wrap>
         <v-flex sm12>

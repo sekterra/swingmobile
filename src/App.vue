@@ -154,7 +154,7 @@ export default {
     // 참고 url
     // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
     // - http://blog.eedler.com/5
-    // if (StatusBar) StatusBar.hide()
+    if (StatusBar) StatusBar.hide()
   },
   created () {
     AppEvents.forEach(item => {

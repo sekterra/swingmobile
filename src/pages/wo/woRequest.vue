@@ -1,6 +1,6 @@
 <template>
   <div id="page-forms">
-    <v-container grid-list-xl fluid class="mt-0 pt-0">
+    <v-container grid-list-xl fluid ma-0 pa-0>
       <v-layout row wrap v-scroll="onScroll">
         <v-flex sm12>
           <v-card>
@@ -265,7 +265,6 @@
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center">
-                    {{this.saveData}}
                     <y-btn
                       v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
                       type="save"
@@ -308,6 +307,7 @@
         :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
+        :title="$t('title.equipmentSearchPopup')"
         @closePopup="closePopup"
         @bindEquipmentData="bindEquipmentData"
         @bindWoData="bindWoData"

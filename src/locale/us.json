@@ -164,7 +164,9 @@
       "cancelReason": "Cancel reason",
       "requestPeriod": "Period of WO request",
       "workStartDate": "WO start date",
-      "workEndDate": "WO end date"
+      "workEndDate": "WO end date",
+      "materialSearchPopup": "Search popup for material",
+      "equipmentSearchPopup": "Search popup for equipment"
     },
     "message": {
       "woNo": "Will be automatically generated.",

@@ -160,7 +160,9 @@
       "cancelReason": "",
       "requestPeriod": "",
       "workStartDate": "",
-      "workEndDate": ""
+      "workEndDate": "",
+      "materialSearchPopup": "",
+      "equipmentSearchPopup": ""
     },
     "message": {
       "woNo": "",

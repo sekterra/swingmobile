@@ -508,6 +508,7 @@
         :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
+        :title="$t('title.materialSearchPopup')"
         @closePopup="closePopup"
         @bindMaterialData="bindMaterialData"
       >

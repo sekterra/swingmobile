@@ -431,6 +431,7 @@
         :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
+        :title="$t('title.equipmentSearchPopup')"
         @closePopup="closePopup"
         @bindEquipmentData="bindEquipmentData"
         @bindWoData="bindWoData"
