@@ -9,6 +9,7 @@
     fixed
     dark
     app
+    style="z-index: 9999;"
     >
       <!-- left 메뉴 토글 버튼 -->
       <v-toolbar-title class="ml-0">
@@ -22,7 +23,12 @@
         <v-icon>fullscreen</v-icon>
       </v-btn> -->
       <!-- WO -->
-      <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
+      <v-menu 
+        offset-y 
+        origin="center center" 
+        class="elelvation-1" 
+        :nudge-bottom="14" 
+        transition="scale-transition">
         <span slot="activator" v-if="upload.isAllStarted" transition="v-slide-y-transition">
           <v-icon color="white">
             cloud_upload

@@ -8,18 +8,18 @@
 <template>
   <div>
       <v-menu
-      v-if="editable"
-      ref="datePickerMenu"
-      :close-on-content-click="false"
-      v-model="datePickerMenu"
-      :nudge-right="40"
-      :return-value.sync="vValue"
-      lazy
-      transition="scale-transition"
-      offset-y
-      full-width
-      min-width="100px"
-      class="mb-0"
+        v-if="editable"
+        ref="datePickerMenu"
+        :close-on-content-click="false"
+        v-model="datePickerMenu"
+        :nudge-right="40"
+        :return-value.sync="vValue"
+        lazy
+        transition="slide-y-transition"
+        offset-y
+        full-width
+        min-width="100px"
+        class="mb-0"
       >
       <v-text-field
         slot="activator"
