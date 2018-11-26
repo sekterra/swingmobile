@@ -131,6 +131,13 @@
         requestType: 'PUT'
       }
     },
+    cancel: {
+      url: 'workorder/cancel/',
+      param: {
+        cancelReason: ''
+      },
+      requestType: 'PUT'
+    }
   },
   inspection: {
     update: {

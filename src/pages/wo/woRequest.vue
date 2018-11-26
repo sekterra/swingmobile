@@ -265,6 +265,7 @@
               </v-form>
                 <v-flex xs12>
                   <div class="text-xs-center">
+                    {{this.saveData}}
                     <y-btn
                       v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
                       type="save"
@@ -280,37 +281,28 @@
                     <y-btn
                       v-if="pk"
                       type="delete"
-                      :title="$t('button.delete')"
-                      @btnClicked="btnDeleteClicked" 
+                      :title="$t('button.woCancel')"
+                      :action-url="transactionCancel.url + pk"
+                      :action-type="transactionCancel.requestType"
+                      :param="woCancel"
+                      :is-submit="woCancel.isSubmit"
+                      before-submit="getCancelRequest"
+                      @btnClicked="btnCancelClicked"
                       @btnClickedError="btnClickedError"
+                      @getCancelRequest="getCancelRequest"
                     ></y-btn>
                     <y-btn
                       v-if="!pk"
                       type="clear"
                       :title="$t('button.clear')"
                       @btnClicked="btnClearClicked" 
-                    ></y-btn>
-                    
-                    <y-btn
-                      type="cancel"
-                      :title="$t('button.cancel')"
-                      @btnClicked="btnCancelClicked" 
-                      @btnClickedError="btnClickedError"
-                    ></y-btn>
+                    ></y-btn>       
                   </div>
                   </v-flex>
             </v-card-text>     
           </v-card>
         </v-flex>           
       </v-layout>
-      <!-- <y-dialog 
-        title="test"
-        message="이것은 다이얼로그 테스트입니다."
-        :is-open-dialog="isOpenDialog"
-        type="info"
-        @dialogResult="dialogResult"
-        >
-      </y-dialog> -->
       <y-popup 
         :search-item="popupSearchItem"
         :grid-type="popupGridType"
@@ -321,10 +313,25 @@
         @bindWoData="bindWoData"
       >
       </y-popup>
+      <y-dialog
+        v-if="pk && editable"
+        :title="$t('title.cancelReason')"
+        :is-open-dialog="isOpenDialog"
+        type="confirm"
+        @dialogResult="dialogResult"
+        >
+        <y-textarea
+          :label="$t('title.cancelReason')"
+          :editable="editable"
+          :counter="1000"
+          :autofocus="true"
+          slot="body"
+          name="cancelReason"
+          v-model="woCancel.cancelReason"
+          :error-msg="errors.first('cancelReason')"
+        />
+      </y-dialog>
     </v-container>
-    <!-- <div>
-      <v-btn v-on:click="takePicture">{{$t("takePhoto")}}</v-btn>
-    </div> -->
   </div>
 </template>
 
@@ -365,7 +372,7 @@ export default {
     isValidForm: true,
     popupSearchItem: '',
     // TODO(중요) : 쓰기 권한 여부이며, 페이지내 컨트롤에 적용됨
-    editable: true,
+    // editable: true,
     isValid: false,
     breakdownDate: null,
     breakdownTime: null,
@@ -384,6 +391,11 @@ export default {
     cameraImageList: [],  // 카메라 이미지
     pk: null,  // TODO : 현재 WO PK
     eventForReturn: '', // TODO : 팝업 창의 결과를 받는 함수명
+    woCancel: {
+      cancelReason: '',
+      isSubmit: false
+    },
+    transactionCancel: transactionConfig.wo.cancel,
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {
@@ -410,6 +422,9 @@ export default {
         this.breakdownTime = null
       }
       return isBreak
+    },
+    editable() {
+      return this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
     }
   },
   beforeMount() {
@@ -465,13 +480,20 @@ export default {
       window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
       this.$comm.movePage(this.$router, '/woList')
     },
-    btnDeleteClicked(_result) {
-    },
     btnCancelClicked() {
       // this.isOpenDialog = true
-      window.getApp.$emit('APP_CONFIRM', this.$t('message.requestsRemained'))
-    },
-    dialogResult() {
+      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
+      this.$comm.movePage(this.$router, '/woList')
+     },
+    dialogResult(_btnResult) {
+      if (_btnResult) {
+        if (!this.woCancel.cancelReason) {
+          window.getApp.$emit('APP_REQUEST_ERROR', this.$t('message.cancelReason'))
+          return
+        } else {
+          this.woCancel.isSubmit  = true
+        }
+      }
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
       this.isOpenDialog = false
     },
@@ -585,7 +607,7 @@ export default {
         this.breakdownTime = time.format('HH:mm')
         this.$forceUpdate()
       }
-      
+    
       this.$set(this.saveData, 'workOrder', workOrder)
       // 팝업에서 전달된 값에 대한 유효성 재검사
       this.$validator.validate('equipment', this.equipment.equipNm)
@@ -680,6 +702,9 @@ export default {
           self.isLoadingImage = false
         })
       })
+    },
+    getCancelRequest() {
+      this.isOpenDialog = true;
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김

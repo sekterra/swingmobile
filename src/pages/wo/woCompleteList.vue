@@ -63,6 +63,9 @@ examples:
       <v-layout>
         <!-- 그리드 영역 -->
         <v-flex xs12>
+          <v-subheader>
+            {{$t('title.workDate')}}: {{searchData.startDate + ' ~ ' + searchData.endDate}}
+          </v-subheader>
           <y-data-table 
             :title="$t('title.woCompleteList')"
             grid-type="edit"
@@ -143,10 +146,10 @@ export default {
         { text: this.$t('title.woStatus'), name: 'woStatusProcess', type: 'process', width: '20%', align: 'center' }
       ]
       this.expandSearchOption = [
-        {name: 'startDate', label: this.$t('title.woRequestFromDate'), type: 'datepicker', defaultType: '1m'},
-        {name: 'endDate', label: this.$t('title.woRequestToDate'), type: 'datepicker', defaultType: 'today'},
+        {name: 'startDate', label: this.$t('title.workStartDate'), type: 'datepicker', defaultType: '1m'},
+        {name: 'endDate', label: this.$t('title.workEndDate'), type: 'datepicker', defaultType: 'today'},
         {name: 'deptPk', label: this.$t('title.RequestDepartment'), type: 'select', key: 'depart'}, // selectConfig.js의 key값 입력
-        {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
+        // {name: 'woStatus', label: this.$t('title.woStatus'), type: 'select', key: 'woStatus'}, // selectConfig.js의 key값 입력
       ]
       this.onSearch()
   },
@@ -169,6 +172,7 @@ export default {
       let self = this
       this.searchData.woStatus = ['WO_STATUS_P', 'WO_STATUS_C']
       this.searchData.woStatusEx = ['WO_STATUS_X']
+      this.searchData.dateConds = 'startdt'
       this.$ajax.url = this.gridUrl
       this.$ajax.param = this.searchData
       // this.$ajax.param.startDate = this.searchData.startDate
@@ -181,8 +185,8 @@ export default {
           if (_item.woStatusCd === 'WO_STATUS_R') _item.color = 'grey'
           if (_item.woStatusCd === 'WO_STATUS_A') _item.color = 'blue'
           if (_item.woStatusCd === 'WO_STATUS_P') _item.color = 'indigo'
-          if (_item.woStatusCd === 'WO_STATUS_X') _item.color = 'success'
-          if (_item.woStatusCd === 'WO_STATUS_C') _item.color = 'red'
+          if (_item.woStatusCd === 'WO_STATUS_X') _item.color = 'red'
+          if (_item.woStatusCd === 'WO_STATUS_C') _item.color = 'success'
           _item.colorTitle = _item.woStatusNm
         })
         self.gridData = gridData

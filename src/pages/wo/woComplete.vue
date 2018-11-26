@@ -63,7 +63,7 @@
                                 >
                                   <v-icon small>domain_disabled</v-icon> {{$t('title.woRequestDate')}} : {{ breakdownDateTime }}
                                 </v-flex>
-                                <v-flex 
+                                <!-- <v-flex 
                                   v-if="woStatusCd === 'WO_STATUS_C'"
                                   xs12>
                                   <v-alert
@@ -82,7 +82,7 @@
                                   >
                                     {{$t('message.woCancel')}}
                                   </v-alert>
-                                </v-flex>
+                                </v-flex> -->
                             </v-layout>
                             </v-slide-y-transition>
                         </v-container>
@@ -103,6 +103,26 @@
               <!-- WO내용 -->
               <v-form v-model="isValidForm">
                   <v-layout row wrap fill-height>
+                    <v-flex 
+                      xs12 
+                      class="py-0"
+                      v-if="woStatusCd === 'WO_STATUS_X' || woStatusCd === 'WO_STATUS_C'"
+                      >
+                      <v-alert
+                        v-if="woStatusCd === 'WO_STATUS_C'"
+                        :value="true"
+                        type="success"
+                      >
+                        {{$t('message.woComplete')}}
+                      </v-alert>
+                      <v-alert
+                        v-if="woStatusCd === 'WO_STATUS_X'"
+                        :value="true"
+                        type="info"
+                      >
+                        {{$t('message.woCancel')}}
+                      </v-alert>
+                    </v-flex>
                     <!-- 작업 내용 -->
                     <v-flex sm12 class="py-0">
                       <y-textarea
@@ -146,7 +166,7 @@
                       v-if="editable"
                       class="py-0">
                       <y-datepicker
-                        :editable="true"
+                        :editable="editable"
                         :label="$t('title.woEndDate') + '*'"
                         name="finishDate"
                         v-model="finishDate" 
@@ -167,7 +187,7 @@
                       class="py-0">
                       <y-timepicker
                         v-if="editable"
-                        :editable="true"
+                        :editable="editable"
                         :label="$t('title.woEndTime') + '*'"
                         name="finishTime"
                         v-model="finishTime"
@@ -463,12 +483,18 @@
                       @btnClickedError="btnClickedError"
                       @checkValidationComplete="checkValidation"
                     ></y-btn> -->
-                    <y-btn
+                     <y-btn
                       v-if="pk && editable"
                       type="delete"
-                      :title="$t('button.delete')"
-                      @btnClicked="btnDeleteClicked" 
+                      :title="$t('button.woCancel')"
+                      :action-url="transactionCancel.url + pk"
+                      :action-type="transactionCancel.requestType"
+                      :param="woCancel"
+                      :is-submit="woCancel.isSubmit"
+                      before-submit="getCancelRequest"
+                      @btnClicked="btnCancelClicked"
                       @btnClickedError="btnClickedError"
+                      @getCancelRequest="getCancelRequest"
                     ></y-btn>
                   </div>
                   </v-flex>
@@ -486,6 +512,24 @@
         @bindMaterialData="bindMaterialData"
       >
       </y-popup>
+      <y-dialog
+        v-if="pk && editable"
+        :title="$t('title.cancelReason')"
+        :is-open-dialog="isOpenDialog"
+        type="confirm"
+        @dialogResult="dialogResult"
+        >
+        <y-textarea
+          :label="$t('title.cancelReason')"
+          :editable="editable"
+          :counter="1000"
+          :autofocus="true"
+          slot="body"
+          name="cancelReason"
+          v-model="woCancel.cancelReason"
+          :error-msg="errors.first('cancelReason')"
+        />
+      </y-dialog>
     </v-container>
     <!-- <div>
       <v-btn v-on:click="takePicture">{{$t("takePhoto")}}</v-btn>
@@ -533,7 +577,6 @@ export default {
     isValidForm: true,
     popupSearchItem: '',
     // TODO(중요) : 쓰기 권한 여부이며, 페이지내 컨트롤에 적용됨
-    editable: true,
     isValid: false,
     breakdownDateTime: null,  // 고장 일시
     imagePath: '',
@@ -561,12 +604,20 @@ export default {
     show: true,
     finishDate: null,
     finishTime: null,
+    woStatusCd: '',
     // outsourcingTotalCost: 0,
     employeeTotalCost: 0,
     jobClassTotalCost: 0,
     // materialTotalCost: 0,
     // etcCost: 0,
-    woImage: null  // WO 이미지 정보
+    woImage: null,  // WO 이미지 정보
+    woCancel: {
+      cancelReason: '',
+      isSubmit: false
+    },
+    transactionCancel: transactionConfig.wo.cancel,
+    // 알림 메시지
+    isOpenDialog: false
   }),
   watch: {
     uploadedImagesCount() {
@@ -595,6 +646,9 @@ export default {
     },
     finishDateTime() {
       return this.finishDate + ' ' + this.finishTime
+    },
+    editable() {
+      return this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
     }
   },
   watch: {
@@ -643,7 +697,6 @@ export default {
       this.$ajax.requestGet((_result) => {
         this.requestData = _result
         this.woStatusCd = this.requestData.woStatusCd
-        this.editable = (this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C')
         this.mappedWoData(_result)
         this.getWoImagePk(_result.equipPk)
       })
@@ -1076,6 +1129,26 @@ export default {
     },
     btnClickedError(_error) {
       this.isSubmit = false
+    },
+    btnCancelClicked() {
+      // this.isOpenDialog = true
+      window.getApp.$emit('APP_REQUEST_SUCCESS', this.$t('message.transactionSuccess'))
+      this.$comm.movePage(this.$router, '/woCompleteList')
+     },
+    dialogResult(_btnResult) {
+      if (_btnResult) {
+        if (!this.woCancel.cancelReason) {
+          window.getApp.$emit('APP_REQUEST_ERROR', this.$t('message.cancelReason'))
+          return
+        } else {
+          this.woCancel.isSubmit  = true
+        }
+      }
+      // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
+      this.isOpenDialog = false
+    },
+    getCancelRequest() {
+      this.isOpenDialog = true;
     },
     onScroll(e) {
       // TODO : text box에서 활성화된 키보드를 스크롤 변경시 숨김

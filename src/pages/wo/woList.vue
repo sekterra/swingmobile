@@ -56,6 +56,9 @@
       <v-layout>
         <!-- 그리드 영역 -->
         <v-flex xs12>
+          <v-subheader>
+            {{$t('title.requestPeriod')}}: {{searchData.startDate + ' ~ ' + searchData.endDate}}
+          </v-subheader>
           <y-data-table 
             :title="$t('title.woList')"
             ref="dataTable"
@@ -116,9 +119,10 @@ export default {
       gridHeaderOptions: []
     }
   },
+  computed: {
+  },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
-    
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
@@ -180,8 +184,8 @@ export default {
           if (_item.woStatusCd === 'WO_STATUS_R') _item.color = 'grey'
           if (_item.woStatusCd === 'WO_STATUS_A') _item.color = 'blue'
           if (_item.woStatusCd === 'WO_STATUS_P') _item.color = 'indigo'
-          if (_item.woStatusCd === 'WO_STATUS_X') _item.color = 'success'
-          if (_item.woStatusCd === 'WO_STATUS_C') _item.color = 'red'
+          if (_item.woStatusCd === 'WO_STATUS_X') _item.color = 'red'
+          if (_item.woStatusCd === 'WO_STATUS_C') _item.color = 'success'
           _item.colorTitle = _item.woStatusNm
         })
         self.gridData = gridData
@@ -195,7 +199,6 @@ export default {
      * eventBus로 선택된 정보를 부모로 넘긴다.
      */
     selectedData(_item) {
-      console.log(':::::::::::: [woList] select item ::::::::::::' + JSON.stringify(_item))
       this.$emit('selectedData', _item)
     }
   }

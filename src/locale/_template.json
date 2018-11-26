@@ -155,7 +155,12 @@
       "woMaterialInput": "",
       "confirm": "",
       "wageUnitPrice": "",
-      "tenantUrl": ""
+      "tenantUrl": "",
+      "woCancel": "",
+      "cancelReason": "",
+      "requestPeriod": "",
+      "workStartDate": "",
+      "workEndDate": ""
     },
     "message": {
       "woNo": "",
@@ -194,7 +199,8 @@
       "fileRequestCount": "",
       "imageUploadFail": "",
       "noImage": "",
-      "ImageUploadFailed": ""
+      "ImageUploadFailed": "",
+      "cancelReason": ""
     },
     "error": {
       "requestError": "",
@@ -226,7 +232,8 @@
       "list": "",
       "confirm": "",
       "close": "",
-      "home": ""
+      "home": "",
+      "woCancel": ""
     }
   }
 }

@@ -23,7 +23,6 @@ examples:
             <span v-html="message"></span>
           </slot>
         </v-card-text>
-
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn

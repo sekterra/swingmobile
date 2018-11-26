@@ -100,7 +100,8 @@ export default {
       }
       else if (type === 'delete') {
         this.color = 'error'
-        this.actionMethod = 'requestPost'
+        if (this.actionType.toUpperCase() === 'POST') this.actionMethod = 'requestPost'
+        else if (this.actionType.toUpperCase() === 'PUT') this.actionMethod = 'requestPut'
       }
       else if (type === 'cancel') {
         this.color = 'primary'
@@ -126,7 +127,7 @@ export default {
         return false
       }
       // 저장일 경우 유효성 검사
-      if (this.type.toLowerCase() === 'save') {
+      if (this.beforeSubmit) {
         this.$emit(this.beforeSubmit)
         return
       }
