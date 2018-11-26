@@ -293,7 +293,7 @@ export default {
      */
     getPmCompleteRateThisYear() {
       this.$ajax.url = selectConfig.pm.completeStatusYear.url;
-      this.$ajax.param = selectConfig.pm.completeStatusYear.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.pm.completeStatusYear.searchData);
       this.$ajax.param.startDate = this.$comm.getThisYear()
       this.$ajax.param.endDate = this.$comm.getThisYear()
       var self = this
@@ -314,12 +314,12 @@ export default {
     getPmPerformanceStatus(_type) {
       if (_type === 'year') {
         this.$ajax.url = selectConfig.pm.completeStatusYear.url;
-        this.$ajax.param = selectConfig.pm.completeStatusYear.searchData;
+        this.$ajax.param = this.$comm.clone(selectConfig.pm.completeStatusYear.searchData);
         this.$ajax.param.startDate = this.$comm.getPrevYear(this.years)
         this.$ajax.param.endDate = this.$comm.getThisYear()        
       } else {
         this.$ajax.url = selectConfig.pm.completeStatus.url;
-        this.$ajax.param = selectConfig.pm.completeStatus.searchData;
+        this.$ajax.param = this.$comm.clone(selectConfig.pm.completeStatus.searchData);
         this.$ajax.param.startDate = this.$comm.getPrevMonth(this.months)
         this.$ajax.param.endDate = this.$comm.getThisMonth()
       }

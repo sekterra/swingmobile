@@ -651,7 +651,7 @@ export default {
      */
     getWoTotalCostAndHour() {
       this.$ajax.url = selectConfig.wo.totalCostAndHour.url;
-      this.$ajax.param = selectConfig.wo.totalCostAndHour.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.wo.totalCostAndHour.searchData);
       this.$ajax.param.dateType = 'YEAR'
       this.$ajax.param.startDate = this.$comm.getThisYear()
       this.$ajax.param.endDate = this.$comm.getThisYear()
@@ -680,7 +680,7 @@ export default {
      */
     getPmCompleteRate() {
       this.$ajax.url = selectConfig.pm.completeStatus.url;
-      this.$ajax.param = selectConfig.pm.completeStatus.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.pm.completeStatus.searchData);
       this.$ajax.param.startDate = this.$comm.getThisMonth()
       this.$ajax.param.endDate = this.$comm.getThisMonth()
       var self = this
@@ -699,7 +699,7 @@ export default {
      */
     getInspectionCompleteRate() {
       this.$ajax.url = selectConfig.inspection.completeStatus.url;
-      this.$ajax.param = selectConfig.inspection.completeStatus.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.inspection.completeStatus.searchData);
       this.$ajax.param.startDate = this.$comm.getThisMonth()
       this.$ajax.param.endDate = this.$comm.getThisMonth()
       var self = this
@@ -716,7 +716,7 @@ export default {
     // 오늘의 설비 현황
     getEquipmentStatusOfToday() {
       this.$ajax.url = selectConfig.equipmentList[0].url
-      this.$ajax.param = selectConfig.equipmentList[0].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipmentList[0].searchData)
       var self = this
       this.$ajax.requestGet((_result) => {
         var data = _result.content
@@ -747,7 +747,7 @@ export default {
     // 고장 타입별 다운타임
     getBreakdownTime() {
       this.$ajax.url = selectConfig.equipmentList[1].url
-      this.$ajax.param = selectConfig.equipmentList[1].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipmentList[1].searchData)
       this.$ajax.param.startDate = this.$comm.getPrevMonth(6)
       this.$ajax.param.endDate = this.$comm.getThisMonth()
       let self = this
@@ -780,7 +780,7 @@ export default {
     // 원인별 설비 고장현황
     getCauseStatus() {
       this.$ajax.url = selectConfig.woList[1].url
-      this.$ajax.param = selectConfig.woList[1].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.woList[1].searchData)
       this.$ajax.param.dateType = 'MON'
       this.$ajax.param.startDate = this.$comm.getPrevMonth(6)
       this.$ajax.param.endDate = this.$comm.getThisMonth()
@@ -803,7 +803,7 @@ export default {
     },
     getDelayStatus () {
       this.$ajax.url = selectConfig.woList[2].url
-      this.$ajax.param = selectConfig.woList[2].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.woList[2].searchData)
       this.$ajax.param.startDate = this.$comm.getThisMonth()
       this.$ajax.param.endDate = this.$comm.getThisMonth()
       let self = this
@@ -849,7 +849,7 @@ export default {
     // 오늘의 점검완료 현황
     getInspectionStatusOfToday() {
       this.$ajax.url = selectConfig.inspectionList[0].url
-      this.$ajax.param = selectConfig.inspectionList[0].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.inspectionList[0].searchData)
       this.$ajax.param.startDate = this.$comm.getToday()
       this.$ajax.param.endDate = this.$comm.getToday()
       let self = this

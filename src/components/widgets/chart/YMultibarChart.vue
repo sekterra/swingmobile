@@ -217,8 +217,6 @@ export default {
         console.log('this.unit setting:' + this.unit)
       } else defaultOption.yAxis[0].name = ''
         
-      
-
       $.each(this.series, (_i, _item) => {
         var thisSeries = self.$comm.clone(seriesTemplate)
         thisSeries.name = _item.name

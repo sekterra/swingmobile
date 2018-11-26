@@ -299,7 +299,7 @@ export default {
      */
     getInspectionCompleteRate() {
       this.$ajax.url = selectConfig.inspection.completeStatus.url;
-      this.$ajax.param = selectConfig.inspection.completeStatus.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.inspection.completeStatus.searchData);
       this.$ajax.param.dateType = 'YEAR'
       this.$ajax.param.startDate = this.$comm.getThisYear()
       this.$ajax.param.endDate = this.$comm.getThisYear()
@@ -337,7 +337,7 @@ export default {
      */
     getPmPerformanceStatus(_type) {
       this.$ajax.url = selectConfig.inspection.completeStatus.url;
-      this.$ajax.param = selectConfig.inspection.completeStatus.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.inspection.completeStatus.searchData);
       if (_type === 'year') {
         this.$ajax.param.dateType = 'YEAR'
         this.$ajax.param.startDate = this.dataset.completeStatusYear.curDate
@@ -393,7 +393,7 @@ export default {
     },
     getDetectedErrorCount() {
       this.$ajax.url = selectConfig.inspection.detectedErrorStatus.url
-      this.$ajax.param = selectConfig.inspection.detectedErrorStatus.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.inspection.detectedErrorStatus.searchData)
       this.$ajax.param.dateType = 'YEAR'
       this.$ajax.param.startDate = this.$comm.getThisYear()
       this.$ajax.param.endDate = this.$comm.getThisYear()
@@ -408,7 +408,7 @@ export default {
      */
     getWoTotalCostAndHour() {
       this.$ajax.url = selectConfig.wo.totalCostAndHour.url;
-      this.$ajax.param = selectConfig.wo.totalCostAndHour.searchData;
+      this.$ajax.param = this.$comm.clone(selectConfig.wo.totalCostAndHour.searchData);
       this.$ajax.param.startDate = this.$comm.getThisMonth()
       this.$ajax.param.endDate = this.$comm.getThisMonth()
 
@@ -456,7 +456,7 @@ export default {
      */
     getWoCompleteRate(_type) {
       this.$ajax.url = selectConfig.wo.woCompeteRateByMonth.url
-      this.$ajax.param = selectConfig.wo.woCompeteRateByMonth.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.wo.woCompeteRateByMonth.searchData)
       if (_type === 'year') {
         this.$ajax.param.dateType = 'YEAR'
         this.$ajax.param.startDate = this.$comm.getPrevYear(this.years)
@@ -498,7 +498,7 @@ export default {
      */
     getWoCosts(_type) {
       this.$ajax.url = selectConfig.wo.woCostsByMonth.url
-      this.$ajax.param = selectConfig.wo.woCostsByMonth.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.wo.woCostsByMonth.searchData)
       if (_type === 'year') {
         this.$ajax.param.dateType = 'YEAR'
         this.$ajax.param.startDate = this.$comm.getPrevYear(this.years)
@@ -593,7 +593,7 @@ export default {
      */
     getWoCauseStatus(_type) {
       this.$ajax.url = selectConfig.woList[1].url
-      this.$ajax.param = selectConfig.woList[1].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.woList[1].searchData)
       if (_type === 'year') {
         this.$ajax.param.dateType = 'YEAR'
         this.$ajax.param.startDate = this.$comm.getPrevYear(this.years)

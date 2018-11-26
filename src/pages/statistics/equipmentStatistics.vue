@@ -400,7 +400,7 @@ export default {
     // 오늘의 설비 현황
     getEquipmentStatusOfToday() {
       this.$ajax.url = selectConfig.equipmentList[0].url
-      this.$ajax.param = selectConfig.equipmentList[0].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipmentList[0].searchData)
       var self = this
       this.$ajax.requestGet((_result) => {
         var data = _result.content
@@ -429,7 +429,7 @@ export default {
     // 고장 타입별 다운타임
     getBreakdownTime(_type) {
       this.$ajax.url = selectConfig.equipmentList[1].url
-      this.$ajax.param = selectConfig.equipmentList[1].searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipmentList[1].searchData)
 
       if (_type === 'year') {
         this.$ajax.param.dateType = 'YEAR'
@@ -496,7 +496,7 @@ export default {
      */
     getMaintenanceCost(_type) {
       this.$ajax.url = selectConfig.equipment.maintenanceCost.url + _type
-      this.$ajax.param = selectConfig.equipment.maintenanceCost.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipment.maintenanceCost.searchData)
 
       var searchDate = _type === 'year' ? this.dataset.costByYear.curDate : this.dataset.costByMonth.curDate
       if (_type === 'year') {
@@ -550,7 +550,7 @@ export default {
      */
     getMttr(_type) {
       this.$ajax.url = selectConfig.equipment.mttr.url
-      this.$ajax.param = selectConfig.equipment.mttr.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipment.mttr.searchData)
 
       var searchDate = _type === 'year' ? this.dataset.mttrByYear.curDate : this.dataset.mttrByMonth.curDate
       if (_type === 'year') {
@@ -602,7 +602,7 @@ export default {
      */
     getMtbf(_type) {
       this.$ajax.url = selectConfig.equipment.mtbf.url
-      this.$ajax.param = selectConfig.equipment.mtbf.searchData
+      this.$ajax.param = this.$comm.clone(selectConfig.equipment.mtbf.searchData)
 
       var searchDate = _type === 'year' ? this.dataset.mtbfByYear.curDate : this.dataset.mtbfByMonth.curDate
       if (_type === 'year') {
