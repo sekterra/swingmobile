@@ -4,8 +4,8 @@
       <v-layout row wrap>
         <v-flex xs12>
           <v-card>
-            <v-toolbar color="primary darken-1" dark="" flat dense cad>
-              <v-toolbar-title class="subheading">{{$t('menu.woList')}}</v-toolbar-title>
+            <v-toolbar color="grey lighten-3" white flat dense cad>
+              <v-toolbar-title class="subheading">{{$t('title.searchOption')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-divider></v-divider>

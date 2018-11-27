@@ -162,7 +162,14 @@
       "workStartDate": "",
       "workEndDate": "",
       "materialSearchPopup": "",
-      "equipmentSearchPopup": ""
+      "equipmentSearchPopup": "",
+      "requestInformation": "",
+      "currentEquipmentPic": "",
+      "camera": "",
+      "woCreateInformation": "",
+      "searchOption": "",
+      "equipmentList": "",
+      "woSearch": ""
     },
     "message": {
       "woNo": "",

@@ -4,19 +4,18 @@
       <v-layout row wrap v-scroll="onScroll">
         <v-flex sm12>
           <v-card>
-            <v-toolbar color="primary darken-1" dark="" flat dense cad>
-              <v-toolbar-title class="subheading">{{$t('menu.woCreate')}}</v-toolbar-title>
+            <v-toolbar color="grey lighten-3" white flat dense cad>
+              <v-toolbar-title class="subheading">{{$t('title.woCreateInformation')}}</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-tooltip bottom>
-                <v-icon
-                  slot="activator"
-                  color="white"
-                  @click="openWoPopup"
-                >
-                file_copy
-                </v-icon>
-                <span>Tooltip</span>
-              </v-tooltip>
+              <v-btn
+                color="grey lighten-1"
+                round
+                dark
+                small
+                @click.stop="openWoPopup"
+              >
+               {{$t('title.woCopy')}}
+              </v-btn>
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text class="">
@@ -56,14 +55,13 @@
                         name="equipment"
                         v-model="equipment.equipNm"
                         :placeholder="$t('message.equipmentName')"
-                        append-outer-icon="open_in_browser"
+                        prepend-icon="edit"
                         v-validate="'required'"
                         data-vv-name="equipment"
                         clearable
                         readonly
                         :error-messages="errors.collect('equipment')"
                         @click="openSearchPopup"
-                        @click:append-outer="openSearchPopup"
                         @click:clear="equipmentNameChanged"
                       ></v-text-field>
                     </v-flex>
@@ -110,18 +108,6 @@
                       >
                       </y-textarea>
                     </v-flex>
-                    <!-- <v-flex sm6 class="py-0">
-                      <y-datepicker 
-                        :editable="editable"
-                        :label="$t('title.woRequestDate') + '*'"
-                        name="rqstDt"
-                        v-model="saveData.workOrder.workOrderApproval.rqstDt"
-                        default-type="today"
-                        v-validate="'required'"
-                        :error-msg="errors.first('rqstDt')"
-                      >
-                      </y-datepicker>
-                    </v-flex> -->
                     <v-flex sm6 class="py-0">
                       <!-- 작업계획일 -->
                       <y-durationpicker
@@ -233,75 +219,107 @@
                       </y-select>
                     </v-flex>
                   </v-layout>
-                  <!-- 외주업체 -->
-                  <v-layout row wrap fill-height>
-                    <v-flex xs12>
-                      <y-regist-list
-                        ref="outsourcing"
-                        :title="$t('title.outsourcingList')"
-                        :sub-title="$t('title.numberOfSelects')"
-                        :controlTitle="$t('title.searchForOutsourcing')"
-                        :title-of-total="$t('title.totalCost')"
-                        :combo-placeholder="$t('message.enterCost')"
-                        selectItemKey="exSupplier"
-                        icon="location_city"
-                        :editable="editable"
-                        :items="outsourcingItems"
-                      >
-                      </y-regist-list>
-                    </v-flex>
-                  </v-layout>
+                  </v-form>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
 
-                  <!-- 작업 인력 -->
-                  <v-layout row wrap fill-height>
-                    <v-flex xs12>
-                      <y-regist-list
-                        ref="employee"
-                        :title="$t('title.employee')"
-                        :sub-title="$t('title.numberOfSelects')"
-                        :controlTitle="$t('title.searchForOutsourcing')"
-                        :title-of-total="$t('title.totalHours')"
-                        :combo-placeholder="$t('message.workHour')"
-                        select-item-key="employee"
-                        hint-item-key="jobClass"
-                        hint-pk="jobClassPk"
-                        hint-key="wageCost"
-                        :hint-title="$t('title.wageUnitPrice')"
-                        :is-hint-number="true"
-                        icon="people"
-                        :editable="editable"
-                        :items="employeeList"
-                      >
-                      </y-regist-list>
-                    </v-flex>
-                  </v-layout>
+      <!-- 외주업체 -->
+      <v-layout row wrap fill-height>
+        <v-flex xs12>
+          <y-regist-list
+            ref="outsourcing"
+            :title="$t('title.outsourcingList')"
+            :sub-title="$t('title.numberOfSelects')"
+            :controlTitle="$t('title.searchForOutsourcing')"
+            :title-of-total="$t('title.totalCost')"
+            :combo-placeholder="$t('message.enterCost')"
+            selectItemKey="exSupplier"
+            icon="location_city"
+            :editable="editable"
+            :items="outsourcingItems"
+          >
+          </y-regist-list>
+        </v-flex>
+      </v-layout>
 
-                  <!-- 작업 직종 -->
-                  <v-layout row wrap fill-height>
-                    <v-flex xs12>
-                      <y-regist-list
-                        ref="jobClass"
-                        :title="$t('title.jobClass')"
-                        :sub-title="$t('title.numberOfSelects')"
-                        :controlTitle="$t('title.searchForOutsourcing')"
-                        :title-of-total="$t('title.totalHours')"
-                        :combo-placeholder="$t('message.workHour')"
-                        selectItemKey="jobClass"
-                        hint-key="wageCost"
-                        :hint-title="$t('title.wageUnitPrice')"
-                        :is-hint-number="true"
-                        icon="business_center"
-                        :editable="editable"
-                        :items="jobClassList"
-                      >
-                      </y-regist-list>
-                    </v-flex>
-                  </v-layout>
+      <!-- 작업 인력 -->
+      <v-layout row wrap fill-height>
+        <v-flex xs12>
+          <y-regist-list
+            ref="employee"
+            :title="$t('title.employee')"
+            :sub-title="$t('title.numberOfSelects')"
+            :controlTitle="$t('title.searchForOutsourcing')"
+            :title-of-total="$t('title.totalHours')"
+            :combo-placeholder="$t('message.workHour')"
+            select-item-key="employee"
+            hint-item-key="jobClass"
+            hint-pk="jobClassPk"
+            hint-key="wageCost"
+            :hint-title="$t('title.wageUnitPrice')"
+            :is-hint-number="true"
+            icon="people"
+            :editable="editable"
+            :items="employeeList"
+          >
+          </y-regist-list>
+        </v-flex>
+      </v-layout>
+
+      <!-- 작업 직종 -->
+      <v-layout row wrap fill-height>
+        <v-flex xs12>
+          <y-regist-list
+            ref="jobClass"
+            :title="$t('title.jobClass')"
+            :sub-title="$t('title.numberOfSelects')"
+            :controlTitle="$t('title.searchForOutsourcing')"
+            :title-of-total="$t('title.totalHours')"
+            :combo-placeholder="$t('message.workHour')"
+            selectItemKey="jobClass"
+            hint-key="wageCost"
+            :hint-title="$t('title.wageUnitPrice')"
+            :is-hint-number="true"
+            icon="business_center"
+            :editable="editable"
+            :items="jobClassList"
+          >
+          </y-regist-list>
+        </v-flex>
+      </v-layout>
                   
                   <!-- 이미지 파일 업로드 -->
                   <v-layout>
                     <v-flex xs12>
-                      <v-subheader class="pa-0 mt-3">
+                      <v-card>
+                        <v-toolbar color="grey lighten-3" white flat dense cad>
+                          <v-toolbar-title class="subheading">{{$t('title.currentEquipmentPic')}}</v-toolbar-title>
+                          <v-spacer></v-spacer>
+                          <!-- <v-tooltip bottom>
+                            <v-icon
+                              slot="activator"
+                              color=""
+                              @click="takePicture"
+                            >
+                            camera
+                            </v-icon>
+                            <span>Tooltip</span>
+                          </v-tooltip> -->
+                          <v-btn
+                            color="grey lighten-1"
+                            round
+                            small
+                            dark
+                            @click.stop="takePicture"
+                          >
+                          {{$t('title.camera')}}
+                          </v-btn>
+                        </v-toolbar>
+                        <v-divider></v-divider>
+                        <v-card-text>
+                      <!-- <v-subheader class="pa-0 mt-3">
                         {{$t('title.woImageFileUpload')}}
                         <v-spacer></v-spacer>
                         <v-btn 
@@ -314,51 +332,34 @@
                           camera
                         </v-icon>
                       </v-btn>
-                      </v-subheader>
-                      <v-carousel
-                        v-if="carouselImageList.length"
-                        :cycle="false"
-                      >
-                        <v-carousel-item
-                          v-for="(item, i) in carouselImageList"
-                          :key="i"
-                          :src="item"
-                          lazy
-                        ></v-carousel-item>
-                    </v-carousel>
-                    <v-card
-                      v-else
-                      tile 
-                      class="d-flex">
-                      <v-img
-                        src="static/no-image-icon.png"
-                      >
-                      </v-img>
-                    </v-card>
+                      </v-subheader> -->
+                        <v-carousel
+                          v-if="carouselImageList.length"
+                          :cycle="false"
+                        >
+                          <v-carousel-item
+                            v-for="(item, i) in carouselImageList"
+                            :key="i"
+                            :src="item"
+                            lazy
+                          ></v-carousel-item>
+                      </v-carousel>
+                      <v-card
+                        v-else
+                        flat
+                        tile 
+                        class="d-flex">
+                        <v-img
+                          src="static/no-image-icon.png"
+                        >
+                        </v-img>
+                      </v-card>
+                    </v-card-text>
+                  </v-card>
                     </v-flex>
                   </v-layout>
-                  <!-- <v-layout
-                    align-center 
-                    justify-center 
-                    row
-                    fill-height
-                  >
-                      <v-btn 
-                        round
-                        color="black" 
-                        dark
-                        @click="takePicture"
-                      >
-                        <v-icon>
-                          camera
-                        </v-icon>
-                      </v-btn>
-                  </v-layout> -->
-                  <!-- <v-flex xs6>
-                    <div>{{upload.uploadedImagesCount}}/{{upload.imageList.length}} ({{upload.loaded}})bytes</div>
-                    </v-flex> -->
-                  <!-- /이미지 파일 업로드 -->
-              </v-form>
+                  
+               <v-layout>
                 <v-flex xs12>
                   <div class="text-xs-center" lazy>
                     <y-btn
@@ -374,19 +375,6 @@
                       @btnClickedError="btnClickedError"
                       @beforeSubmit="beforeSubmit"
                     ></y-btn>
-                    <!-- <y-btn
-                      v-if="saveData.workOrder.workOrderApproval.woStatusCd === 'WO_STATUS_P'"
-                      type="save"
-                      :title="$t('button.complete')"
-                      :action-url="completeUrl"
-                      :action-type="completeRequestType"
-                      :param="saveData"
-                      :is-valid-by-parent = "isValid"
-                      @btnClicked="btnCompleteClicked"
-                      @btnClickedError="btnClickedError"
-                      @checkValidation="checkValidation"
-                    >
-                    </y-btn> -->
                     <y-btn
                       v-if="pk && editable"
                       type="delete"
@@ -406,32 +394,23 @@
                       :title="$t('button.clear')"
                       @btnClicked="btnClearClicked" 
                     ></y-btn>
-                    
-                    <!-- <y-btn
-                      type="cancel"
-                      :title="$t('button.cancel')"
-                      @btnClicked="btnCancelClicked" 
-                      @btnClickedError="btnClickedError"
-                    ></y-btn> -->
                   </div>
-                  </v-flex>
-            </v-card-text>     
-          </v-card>
-        </v-flex>           
-      </v-layout>
+                </v-flex>
+              </v-layout>
+        <!-- </v-flex>           
+      </v-layout> -->
 
       <!-- <v-layout row wrap>
         <VuePerfectScrollbar class="scroll-area" v-once :settings="settings" @ps-scroll-y="scrollHanle">
           <img src="/static/background.jpg'" height="720" width="1280" alt="">
         </VuePerfectScrollbar>
       </v-layout> -->
-
       <y-popup 
         :search-item="popupSearchItem"
         :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
-        :title="$t('title.equipmentSearchPopup')"
+        :title="popupTitle"
         @closePopup="closePopup"
         @bindEquipmentData="bindEquipmentData"
         @bindWoData="bindWoData"
@@ -538,7 +517,8 @@ export default {
       cancelReason: '',
       isSubmit: false
     },
-    transactionCancel: transactionConfig.wo.cancel
+    transactionCancel: transactionConfig.wo.cancel,
+    popupTitle: ''
   }),
   watch: {
     breakdownDate() {
@@ -660,6 +640,7 @@ export default {
       this.checkValidation()
     },
     openSearchPopup() {
+      this.popupTitle = this.$t('title.equipmentSearchPopup')
       this.popupSearchItem = 'equipment'
       this.popupGridType = 'radio'
       this.isOpenPopup = true
@@ -670,6 +651,7 @@ export default {
       this.equipment.equipPk = null
     },
     openWoPopup() {
+      this.popupTitle=this.$t('title.woSearch')
       this.popupSearchItem = 'wo'
       this.popupGridType = 'radio'
       this.isOpenPopup = true

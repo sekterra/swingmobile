@@ -4,19 +4,17 @@
       <v-layout row wrap v-scroll="onScroll">
         <v-flex sm12>
           <v-card>
-            <v-toolbar color="primary darken-1" dark="" flat dense cad>
-              <v-toolbar-title class="subheading">{{$t('menu.woRequest')}}</v-toolbar-title>
+            <v-toolbar color="grey lighten-2" white flat dense cad>
+              <v-toolbar-title class="subheading">{{$t('title.requestInformation')}}</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-tooltip bottom>
-                <v-icon
-                  slot="activator"
-                  color="white"
-                  @click="openWoPopup"
-                >
-                file_copy
-                </v-icon>
-                <span>Tooltip</span>
-              </v-tooltip>
+              <v-btn
+                color="grey darken-1"
+                dark
+                small
+                @click.stop="openWoPopup"
+              >
+               {{$t('title.woCopy')}}
+              </v-btn>
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text class="">
@@ -36,14 +34,13 @@
                         name="equipment"
                         v-model="equipment.equipNm"
                         :placeholder="$t('message.equipmentName')"
-                        append-outer-icon="open_in_browser"
+                        prepend-icon="edit"
                         v-validate="'required'"
                         data-vv-name="equipment"
                         clearable
                         readonly
                         :error-messages="errors.collect('equipment')"
                         @click="openSearchPopup"
-                        @click:append-outer="openSearchPopup"
                         :clear-icon-cb="equipmentNameChanged"
                       ></v-text-field>
                     </v-flex>
@@ -195,10 +192,41 @@
                       </y-select>
                     </v-flex>
                   </v-layout>
+              </v-form>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+        <v-flex sm12>
+            <v-card>
+              <v-toolbar color="grey lighten-3" white flat dense cad>
+                <v-toolbar-title class="subheading">{{$t('title.currentEquipmentPic')}}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <!-- <v-tooltip bottom>
+                  <v-icon
+                    slot="activator"
+                    color=""
+                    @click="takePicture"
+                  >
+                  camera
+                  </v-icon>
+                  <span>Tooltip</span>
+                </v-tooltip> -->
+                <v-btn
+                  color="grey lighten-1"
+                  round
+                  small
+                  dark
+                  @click.stop="takePicture"
+                >
+                {{$t('title.camera')}}
+                </v-btn>
+              </v-toolbar>
+              <v-divider></v-divider>
+              <v-card-text>
                   <!-- 이미지 파일 업로드 -->
                   <v-layout>
                     <v-flex xs12>
-                      <v-subheader class="pa-0 mt-3">
+                      <!-- <v-subheader class="pa-0 mt-3">
                         {{$t('title.woImageFileUpload')}}
                         <v-spacer></v-spacer>
                         <v-progress-circular
@@ -219,7 +247,7 @@
                           camera
                         </v-icon>
                       </v-btn>
-                      </v-subheader>
+                      </v-subheader> -->
                       <v-carousel
                         v-if="carouselImageList.length"
                       >
@@ -232,74 +260,52 @@
                     </v-carousel>
                     <v-card
                       v-else
+                      flat
                       tile 
                       class="d-flex">
-                      <v-img
-                        src="static/no-image-icon.png"
-                      >
-                      </v-img>
+                      <v-img src="static/no-image-icon.png"/>
                     </v-card>
                     </v-flex>
                   </v-layout>
-                  <!-- <v-layout
-                    align-center 
-                    justify-center 
-                    row
-                    fill-height
-                  >
-                      <v-btn 
-                        round
-                        color="black" 
-                        dark
-                        @click="takePicture"
-                      >
-                        <v-icon>
-                          camera
-                        </v-icon>
-                      </v-btn>
-                  </v-layout> -->
-                  <!-- <v-flex xs6>
-                    <div>{{upload.uploadedImagesCount}}/{{upload.imageList.length}} ({{upload.loaded}})bytes</div>
-                    </v-flex> -->
-                  <!-- /이미지 파일 업로드 -->
-              </v-form>
-                <v-flex xs12>
-                  <div class="text-xs-center">
-                    <y-btn
-                      v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
-                      type="save"
-                      :title="$t('button.save')"
-                      :action-url="url"
-                      :action-type="requestType"
-                      :param="saveData"
-                      :is-valid-by-parent="isValid"
-                      @btnClicked="btnSaveClicked" 
-                      @btnClickedError="btnClickedError"
-                      @checkValidation="checkValidation"
-                    ></y-btn>
-                    <y-btn
-                      v-if="pk"
-                      type="delete"
-                      :title="$t('button.woCancel')"
-                      :action-url="transactionCancel.url + pk"
-                      :action-type="transactionCancel.requestType"
-                      :param="woCancel"
-                      :is-submit="woCancel.isSubmit"
-                      before-submit="getCancelRequest"
-                      @btnClicked="btnCancelClicked"
-                      @btnClickedError="btnClickedError"
-                      @getCancelRequest="getCancelRequest"
-                    ></y-btn>
-                    <y-btn
-                      v-if="!pk"
-                      type="clear"
-                      :title="$t('button.clear')"
-                      @btnClicked="btnClearClicked" 
-                    ></y-btn>       
-                  </div>
-                  </v-flex>
-            </v-card-text>     
+                </v-card-text>
           </v-card>
+          <v-layout>
+            <v-flex xs12>
+              <div class="text-xs-center">
+                <y-btn
+                  v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
+                  type="save"
+                  :title="$t('button.save')"
+                  :action-url="url"
+                  :action-type="requestType"
+                  :param="saveData"
+                  :is-valid-by-parent="isValid"
+                  @btnClicked="btnSaveClicked" 
+                  @btnClickedError="btnClickedError"
+                  @checkValidation="checkValidation"
+                ></y-btn>
+                <y-btn
+                  v-if="pk"
+                  type="delete"
+                  :title="$t('button.woCancel')"
+                  :action-url="transactionCancel.url + pk"
+                  :action-type="transactionCancel.requestType"
+                  :param="woCancel"
+                  :is-submit="woCancel.isSubmit"
+                  before-submit="getCancelRequest"
+                  @btnClicked="btnCancelClicked"
+                  @btnClickedError="btnClickedError"
+                  @getCancelRequest="getCancelRequest"
+                ></y-btn>
+                <y-btn
+                  v-if="!pk"
+                  type="clear"
+                  :title="$t('button.clear')"
+                  @btnClicked="btnClearClicked" 
+                ></y-btn>       
+              </div>
+            </v-flex>
+          </v-layout>
         </v-flex>           
       </v-layout>
       <y-popup 
@@ -307,7 +313,7 @@
         :grid-type="popupGridType"
         :is-open-popup="isOpenPopup"
         :event-for-return="eventForReturn"
-        :title="$t('title.equipmentSearchPopup')"
+        :title="popupTitle"
         @closePopup="closePopup"
         @bindEquipmentData="bindEquipmentData"
         @bindWoData="bindWoData"
@@ -396,6 +402,7 @@ export default {
       isSubmit: false
     },
     transactionCancel: transactionConfig.wo.cancel,
+    popupTitle: ''
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {
@@ -498,6 +505,7 @@ export default {
       this.isOpenDialog = false
     },
     openSearchPopup() {
+      this.popupTitle = this.$t('title.equipmentSearchPopup')
       this.popupSearchItem = 'equipment'
       this.popupGridType = 'radio'
       this.isOpenPopup = true
@@ -508,6 +516,7 @@ export default {
       this.equipment.equipPk = null
     },
     openWoPopup() {
+      this.popupTitle=this.$t('title.woSearch')
       this.popupSearchItem = 'wo'
       this.popupGridType = 'radio'
       this.isOpenPopup = true

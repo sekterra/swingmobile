@@ -9,7 +9,6 @@
     fixed
     dark
     app
-    style="z-index: 9999;"
     >
       <!-- left 메뉴 토글 버튼 -->
       <v-toolbar-title class="ml-0">

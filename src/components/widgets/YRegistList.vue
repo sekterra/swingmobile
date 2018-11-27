@@ -7,20 +7,21 @@
   -->
 <template>
   <div>
-    <div class="caption grey--text">{{title}}</div>
+    <div class="caption mb-2">{{title}}</div>
     <v-card>
       <v-card-title class="pa-0 ma-0">
-      <v-toolbar color="primary" flat  dark>
+      <!-- <v-toolbar color="primary" flat  dark> -->
+      <v-toolbar color="white" white flat dense cad>
         <v-toolbar-side-icon>
-          <v-icon v-if="editable">{{icon}}</v-icon>
+          <v-icon v-if="editable" color="indigo">{{icon}}</v-icon>
           <v-icon v-else>https</v-icon>
         </v-toolbar-side-icon>
-        <v-toolbar-title class="hidden-sm-and-down">{{controlTitle}}</v-toolbar-title>
+        <v-toolbar-title class="hidden-sm-and-down theme--light">{{controlTitle}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <y-select
           v-show="editable"
           ref="select"
-          color="grey lighten-3"
+          color="indigo"
           :is-clear-text="true"
           :placeholder="controlTitle"
           :item-search-key="selectItemKey"
@@ -34,8 +35,11 @@
         </span>
       </v-toolbar>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card flat>
-        <v-card-title class="caption grey--text">{{$t('title.selectedItems')}}</v-card-title>
+        <v-card-title class="caption grey--text">
+          {{$t('title.selectedItems')}}
+        </v-card-title>
         <v-card-media max-height="300" class="vscroll">
           <v-list 
             subheader

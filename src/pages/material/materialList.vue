@@ -5,7 +5,7 @@
         <v-flex xs12>
           <v-card>
             <v-toolbar color="primary darken-1" dark="" flat dense cad>
-              <v-toolbar-title class="subheading">{{$route.name}}</v-toolbar-title>
+              <v-toolbar-title class="subheading">{{$t('title.searchOption')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-divider></v-divider>
@@ -18,7 +18,7 @@
                       <v-layout row wrap>
                           <v-flex sm6 class="py-0">
                               <v-text-field
-                                label="검색 키워드" 
+                                :label="$t('title.searchKeyword')"
                                 class="mr-2"
                                 lazy
                                 clearable

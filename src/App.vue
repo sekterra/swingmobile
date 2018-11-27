@@ -154,7 +154,11 @@ export default {
     // 참고 url
     // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
     // - http://blog.eedler.com/5
-    if (StatusBar) StatusBar.hide()
+    try {
+      if (StatusBar) StatusBar.hide()
+    } catch (e) {
+
+    }
   },
   created () {
     AppEvents.forEach(item => {
@@ -197,8 +201,9 @@ export default {
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
-    // 모든 이벤트 제거
+    // 모든 이벤트 제거:확인필요
     this.$off()
+    console.log(':::::::: APP beforeDestroy ::::::::')
  },
   methods: {
     /**

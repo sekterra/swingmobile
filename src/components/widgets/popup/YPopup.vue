@@ -8,14 +8,18 @@ examples:
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" fullscreen razy hide-overlay transition="dialog-bottom-transition">
-      <v-card>
-        <v-toolbar dark color="primary darken-3">
+      <v-card color="grey lighten-5">
+        <v-toolbar 
+          dark 
+          color="indigo darken-4"
+          flat
+          >
           <v-toolbar-title>
             <v-icon>search</v-icon>
             {{title}}
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon dark @click.native="closePopup">
+          <v-btn icon @click.native="closePopup">
             <v-icon>close</v-icon>
           </v-btn>
           <!--<v-toolbar-items>

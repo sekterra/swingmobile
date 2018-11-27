@@ -165,7 +165,15 @@
       "workStartDate": "작업시작일자",
       "workEndDate": "작업종료일자",
       "materialSearchPopup": "자재검색팝업",
-      "equipmentSearchPopup": "설비검색팝업"
+      "equipmentSearchPopup": "설비검색팝업",
+      "requestInformation": "WO 요청정보",
+      "currentEquipmentPic": "현재 설비 사진",
+      "woCopy": "WO복사",
+      "camera": "사진찍기",
+      "woCreateInformation": "WO 작성 정보",
+      "searchOption": "검색조건",
+      "equipmentList": "설비 목록",
+      "woSearch": "WO 검색"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

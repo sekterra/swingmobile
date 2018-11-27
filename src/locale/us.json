@@ -166,7 +166,15 @@
       "workStartDate": "WO start date",
       "workEndDate": "WO end date",
       "materialSearchPopup": "Search popup for material",
-      "equipmentSearchPopup": "Search popup for equipment"
+      "equipmentSearchPopup": "Search popup for equipment",
+      "requestInformation": "WO request Information",
+      "currentEquipmentPic": "Current equipment photos",
+      "woCopy": "Copy WO",
+      "camera": "Take picture",
+      "woCreateInformation": "WO Create Information",
+      "searchOption": "Search Options",
+      "equipmentList": "List of equiments",
+      "woSearch": "Search WO"
     },
     "message": {
       "woNo": "Will be automatically generated.",

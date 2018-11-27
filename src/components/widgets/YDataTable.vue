@@ -7,8 +7,8 @@ examples:
 -->
 <template>
     <v-card>
-      <v-toolbar card dense color="grey lighten-5">
-        <v-toolbar-title><h4>{{title}}</h4></v-toolbar-title>
+      <v-toolbar card dense color="grey lighten-3">
+        <v-toolbar-title class="subheading">{{title}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn 
           v-if="createUrl || popupCallback"
@@ -17,7 +17,7 @@ examples:
           <v-icon>add</v-icon>
         </v-btn>
       </v-toolbar>
-    <v-divider></v-divider>
+      <v-divider></v-divider>
       <v-card-text class="pa-0">
       <v-data-table
         v-model="selected"

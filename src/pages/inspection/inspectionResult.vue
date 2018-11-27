@@ -152,14 +152,19 @@ examples:
               <small v-else>{{$t('message.inspectionFail')}}</small>
             </v-stepper-step>
             <v-divider></v-divider>
-            <v-stepper-content
+            <!-- <v-stepper-content
               :step="n + 2"
               :key="`${n}-content`"
               class="ma-0 px-2 py-0"
+            >   -->
+            <v-stepper-content
+              :step="n + 2"
+              :key="`${n}-content`"
+              class="ma-0 pa-0"
             >  
               <v-layout>
                 <v-flex sm12>
-                  <v-card>
+                  <v-card class="grey lighten-3">
                     <v-card-text>
                       <v-container fluid grid-list-md class="ma-0 pa-0">
                         <v-layout row wrap  v-for="(checkItem, i) in item.equipChkItemRslts" :key="`${n}-step-${i}`">
@@ -167,8 +172,7 @@ examples:
                           <v-flex 
                             v-if="inspectionInfo.chkStatusCd === 'CHK_STATUS_Y' && !item.isPass && !item.isIssueWo && i === 0"
                             d-flex 
-                            xs12 
-                            class="py-0 px-1">
+                            xs12>
                             <v-btn 
                               small
                               dark
@@ -179,22 +183,57 @@ examples:
                             </v-btn>
                           </v-flex>
                           <!-- /WO 발행 버튼 -->
-                          <v-flex d-flex xs12 sm6 md4 class="pt-1 pb-0">
-                            <v-card :color="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? 'indigo lighten-5' : 'grey lighten-2'">
-                              <v-card-title primary class="title">{{i + 1}}.</v-card-title>
+                          <v-flex d-flex xs12 sm6 md4 class="mb-0 pb-0">
+                            <v-card :color="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? 'light-blue lighten-3' : 'grey lighten-2'" flat>
+                              <v-card-title primary class="title">
+                                  <v-layout align-center justify-space-between row>
+                                <div class="ml-2">
+                                {{i + 1}}
+                                </div>
+                                <div>
+                                  <!-- <v-switch
+                                    :label="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? $t('title.pass') : $t('title.fail')"
+                                    color="primary"
+                                    name="okYn"
+                                    v-model="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid"
+                                    hide-details
+                                    small
+                                    @change="changedOkYn(saveData.equipChkItems, (n * item.equipChkItemRslts.length) + i, item) "
+                                  >
+                                  </v-switch> -->
+                                  <v-chip 
+                                    color="white" 
+                                    text-color="light-blue darken-1">
+                                    <v-avatar>
+                                      <v-icon color="light-blue darken-1">check_circle</v-icon>
+                                    </v-avatar>
+                                    성공
+                                  </v-chip>
+                                  <v-chip 
+                                    color="white" 
+                                    text-color="grey darken-1">
+                                    <v-avatar>
+                                      <v-icon color="grey darken-1">error</v-icon>
+                                    </v-avatar>
+                                    실패
+                                  </v-chip>
+                                </div>
+                                  </v-layout>
+                              </v-card-title>
                               <v-responsive>
                                 <v-container
                                   fluid
-                                  pa-2
+                                  pb-0
+                                  mb-2
                                 >
                                 <v-layout fill-height>
-                                  <v-flex xs12 align-end flexbox>
-                                    <span class="contents" v-text="checkItem.chkItemNm"></span>
+                                  <v-flex xs12 align-end flexbox >
+                                    <div class="contents" v-text="checkItem.chkItemNm"></div>
                                   </v-flex>
                                 </v-layout>
                                 </v-container>
                               </v-responsive>
-                              <v-card-actions>
+                              <!-- <v-card-actions>
                                 <v-switch
                                     :label="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? $t('title.pass') : $t('title.fail')"
                                     color="primary"
@@ -204,13 +243,13 @@ examples:
                                     @change="changedOkYn(saveData.equipChkItems, (n * item.equipChkItemRslts.length) + i, item) "
                                   >
                                 </v-switch>
-                              </v-card-actions>
+                              </v-card-actions> -->
                             </v-card>
                           </v-flex>
-                          <v-flex d-flex xs12 sm6 md3>
-                            <v-layout row wrap>
-                              <v-flex d-flex class="py-0">
-                                <v-card color="transparent">
+                          <v-flex d-flex xs12 sm6 md3 class="mt-0 pt-0">
+                            <v-layout row wrap class="mt-0 pt-0">
+                              <v-flex d-flex class="mt-0 pt-0">
+                                <v-card color="white" flat>
                                   <v-card-text>
                                     <v-text-field 
                                       label="UCL"

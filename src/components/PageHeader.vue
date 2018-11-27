@@ -1,9 +1,9 @@
 <template>
-  <v-layout row class="align-center layout px-4 pt-1 app--page-header">
+  <v-layout row class="align-center layout px-4 pt-3  app--page-header">
     <div class="page-header-left">
-      <h3 class="pr-3 breadcrumb" color="deep-purple lighten-4">{{title}}</h3>
+      <h2 class="breadcrumb">{{title}}</h2>
     </div>
-    <v-breadcrumbs divider="/" class="py-2">
+    <v-breadcrumbs divider="/" class="py-2" v-show="isShow">
       <v-breadcrumbs-item>
       <v-icon larg color="grey darken-1">home</v-icon>
       </v-breadcrumbs-item>
@@ -19,8 +19,12 @@ import menu from '@/api/menu';
 export default {
   data () {
     return {
-      title: ''
+      title: '',
+      isShow: false
     };
+  },
+  mounted() {
+
   },
   computed: {
     breadcrumbs: function () {
