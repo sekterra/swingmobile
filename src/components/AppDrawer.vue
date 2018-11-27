@@ -49,7 +49,7 @@
                     <v-list-tile-title><span>{{ subItem.title }}4</span></v-list-tile-title>
                   </v-list-tile-content>
                   <v-list-tile-action v-if="subItem.action">
-                    <v-icon :class="[subItem.actionClass || 'success--text']">{{ subItem.action }}</v-icon>
+                    <v-icon :class="[subItem.actionClass || 'success--text']">{{ subItem.action }}5</v-icon>
                   </v-list-tile-action>
                 </v-list-tile>
               </template>
@@ -57,7 +57,15 @@
             <v-subheader v-else-if="item.header" :key="i">{{ item.header }}</v-subheader>
             <v-divider v-else-if="item.divider" :key="i"></v-divider>
             <!--top-level link-->
-            <v-list-tile v-else :to="!item.href ? { name: item.name } : null" :href="item.href" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="item.name">
+            <v-list-tile 
+              v-else 
+              :to="!item.href ? { name: item.name } : null" 
+              :href="item.href" 
+              :disabled="item.disabled" 
+              :target="item.target" 
+              ripple="ripple" 
+              rel="noopener" 
+              :key="item.name">
               <v-list-tile-action v-if="item.icon">
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
@@ -104,7 +112,6 @@ export default {
     computeLogo () {
       return '/static/m.png';
     },
-
     sideToolbarColor () {
       return this.$vuetify.options.extra.sideNav;
     }    

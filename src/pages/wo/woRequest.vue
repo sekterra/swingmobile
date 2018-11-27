@@ -1,6 +1,6 @@
 <template>
   <div id="page-forms">
-    <v-container grid-list-xl fluid ma-0 pa-0>
+    <v-container grid-list-xl fluid class="mt-0 pt-0">
       <v-layout row wrap v-scroll="onScroll">
         <v-flex sm12>
           <v-card>
