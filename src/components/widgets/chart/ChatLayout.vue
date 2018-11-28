@@ -19,7 +19,7 @@
     </template>  
     <template v-else>
       <v-toolbar color="primary" fixed dark>
-        <v-btn icon @click="handleClick">
+        <v-btn icon @click.prevent="handleClick">
           <v-icon>keyboard_arrow_left</v-icon>
         </v-btn>
         <v-spacer></v-spacer>

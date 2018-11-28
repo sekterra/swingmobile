@@ -31,7 +31,7 @@
       <v-toolbar-items>
         <v-btn 
           icon
-          @click="changedExpand"
+          @click.prevent="changedExpand"
           >
             <v-icon small v-if="isExpand">expand_more</v-icon>
             <v-icon small v-else>pause</v-icon>
@@ -52,7 +52,7 @@
           class="pa-0 ma-0">
           <v-expansion-panel-content 
             :class="{'grey lighten-4': (i % 2 === 0 && !item.isCheck), 'indigo lighten-4': item.isCheck}">
-            <div slot="header" class="word-break" @click="itemClicked(i, item.index)">
+            <div slot="header" class="word-break" @click.prevent="itemClicked(i, item.index)">
               <v-icon 
                 v-if="!item.isCheck"
                 small>

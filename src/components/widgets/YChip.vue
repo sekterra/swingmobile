@@ -11,7 +11,7 @@ examples:
     :text-color="sets[type].textColor"
     :label="sets[type].label"
     :outline="outline"
-    @click.stop="chipClicked"
+    @click.prevent="chipClicked"
     >
     <v-avatar>
         <v-icon :color="sets[type].iconColor">

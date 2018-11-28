@@ -6,7 +6,7 @@
       :loading="loading"
       :disabled="loading"
       :color="color"
-      @click.stop="btnClicked"
+      @click.prevent="btnClicked"
     >
       <span v-if="!hasButtonError">{{title}}</span>
       <v-icon v-else>block</v-icon>

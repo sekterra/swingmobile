@@ -10,7 +10,7 @@
             </v-avatar>
           </v-btn>
           <v-list class="pa-0">
-              <v-list-tile v-for="(item,index) in mailActions" :to="!item.href ? { name: item.name } : null" :href="item.href" @click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
+              <v-list-tile v-for="(item,index) in mailActions" :to="!item.href ? { name: item.name } : null" :href="item.href" @click.prevent="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
               <v-list-tile-action v-if="item.icon">
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
@@ -65,7 +65,7 @@
                 <v-list-tile-action>
                   <v-list-tile-action-text>{{ formatDate(item.created_at) }}</v-list-tile-action-text>
                   <v-icon
-                    @click="toggle(index)"
+                    @click.prevent="toggle(index)"
                     color="grey lighten-1"
                     v-if="selected.indexOf(index) < 0"
                   >star_border</v-icon>

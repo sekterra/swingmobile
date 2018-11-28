@@ -49,7 +49,7 @@
                     <v-list-tile
                       v-for="tile in tiles"
                       :key="tile.title"
-                      @click="sheet = false"
+                      @click.prevent="sheet = false"
                     >
                       <v-list-tile-avatar>
                         <v-avatar size="32px" tile>

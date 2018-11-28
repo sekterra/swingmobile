@@ -7,7 +7,7 @@
                   <img v-if="imgData" id="photo" :src="imgData" style="width:50%;height:50%;"/>
                 </p>
                 <p style="width:300px;">Image path : {{imgLog}}</p> -->
-                <v-btn large round color="primary" @click="init">
+                <v-btn large round color="primary" @click.prevent="init">
                   <v-icon>camera_alt</v-icon>
                 </v-btn>
               </div>

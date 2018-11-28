@@ -175,7 +175,7 @@
                   <img v-if="imgData" id="photo" :src="imgData" style="width:60%;height:60%;"/>
                  </p>
                  <p style="width:300px;">Image path : {{imgLog}}</p>
-                 <v-btn color="success" @click="init">take photo</v-btn>
+                 <v-btn color="success" @click.prevent="init">take photo</v-btn>
                </div>
                <!-- <div id="debug">
                  <div><strong><h2>::::: DEBUG :::::</h2></strong></div>

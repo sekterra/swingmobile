@@ -98,7 +98,7 @@
                 dark
                 round
                 color="indigo lighten-1"
-                @click="durationSelect">
+                @click.prevent="durationSelect">
                 <v-icon color="indigo darken-1">
                   done
                 </v-icon>
@@ -108,7 +108,7 @@
               <v-chip 
               color="success lighten-1" 
               text-color="white"
-              @click="durationSelect">
+              @click.prevent="durationSelect">
                   <v-avatar>
                     <v-icon>check_circle</v-icon>
                   </v-avatar>

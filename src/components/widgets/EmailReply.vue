@@ -3,7 +3,7 @@
     <v-toolbar color="primary" dark extended dense class="elevation-1">
       <v-toolbar-title>Hey Michael, How are you?</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click="handleClose">
+      <v-btn icon @click.prevent="handleClose">
         <v-icon color="white" >close</v-icon>
       </v-btn>
       <div slot="extension" class="layout row align-center white grey--text px-2">

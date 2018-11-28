@@ -94,7 +94,7 @@
                 <v-btn
                   v-if="editable"
                   icon
-                  @click.stop="setCancel(item)"
+                  @click.prevent="setCancel(item)"
                 >
                   <v-icon color="indigo">highlight_off</v-icon>
                 </v-btn>
@@ -109,9 +109,9 @@
         </v-card-media>
         <v-divider></v-divider>
         <v-card-actions>
-          <div class="caption indigo--text">{{subTitle}} : {{selectCount}} {{$t('title.things')}}</div>
+          <div class="caption grey--text">{{subTitle}} : {{selectCount}} {{$t('title.things')}}</div>
           <v-spacer></v-spacer>
-          <div class="caption indigo--text">{{titleOfTotal}} : {{summary}}</div>
+          <div class="caption grey--text">{{titleOfTotal}} : {{summary}}</div>
         </v-card-actions>
       </v-card>
   </v-card>

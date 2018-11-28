@@ -19,7 +19,7 @@ examples:
               <v-icon
                 slot="activator"
                 color="white"
-                @click="backToList"
+                @click.prevent="backToList"
               >
               list
               </v-icon>
@@ -177,7 +177,7 @@ examples:
                               small
                               dark
                               color="indigo"
-                              @click="issueWO(checkItem)">
+                              @click.prevent="issueWO(checkItem)">
                               <v-icon>description</v-icon>
                               {{$t('title.issueWo')}}
                             </v-btn>
@@ -313,7 +313,7 @@ examples:
           <span v-if="inspectionInfo.chkStatusCd === 'CHK_STATUS_N'">
             <v-btn
               color="success"
-              @click="btnSaveClicked" 
+              @click.prevent="btnSaveClicked" 
               @btnClickedError="btnClickedError"
             >{{$t('button.save')}}</v-btn>
             <y-btn
@@ -337,7 +337,7 @@ examples:
           </v-alert>
           <v-btn
               color="primary"
-              @click="backToList" 
+              @click.prevent="backToList" 
             >
             <v-icon>
               list

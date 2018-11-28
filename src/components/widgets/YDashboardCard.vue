@@ -37,7 +37,7 @@ examples:
           dark
           small
           :color="item.key === key ? 'grey lighten-2' : 'primary'"
-          @click="chartChanged(item.key)"
+          @click.prevent="chartChanged(item.key)"
         >
           <v-icon v-if="item.type === 'bar'">bar_chart</v-icon>
           <v-icon v-if="item.type === 'donut'">pie_chart</v-icon>

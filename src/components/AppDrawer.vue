@@ -64,8 +64,11 @@
               :disabled="item.disabled" 
               :target="item.target" 
               ripple="ripple" 
-              rel="noopener" 
-              :key="item.name">
+              rel="noopener"
+              append
+              :key="item.name"
+              @click.prevent="linkClicked"
+              >
               <v-list-tile-action v-if="item.icon">
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
@@ -103,7 +106,8 @@ export default {
     menus: menu,
     scrollSettings: {
       maxScrollbarLength: 160
-    }    
+    },
+    routedPath: ''
   }),
   computed: {
     computeGroupActive () {
@@ -118,7 +122,8 @@ export default {
   },
   created () {
     window.getApp.$on('APP_DRAWER_TOGGLED', () => {
-      this.drawer = (!this.drawer);
+      // this.drawer = (!this.drawer);
+      this.drawer = true;
     });
   },
   beforeDestroy () {
@@ -136,6 +141,13 @@ export default {
       }
       return { name: `${item.group}/${(subItem.name)}` };
     },
+    linkClicked() {
+      // if (this.routedPath === window.getApp.$route.fullPath) {
+      //   this.routedPath = window.getApp.$route.fullPath
+      //   // window.getApp.$router.go(0)
+      // } else this.routedPath = window.getApp.$route.fullPath
+      // window.getApp.$emit('APP_DRAWER_TOGGLED');
+    }
   }
 };
 </script>

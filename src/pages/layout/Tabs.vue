@@ -37,7 +37,7 @@
                     <v-list-tile
                       v-for="item in more"
                       :key="item"
-                      @click="handleClick"
+                      @click.prevent="handleClick"
                     >
                       {{ item }}
                     </v-list-tile>

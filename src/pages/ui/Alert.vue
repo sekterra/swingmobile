@@ -72,7 +72,7 @@
                 This is a info alert that is closable.
               </v-alert>
               <div class="text-xs-center">
-                <v-btn color="primary" dark @click="handleReset">Reset</v-btn>
+                <v-btn color="primary" dark @click.prevent="handleReset">Reset</v-btn>
               </div>
             </div>
           </v-widget>

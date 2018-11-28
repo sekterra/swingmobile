@@ -89,7 +89,7 @@
                       </v-card-media>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn icon @click="show = !show">
+                      <v-btn icon @click.prevent="show = !show">
                         <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
                       </v-btn>
                     </v-card-actions>
@@ -409,7 +409,7 @@
                         round
                         color="black" 
                         dark
-                        @click="takePicture"
+                        @click.prevent="takePicture"
                       >
                         <v-icon>
                           camera

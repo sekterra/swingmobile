@@ -19,7 +19,7 @@ examples:
           :key="item.pk"
           avatar
           ripple
-          @click="itemClicked(item)"
+          @click.prevent="itemClicked(item)"
         >
           <v-list-tile-avatar color="blue darken-1">
             <v-icon dark>description</v-icon>
@@ -41,7 +41,7 @@ examples:
         <v-list-tile
           avatar
           ripple
-          @click="itemClicked"
+          @click.prevent="itemClicked"
         >
           <v-list-tile-avatar color="light-blue">
             <v-icon dark>account_circle</v-icon>

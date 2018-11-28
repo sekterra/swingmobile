@@ -43,7 +43,7 @@
                     :label="cloudLabel"
                     v-model="isCloudAccess"
                   ></v-switch>
-                  <v-btn @click="btnAutoIdSet">
+                  <v-btn @click.prevent="btnAutoIdSet">
                     테스트 ID 세팅
                   </v-btn>
                 </v-form>
@@ -56,7 +56,7 @@
                     block
                     color="success"
                     :disabled="!isConnected" 
-                    @click="login" 
+                    @click.prevent="login" 
                     :loading="loading">
                     Login
                   </v-btn>

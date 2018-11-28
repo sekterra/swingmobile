@@ -29,7 +29,7 @@ examples:
             v-if="type === 'confirm'"
             color="green darken-1"
             flat="flat"
-            @click="yesClicked"
+            @click.prevent="yesClicked"
           >
             Yes
           </v-btn>
@@ -37,7 +37,7 @@ examples:
             v-if="type === 'confirm'"
             color="deep-orange darken-3"
             flat="flat"
-            @click="noClicked"
+            @click.prevent="noClicked"
           >
             No
           </v-btn>
@@ -46,7 +46,7 @@ examples:
             v-if="type === 'info' || type === 'error'"
             color="green darken-1"
             flat="flat"
-            @click="noClicked"
+            @click.prevent="noClicked"
           >
             OK
           </v-btn>

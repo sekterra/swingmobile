@@ -9,7 +9,7 @@
             <h1>500</h1>
             <h2 class="my-3 headline ">{{$t('error.serverError')}}</h2>
             <div>
-              <v-btn color="primary" @click="goHome">
+              <v-btn color="primary" @click.prevent="goHome">
                 <v-icon>home</v-icon>
                 {{$t('button.home')}}
               </v-btn>

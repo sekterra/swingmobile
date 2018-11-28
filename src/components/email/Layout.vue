@@ -1,7 +1,7 @@
 <template>
   <v-app id="mail" class="mail">
     <v-toolbar fixed app flat dark color="indigo" clipped-left class="mail-toolbar" id="topbar">
-      <v-toolbar-side-icon class="hidden-sm-and-up" @click="toggleDrawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon class="hidden-sm-and-up" @click.prevent="toggleDrawer"></v-toolbar-side-icon>
       <v-avatar class="hidden-sm-and-down">
         <img src="/static/m.png" alt="Vue Material Mail">
       </v-avatar>
@@ -27,7 +27,7 @@
           </v-avatar>
         </v-btn>
         <v-list class="pa-0">
-          <v-list-tile v-for="(item,index) in items" :to="!item.href ? { name: item.name } : null" :href="item.href" @click="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
+          <v-list-tile v-for="(item,index) in items" :to="!item.href ? { name: item.name } : null" :href="item.href" @click.prevent="item.click" ripple="ripple" :disabled="item.disabled" :target="item.target" rel="noopener" :key="index">
           <v-list-tile-action v-if="item.icon">
               <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -46,7 +46,7 @@
       app
       >
       <div class="layout column pa-3">
-        <v-btn large block color="red" dark @click.stop="dialog = true"> + COMPOSE</v-btn>
+        <v-btn large block color="red" dark @click.prevent="dialog = true"> + COMPOSE</v-btn>
       </div>
       <v-list class="mail-list" dense>
         <template v-for="item in menus">

@@ -31,7 +31,7 @@ examples:
     dark
     small
     :color="item.color"
-    @click.stop="btnClicked(item)"
+    @click.prevent="btnClicked(item)"
   >
     <v-icon>{{item.icon}}</v-icon>
   </v-btn>

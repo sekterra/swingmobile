@@ -17,7 +17,7 @@
           <!-- Page Header -->
           <!-- TODO : Current Page Direction -->
           <page-header v-if="$route.meta.breadcrumb"></page-header>
-          <div class="page-wrapper">            
+          <div class="page-wrapper">      
             <router-view></router-view>
           </div>
            <!-- App Footer -->
@@ -33,7 +33,7 @@
         <!-- theme setting -->
         <!--
           TODO : Floating Theme Setting Icon
-           <v-btn small fab dark falt fixed top="top" right="right" class="setting-fab" color="red" @click="openThemeSettings">
+           <v-btn small fab dark falt fixed top="top" right="right" class="setting-fab" color="red" @click.prevent="openThemeSettings">
             <v-icon>settings</v-icon>
            </v-btn> 
         -->
@@ -113,7 +113,6 @@ export default {
     rightDrawer: false,  // right slide popup 오픈 여부
     isSearchPopup: false,  // rightDrawer 구분자, true : 검색용 팝업, false : Theme 설정
     locale: null, // 현재 설정된 언어 locale
-    isLogin: false,
     userPk: null,
     userInfo: null,
     document: document,
@@ -147,6 +146,9 @@ export default {
   computed: {
     isRetry() {
       return localStorage.ajaxRequestList || localStorage.ajaxFileRequestList
+    },
+    isLogin() {
+      return this.userPk !== null || this.userPk !== ''
     }
   },
   beforeCreate() {
@@ -157,7 +159,6 @@ export default {
     try {
       if (StatusBar) StatusBar.hide()
     } catch (e) {
-
     }
   },
   created () {
@@ -167,6 +168,7 @@ export default {
     window.getApp = this;
     this.$ajax.isAuthCheck = false;
     // this.userPk = localStorage.userPk
+    window.addEventListener('beforeunload', this.beforeAppClose)
   },
   beforeMount () {
     this.changeLocale(this.$i18n.locale);
@@ -197,13 +199,14 @@ export default {
     this.$nextTick(() => {
       this.$vuetify.goTo(0);
     })
-    // this.userPk = localStorage.userPk;
+
+    // 화면이 다시 렌더링 되었을 경우 로그인 유저 처리
+    if (localStorage.getItem('userPk')) this.$emit('USER_LOGIN', localStorage.getItem('userPk'))
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     // 모든 이벤트 제거:확인필요
     this.$off()
-    console.log(':::::::: APP beforeDestroy ::::::::')
  },
   methods: {
     /**
@@ -427,6 +430,12 @@ export default {
     backupAjaxFileRequest() {
       localStorage.removeItem('ajaxFileRequestList');
       if (this.ajaxFileRequestList.length > 0) localStorage.ajaxFileRequestList = JSON.stringify(this.ajaxFileRequestList)
+    },
+    /**
+     * 앱 또는 브라우저가 종료되기 전에 해야할 작업
+     */
+    beforeAppClose() {
+      localStorage.removeItem('userPk');
     }
   },
 };

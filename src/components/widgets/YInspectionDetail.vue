@@ -71,7 +71,7 @@ examples:
                 small
                 dark
                 color="success"
-                @click="doInspection"
+                @click.prevent="doInspection"
               >
                 <v-icon>list_alt</v-icon>
                 {{$t('title.inspection')}}

@@ -19,7 +19,7 @@
         <v-spacer></v-spacer>
           <v-btn 
             icon
-            @click.stop="openSearchPopup"
+            @click.prevent="openSearchPopup"
             >
             <v-icon>add</v-icon>
           </v-btn>
@@ -48,7 +48,7 @@
                       <span :class="{'title indigo--text pl-2': true, 'strikethrough': item.isCancel}">{{item.mtrlCd}}</span>
                       <v-btn
                         icon
-                        @click.stop="setCancel(item)">
+                        @click.prevent="setCancel(item)">
                         <v-icon color="indigo">highlight_off</v-icon>
                       </v-btn>
                     </v-layout>

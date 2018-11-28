@@ -8,8 +8,8 @@
               <div class="application--example">
                 <v-container class="application--example-container">
                   <v-layout justify-center>
-                    <v-btn @click.stop="drawer = !drawer" dark color="pink">Toggle</v-btn>
-                    <v-btn @click.stop="miniDrawer = !miniDrawer" dark color="pink">Mini Drawer</v-btn>
+                    <v-btn @click.prevent="drawer = !drawer" dark color="pink">Toggle</v-btn>
+                    <v-btn @click.prevent="miniDrawer = !miniDrawer" dark color="pink">Mini Drawer</v-btn>
                   </v-layout>
                 </v-container>              
                 <v-navigation-drawer absolute v-model="drawer" :mini-variant="miniDrawer">

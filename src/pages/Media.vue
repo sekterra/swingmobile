@@ -53,7 +53,7 @@
                 v-for="(item,index) in files"
                 :key="index"
               >
-                <a @click="showDetail(item)" class="d-flex">
+                <a @click.prevent="showDetail(item)" class="d-flex">
                   <v-card flat tile>
                     <v-card-media
                       height="150px"
@@ -73,7 +73,7 @@
           </v-container>
           <v-layout column v-else>
             <v-list dense class="transparent">
-              <v-list-tile avatar @click="showDetail(item)" 
+              <v-list-tile avatar @click.prevent="showDetail(item)" 
               v-for="(item,index) in files"
               :key="'list-file-'+index"
               >

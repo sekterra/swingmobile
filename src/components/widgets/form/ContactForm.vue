@@ -69,7 +69,7 @@
         >
           <v-btn
             icon
-            @click="resetForm"
+            @click.prevent="resetForm"
             slot="activator"
             class="my-0"
           >
@@ -78,7 +78,7 @@
           <span>Refresh form</span>
         </v-tooltip>
       </v-slide-x-reverse-transition>
-      <v-btn color="primary" flat @click="submit">Submit</v-btn>
+      <v-btn color="primary" flat @click.prevent="submit">Submit</v-btn>
     </v-card-actions>
   </v-card>
 </template>

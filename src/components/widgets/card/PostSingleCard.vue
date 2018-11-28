@@ -24,15 +24,15 @@
         </div>
         <div class="post--action align-center justify-space-between mt-2">
           <div class="social">
-            <a @click="handleThumb" class="grey--text">
+            <a @click.prevent="handleThumb" class="grey--text">
               <v-icon small>thumb_up</v-icon>
               <small>100+</small>
             </a>
-            <a @click="handleComment" class="grey--text mx-3">
+            <a @click.prevent="handleComment" class="grey--text mx-3">
               <v-icon small>mode_comment</v-icon>
               <small>12+</small>
             </a>
-            <a @click="handleFavorite" class="grey--text ">
+            <a @click.prevent="handleFavorite" class="grey--text ">
               <v-icon small>favorite</v-icon>
               <small>50+</small>
             </a>

@@ -11,7 +11,7 @@
                 color="grey darken-1"
                 dark
                 small
-                @click.stop="openWoPopup"
+                @click.prevent="openWoPopup"
               >
                {{$t('title.woCopy')}}
               </v-btn>
@@ -40,7 +40,7 @@
                         clearable
                         readonly
                         :error-messages="errors.collect('equipment')"
-                        @click="openSearchPopup"
+                        @click.prevent="openSearchPopup"
                         :clear-icon-cb="equipmentNameChanged"
                       ></v-text-field>
                     </v-flex>
@@ -201,22 +201,11 @@
               <v-toolbar color="grey lighten-3" white flat dense cad>
                 <v-toolbar-title class="subheading">{{$t('title.currentEquipmentPic')}}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <!-- <v-tooltip bottom>
-                  <v-icon
-                    slot="activator"
-                    color=""
-                    @click="takePicture"
-                  >
-                  camera
-                  </v-icon>
-                  <span>Tooltip</span>
-                </v-tooltip> -->
                 <v-btn
-                  color="grey lighten-1"
-                  round
+                  color="grey darken-1"
                   small
                   dark
-                  @click.stop="takePicture"
+                  @click.prevent="takePicture"
                 >
                 {{$t('title.camera')}}
                 </v-btn>
@@ -241,7 +230,7 @@
                         round
                         color="black" 
                         dark
-                        @click="takePicture"
+                        @click.prevent="takePicture"
                       >
                         <v-icon>
                           camera

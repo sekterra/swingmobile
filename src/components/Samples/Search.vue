@@ -99,7 +99,7 @@
                   <v-icon
                     small
                     class="mr-2"
-                    @click="editItem(props.item)"
+                    @click.prevent="editItem(props.item)"
                   >
                   edit
                   </v-icon>
@@ -127,7 +127,7 @@
         </v-container>
         <v-layout column class="fab-container" mb-5>
           <v-btn fab small v-show="!btnHidden">
-            <v-icon @click="scrollToTop">keyboard_arrow_up</v-icon>
+            <v-icon @click.prevent="scrollToTop">keyboard_arrow_up</v-icon>
           </v-btn>
         </v-layout>
       </v-flex>

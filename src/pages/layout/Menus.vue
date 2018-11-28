@@ -19,7 +19,7 @@
                         Menu Offset Bottom
                       </v-btn>
                       <v-list>
-                        <v-list-tile v-for="(item,key) in items" :key="key" @click="handleClick">
+                        <v-list-tile v-for="(item,key) in items" :key="key" @click.prevent="handleClick">
                           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                         </v-list-tile>
                       </v-list>
@@ -32,7 +32,7 @@
                         Menu Offset Top
                       </v-btn>
                       <v-list>
-                        <v-list-tile v-for="(item,key) in items" :key="key" @click="handleClick">
+                        <v-list-tile v-for="(item,key) in items" :key="key" @click.prevent="handleClick">
                           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                         </v-list-tile>
                       </v-list>

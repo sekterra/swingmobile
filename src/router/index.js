@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css';
 import jwt from '@/js/jwtToken'
 
 Vue.use(Router);
+
 const router =  new Router({
   base: '/',
   mode: 'hash',
@@ -21,8 +22,10 @@ const router =  new Router({
 router.beforeEach((to, from, next) => {
   // TODO : token이 없을 경우 발행 할 수 있도록 로그인 페이지로 이동
   if (to.path !== '/login' && !jwt.getJwtToken()) next({ path: '/login' })
+  console.log('beforeEach to:' + to.path +' from:' + from.path)
   NProgress.start();
-  next();
+  if (to.path !== from.path) next();
+  else router.go(0)
 });
 
 router.afterEach((to, from) => {

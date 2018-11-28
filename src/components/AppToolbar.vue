@@ -12,13 +12,13 @@
     >
       <!-- left 메뉴 토글 버튼 -->
       <v-toolbar-title class="ml-0">
-        <v-toolbar-side-icon @click.stop="handleDrawerToggle"></v-toolbar-side-icon>
+        <v-toolbar-side-icon @click.prevent="handleDrawerToggle"></v-toolbar-side-icon>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <!-- full screen 버튼 -->
-      <!-- <v-btn icon @click="handleFullScreen()">
+      <!-- <v-btn icon @click.prevent="handleFullScreen()">
         <v-icon>fullscreen</v-icon>
       </v-btn> -->
       <!-- WO -->
@@ -34,6 +34,24 @@
           </v-icon>
           {{upload.transPercent}}%
         </span>
+
+        <!-- network 연결 여부 icon -->
+        <v-btn
+          icon
+          flat 
+          slot="activator"
+          @click.prevent=""
+        >
+          <v-icon :color="connectColor">{{connectIcon}}</v-icon>
+        </v-btn>
+        <!-- refresh 버튼 -->
+        <!-- <v-btn 
+          icon
+          flat 
+          slot="activator"
+          @click.prevent="refreshPage">
+          <v-icon>refresh</v-icon>
+        </v-btn> -->
         
         <v-btn icon flat slot="activator">
           <v-badge color="teal" overlap>
@@ -79,14 +97,9 @@
         >
         </y-notification>
       </v-menu>
-      <!-- network 연결 여부 icon -->
-      <v-icon :color="connectColor">{{connectIcon}}</v-icon>
-      <!-- full screen 버튼 -->
-      <!-- <v-btn icon>
-        <v-icon>refresh</v-icon>
-      </v-btn> -->
+      
       <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
-        <v-btn icon large flat slot="activator" @click="openThemeSettings">
+        <v-btn icon large flat slot="activator" @click.prevent="openThemeSettings">
           <v-icon title="설정">settings</v-icon>
         </v-btn>
       </v-menu>
@@ -407,6 +420,10 @@ export default {
         // window.getApp.$emit('APP_REQUEST_ERROR', 'error:' + e.message);
         window.alert('error:' + e.message);
       }
+    },
+    refreshPage() {
+      // this.$comm.movePage(window.getApp.$router, window.getApp.$route.path)
+      window.getApp.$router.go(0)
     }
   }
 };

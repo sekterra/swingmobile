@@ -6,7 +6,7 @@
           <v-widget title="Default">
             <div slot="widget-content">
               <v-list>
-                <v-list-tile avatar v-for="item in users" :key="item.title" @click="handleClick">
+                <v-list-tile avatar v-for="item in users" :key="item.title" @click.prevent="handleClick">
                   <v-list-tile-action>
                     <v-icon color="pink">star</v-icon>
                   </v-list-tile-action>
@@ -24,7 +24,7 @@
             <div slot="widget-content">
               <v-list two-line subheader>
                 <v-subheader inset>Folders</v-subheader>
-                <v-list-tile avatar v-for="item in folders" :key="item.title" @click="handleClick">
+                <v-list-tile avatar v-for="item in folders" :key="item.title" @click.prevent="handleClick">
                   <v-list-tile-avatar>
                     <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
                   </v-list-tile-avatar>
@@ -39,7 +39,7 @@
                   </v-list-tile-action>
                 </v-list-tile>
                 <v-subheader inset>Files</v-subheader>
-                <v-list-tile v-for="item in files" :key="item.title" avatar @click="handleClick">
+                <v-list-tile v-for="item in files" :key="item.title" avatar @click.prevent="handleClick">
                   <v-list-tile-avatar>
                     <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
                   </v-list-tile-avatar>
@@ -163,7 +163,7 @@
                       readonly
                     ></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content @click="notifications = !notifications">
+                  <v-list-tile-content @click.prevent="notifications = !notifications">
                     <v-list-tile-title>Notifications</v-list-tile-title>
                     <v-list-tile-sub-title>Notify me about updates to apps or games that I downloaded</v-list-tile-sub-title>
                   </v-list-tile-content>
@@ -172,7 +172,7 @@
                   <v-list-tile-action>
                     <v-checkbox v-model="sound"></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content @click="sound = !sound">
+                  <v-list-tile-content @click.prevent="sound = !sound">
                     <v-list-tile-title>Sound</v-list-tile-title>
                     <v-list-tile-sub-title>Auto-update apps at any time. Data charges may apply</v-list-tile-sub-title>
                   </v-list-tile-content>
@@ -181,7 +181,7 @@
                   <v-list-tile-action>
                     <v-checkbox v-model="widgets"></v-checkbox>
                   </v-list-tile-action>
-                  <v-list-tile-content @click="widgets = !widgets">
+                  <v-list-tile-content @click.prevent="widgets = !widgets">
                     <v-list-tile-title>Auto-add widgets</v-list-tile-title>
                     <v-list-tile-sub-title>Automatically add home screen widgets</v-list-tile-sub-title>
                   </v-list-tile-content>
@@ -192,7 +192,7 @@
           <v-widget title="Long dark list with scroll" class="mt-3">
             <div slot="widget-content" style="max-height: 250px; overflow-y: scroll">
               <v-list dense dark>
-                <v-list-tile avatar v-for="item in allUsers" :key="item.title" @click="handleClick">
+                <v-list-tile avatar v-for="item in allUsers" :key="item.title" @click.prevent="handleClick">
                   <v-list-tile-action>
                     <v-icon color="pink">star</v-icon>
                   </v-list-tile-action>

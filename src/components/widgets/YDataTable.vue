@@ -12,9 +12,11 @@ examples:
         <v-spacer></v-spacer>
         <v-btn 
           v-if="createUrl || popupCallback"
-          icon 
-          @click.stop="create">
-          <v-icon>add</v-icon>
+          icon
+          small
+          color="indigo"
+          @click.prevent="create">
+          <v-icon color="white">add</v-icon>
         </v-btn>
       </v-toolbar>
       <v-divider></v-divider>
@@ -49,7 +51,7 @@ examples:
               v-for="header in props.headers"
               :key="header.text"
               :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.name === pagination.sortBy ? 'active' : '']"
-              @click="changeSort(header.name)"
+              @click.prevent="changeSort(header.name)"
             >
               <v-icon small v-if="header.hasOwnProperty('sortable') ? header.sortable : true">arrow_upward</v-icon>
               {{ header.text }}
@@ -58,7 +60,7 @@ examples:
         </template>
         <template slot="items" slot-scope="props">
           <!-- TODO : 아래 props.selected = !props.selected가 들어가야 checkbox가 정상적으로 작동 -->
-          <tr :active="props.selected" @click="gridType === 'checkbox' ? props.selected = !props.selected : ''">
+          <tr :active="props.selected" @click.prevent="gridType === 'checkbox' ? props.selected = !props.selected : ''">
             <td v-if="gridType === 'checkbox'">
               <v-checkbox
                 :input-value="props.selected"
@@ -73,7 +75,7 @@ examples:
                 outline
                 color="indigo"
                 :loading="props.selected"
-                @click="editItem(props);"
+                @click.prevent="editItem(props);"
               >
                 <v-icon
                   small
@@ -91,7 +93,7 @@ examples:
                 icon
                 outline
                 color="indigo"
-                @click="selectedData(props.item)"
+                @click.prevent="selectedData(props.item)"
               >
                 <v-icon small>done</v-icon>
               </v-btn>

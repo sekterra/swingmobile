@@ -48,7 +48,7 @@ comm.getFixedSizeByDevice = function (_baseSize, _breakpoint) {
 }
 
 comm.movePage = function (_$router, _path) {
-  console.log('path:' + _path)
+  console.log('movePage : ' + _path)
   _$router.push({'path': _path})
 }
 
