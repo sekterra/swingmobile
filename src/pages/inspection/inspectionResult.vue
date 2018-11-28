@@ -202,21 +202,27 @@ examples:
                                   >
                                   </v-switch> -->
                                   <v-chip 
-                                    color="white" 
-                                    text-color="light-blue darken-1">
+                                    color="white"
+                                    flat
+                                    :text-color="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? 'light-blue darken-1' : 'grey darken-1'"
+                                    @click.prevent="() => {
+                                      saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid = !saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid;
+                                      changedOkYn(saveData.equipChkItems, (n * item.equipChkItemRslts.length) + i, item)
+                                    }">
                                     <v-avatar>
-                                      <v-icon color="light-blue darken-1">check_circle</v-icon>
+                                      <v-icon color="light-blue darken-1" v-if="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid">check_circle</v-icon>
+                                      <v-icon color="grey darken-1" v-else>error</v-icon>
                                     </v-avatar>
-                                    성공
+                                    {{saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? $t('title.pass') : $t('title.fail')}}
                                   </v-chip>
-                                  <v-chip 
+                                  <!-- <v-chip 
                                     color="white" 
                                     text-color="grey darken-1">
                                     <v-avatar>
                                       <v-icon color="grey darken-1">error</v-icon>
                                     </v-avatar>
                                     실패
-                                  </v-chip>
+                                  </v-chip> -->
                                 </div>
                                   </v-layout>
                               </v-card-title>
