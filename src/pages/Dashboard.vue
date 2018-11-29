@@ -1,84 +1,101 @@
 <template>
   <div id="pageDashboard">
     <v-container grid-list-xl fluid class="mt-0 pt-0">
+      <div class="text-xs-right">
+        <v-btn 
+          icon
+          flat
+          dark
+          color="indigo lighten-1"
+          @click.prevent="openSettingPopup"
+          >
+          <v-icon>phonelink_setup</v-icon>
+        </v-btn>
+      </div>
       <!-- TODO : summary -->
-      <v-layout row wrap>
-        <v-flex sm12>
-          <h4>{{$t('title.summaryThisYear')}}</h4>
-        </v-flex>
-        <!-- 설치된 설비수 -->
-        <v-flex lg3 sm6 xs12>
-          <mini-statistic
-            icon="domain"
-            :iconTitle="$t('title.installedEquipment')"
-            :title="dataset.equipment.totalCount"
-            :sub-title="$t('title.number')"
-            color="success  darken-1"      
-          >
-          </mini-statistic>  
-        </v-flex>
-        <!-- /설치된 설비수 -->
-        <!-- 고장 설비수 -->
-        <v-flex lg3 sm6 xs12>
-          <mini-statistic
-            icon="domain"
-            :iconTitle="$t('title.breakdownEquipment')"
-            :title="dataset.equipment.totalBreakdownCount"
-            :sub-title="$t('title.number')"
-            color="red darken-1"      
-          >
-          </mini-statistic>  
-        </v-flex>
-        <!-- /고장 설비수 -->
-        <!-- WO 비용 -->
-        <v-flex lg3 sm6 xs12>
-          <mini-statistic
-            icon="description"
-            iconTitle="WO"
-            :title="dataset.wo.totalCosts"
-            :sub-title="$t('title.cost') + '(' + $t('title.unit') + ':' + costDivider + ')'"
-            color="indigo darken-1"      
-          >
-          </mini-statistic>  
-        </v-flex>
-        <!-- /WO 비용 -->
-        <!-- WO 작업시간 -->
-        <v-flex lg3 sm6 xs12>
-          <mini-statistic
-            icon="description"
-            iconTitle="WO"
-            :title="dataset.wo.totalHours"
-            :sub-title="$t('title.workHours')"
-            color="purple darken-1"    
-          >
-          </mini-statistic>
-        </v-flex>
-        <!-- /WO 작업시간 -->
-        <!-- 점검 완료율 -->
-        <v-flex lg3 sm6 xs12>
-          <mini-statistic
-            icon="list_alt"
-            iconTitle="Inspection"
-            :title="dataset.inspection.completeRate"
-            :sub-title="$t('title.complete')"
-            color="teal darken-1"      
-          >
-          </mini-statistic>           
-        </v-flex>          
-        <!-- /점검 완료율 -->
-        <!-- PM 완료율 -->
-        <v-flex lg3 sm6 xs12>
-          <mini-statistic
-            icon="assignment"
-            iconTitle="PM"
-            :title="dataset.pm.completeRate"
-            :sub-title="$t('title.complete')"
-            color="cyan darken-1"      
-          >
-          </mini-statistic>            
-        </v-flex>        
-        <!-- /PM 완료율 -->
-      </v-layout>
+      <v-card color="orange lighten-5" flat>
+        <v-card-title>
+          <div>
+          {{$t('title.summaryThisYear')}}
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-layout row wrap>
+            <!-- 설치된 설비수 -->
+            <v-flex lg4 sm6 xs12>
+              <mini-statistic
+                icon="domain"
+                :iconTitle="$t('title.installedEquipment')"
+                :title="dataset.equipment.totalCount"
+                :sub-title="$t('title.number')"
+                color="success  darken-1"      
+              >
+              </mini-statistic>  
+            </v-flex>
+            <!-- /설치된 설비수 -->
+            <!-- 고장 설비수 -->
+            <v-flex lg4 sm6 xs12>
+              <mini-statistic
+                icon="domain"
+                :iconTitle="$t('title.breakdownEquipment')"
+                :title="dataset.equipment.totalBreakdownCount"
+                :sub-title="$t('title.number')"
+                color="red darken-1"      
+              >
+              </mini-statistic>  
+            </v-flex>
+            <!-- /고장 설비수 -->
+            <!-- WO 비용 -->
+            <v-flex lg4 sm6 xs12>
+              <mini-statistic
+                icon="description"
+                iconTitle="WO"
+                :title="dataset.wo.totalCosts"
+                :sub-title="$t('title.cost') + '(' + $t('title.unit') + ':' + costDivider + ')'"
+                color="indigo darken-1"      
+              >
+              </mini-statistic>  
+            </v-flex>
+            <!-- /WO 비용 -->
+            <!-- WO 작업시간 -->
+            <v-flex lg4 sm6 xs12>
+              <mini-statistic
+                icon="description"
+                iconTitle="WO"
+                :title="dataset.wo.totalHours"
+                :sub-title="$t('title.workHours')"
+                color="purple darken-1"    
+              >
+              </mini-statistic>
+            </v-flex>
+            <!-- /WO 작업시간 -->
+            <!-- 점검 완료율 -->
+            <v-flex lg4 sm6 xs12>
+              <mini-statistic
+                icon="list_alt"
+                iconTitle="Inspection"
+                :title="dataset.inspection.completeRate"
+                :sub-title="$t('title.complete')"
+                color="teal darken-1"      
+              >
+              </mini-statistic>           
+            </v-flex>          
+            <!-- /점검 완료율 -->
+            <!-- PM 완료율 -->
+            <v-flex lg4 sm6 xs12>
+              <mini-statistic
+                icon="assignment"
+                iconTitle="PM"
+                :title="dataset.pm.completeRate"
+                :sub-title="$t('title.complete')"
+                color="cyan darken-1"      
+              >
+              </mini-statistic>            
+            </v-flex>        
+            <!-- /PM 완료율 -->
+          </v-layout>
+        </v-card-text>
+      </v-card>
       <!-- /TODO : summary -->
 
       <!-- TODO : 설비 관련 통계 -->
@@ -407,6 +424,71 @@
         </v-flex>
       </v-layout> -->
     </v-container>
+    <y-popup 
+        :is-open-popup="isOpenPopup"
+        :title="$t('title.setupDashboard')"
+        event-for-return="setupDashboard"
+        @closePopup="closePopup"
+        @setupDashboard="setupDashboard"
+      >
+      <v-card slot="body" flat>
+        <v-card-text>
+      <v-list two-line>
+        <draggable v-model="dashboard" :options="{handle:'.handle'}">
+          <template v-for="(item, index) in dashboard">
+            <!-- <v-subheader
+              v-if="index === 0"
+              :key="index"
+            >
+              dashboard 설정
+            </v-subheader> -->
+
+            <v-list-tile
+              :key="item.key"
+              avatar
+              @click.stop=""
+            >
+              <v-list-tile-action class="handle">
+                <v-btn 
+                  v-if="item.enable" 
+                  icon 
+                  small 
+                  color="indigo lighten-1" 
+                  dark
+                  @click.prevent="item.enable = !item.enable">
+                  <v-icon>notifications_active</v-icon>
+                </v-btn>
+                <v-btn 
+                  v-else 
+                  icon 
+                  small 
+                  color="grey lighten-1"  
+                  dark
+                  @click.prevent="item.enable = !item.enable">
+                  <v-icon>notifications_paused</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title v-html="$t('title.' + item.key)"></v-list-tile-title>
+                <v-list-tile-sub-title v-html="item.remark"></v-list-tile-sub-title>
+              </v-list-tile-content>
+              <v-list-tile-avatar>
+                <v-icon>{{item.taskIcon}}</v-icon>
+                <v-icon>{{item.statusIcon}}</v-icon>
+              </v-list-tile-avatar>
+            </v-list-tile>
+            <!-- <v-divider 
+              v-if="index > 0"
+              inset
+              :key="index"
+            ></v-divider> -->
+          </template>
+        </draggable>
+        </v-list>
+        </v-card-text>
+        </v-card>
+      </y-popup>
   </div>
 </template>
 
@@ -440,6 +522,8 @@ import {
 import YDashboardCard from '@/components/widgets/YDashboardCard'
 import selectConfig from '@/js/selectConfig.js'
 import $ from 'jquery'
+import draggable from 'vuedraggable';
+import dashboardConfig from '@/js/dashboardConfig.js'
 
 export default {
   /* attributes: name, components, props, data */
@@ -460,13 +544,15 @@ export default {
     PlainTable,
     PlainTableOrder,
     YDashboardCard,
-    YGaugeChart
+    YGaugeChart,
+    draggable
   },
   data: () => ({
     color: Material,
     woDelayData: null,
     woDashboardData: {},
     userInfo: null,
+    isOpenPopup: false,
     sampleDataset: {
       sinData: SinData,
       monthVisit: monthVisitData,
@@ -539,7 +625,7 @@ export default {
           value: 0,
           color: 'purple',
           icon: {
-            label: 'report_problem',
+            label: 'assignment',
             color: 'purple'
           }
         }
@@ -554,7 +640,7 @@ export default {
           value: 0,
           color: 'success',
           icon: {
-            label: 'list',
+            label: 'list_alt',
             color: 'success'
           }
         }
@@ -605,7 +691,20 @@ export default {
     //     }
     //   }
     // ],
-    costDivider: 1000
+    costDivider: '1,000',
+    dashboard: [],
+    // TODO : 샘플
+    items: [
+          {
+            title: 'Brunch this weekend?'
+          },
+          {
+            title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>'
+          },
+          {
+            title: 'Oui oui',
+          }
+        ]
   }),
   computed: {
     activity () {
@@ -637,6 +736,10 @@ export default {
     this.getBreakdownTime()
     this.getCauseStatus()
     this.getDelayStatus()
+  },
+  mounted() {
+    if (localStorage.dashboardSetting) this.dashboard = localStorage.dashboardSetting
+    else this.dashboard = this.$comm.clone(dashboardConfig)
   },
   /* methods */
   methods: {
@@ -883,6 +986,15 @@ export default {
 
       // TODO : 변경된 데이터를 localstorage에 저장
       localStorage.dashboard = JSON.stringify(this.dataset.keyList)
+    },
+    openSettingPopup() {
+      this.isOpenPopup = true
+    },
+    closePopup () {
+      this.isOpenPopup = false
+    },
+    setupDashboard () {
+
     }
   }
 };

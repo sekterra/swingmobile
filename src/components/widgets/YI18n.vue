@@ -26,7 +26,7 @@ examples:
           slot="activator"
           small
           dark
-          color="indigo"
+          color="indigo lighten-1"
          >
           <v-icon>
             language

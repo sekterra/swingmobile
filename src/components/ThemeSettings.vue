@@ -16,20 +16,20 @@ examples:
     <v-layout column>
       <v-flex>
         <div class="theme-options">
-          <v-subheader class="px-1 my-2">
+          <v-subheader class="px-1">
             {{$t('title.userInfo')}}
           </v-subheader>
           <span v-if="userInfo">
           {{userInfo.userNm}} / {{userInfo.deptNm}}
           </span>
           <v-divider></v-divider>
-          <v-subheader class="px-1 my-2">
+          <v-subheader class="px-1">
             {{$t('title.languageSetting')}}
           </v-subheader>
           <y-i18n></y-i18n>
           <v-divider></v-divider>
         </div>
-        <v-subheader class="px-1 my-2">
+        <v-subheader class="px-1">
           {{$t('title.colorSetting')}}
         </v-subheader>
         <div class="color-option">
@@ -81,7 +81,7 @@ export default {
       themeColor: 'indigo',
       sideBarOption: 'light',
       colors: colors,
-      userInfo: window.getApp.getUserInfo()
+      userInfo: null
     };
   },
   computed: {
@@ -185,7 +185,9 @@ export default {
       immediate: true      
     }
   },  
-
+  mounted() {
+    this.userInfo = window.getApp.getUserInfo()
+  }
 };
 </script>
 <style lang="stylus" scoped>

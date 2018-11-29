@@ -7,11 +7,14 @@
   -->
 <template>
     <v-card class="ma-0 pa-0" :color="backgroundColor">
-      <v-card-title>
+      <v-card-title class="drag-handle">
         <div class="layout row ma-0 justify-space-between">
-          <div class="subheading">{{title}}</div>
+          <div class="subheading layout align-center mt-1 ml-1">
+            <v-icon>{{icon}}</v-icon>
+            {{title}}
+          </div>
           <div class="icon">
-            <v-icon :color="color">{{icon}}</v-icon>
+            <!-- <v-icon :color="color">{{icon}}</v-icon> -->
           </div>
         </div>
       </v-card-title>
@@ -44,7 +47,6 @@
               },
               detail : {
                   show : true,
-                  backgroundColor: '#EDE7F6',
                   borderWidth: 0,
                   borderColor: '#ccc',
                   width: 100,

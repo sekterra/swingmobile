@@ -1,10 +1,13 @@
 <template>
     <v-card>
       <v-card-title>
-        <div class="layout row ma-0 justify-space-between pb-1">
-          <div class="subheading">{{title}}</div>
+        <div class="layout row justify-space-between ma-0 pb-1">
+          <div class="subheading layout align-center mt-1 ml-1">
+            <v-icon>{{icon}}</v-icon>
+            {{title}}
+          </div>
           <div class="icon">
-            <v-icon :color="color">{{icon}}</v-icon>
+            <v-icon color="indigo lighten-1">settings</v-icon>
           </div>
         </div>
       </v-card-title>

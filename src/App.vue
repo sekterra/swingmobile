@@ -176,7 +176,6 @@ export default {
       this.changeLocale(_localeCode);
     });
     this.$on('USER_LOGIN', (_userPk) => {
-      console.log(':::::: USER_LOGIN : ' + _userPk)
       this.userPk = _userPk;
       // this.isLogin = true
       // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.

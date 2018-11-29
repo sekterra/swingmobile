@@ -45,6 +45,8 @@ examples:
           :grid-type="gridType"
           @selectedData="selectedData"
         />
+        <slot name="body">
+        </slot>
         <div class="text-xs-center">
           <y-btn
             v-if="gridType !== 'radio'"
@@ -100,7 +102,7 @@ export default {
     },
     searchItem: {
       type: String,
-      required:  true
+      default: ''
     },
     eventForReturn: {
       type: String,
