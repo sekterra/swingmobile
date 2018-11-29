@@ -209,7 +209,9 @@
       "imageUploadFail": "",
       "noImage": "",
       "ImageUploadFailed": "",
-      "cancelReason": ""
+      "cancelReason": "",
+      "select": "",
+      "all": ""
     },
     "error": {
       "requestError": "",

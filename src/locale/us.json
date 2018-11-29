@@ -209,7 +209,9 @@
       "imageUploadFail": "There are some errors in the image upload information. Please try again.",
       "noImage": "No photos to upload. Please take a picture again and upload it.",
       "ImageUploadFailed": "There was an error uploading the picture. Please take a picture again and upload it.",
-      "cancelReason": "When canceling the WO, you must enter the reason."
+      "cancelReason": "When canceling the WO, you must enter the reason.",
+      "select": "Select item",
+      "all": "All"
     },
     "error": {
       "requestError": "An error occurred during data processing.",

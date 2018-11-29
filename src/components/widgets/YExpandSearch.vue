@@ -25,6 +25,7 @@ examples:
             :label="item.label"
             :name="item.name"
             :item-search-key="item.key"
+            type="search"
             @input="value => {
               searchData[item.name] = value
               searchDataChanged()

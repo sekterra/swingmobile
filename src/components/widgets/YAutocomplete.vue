@@ -1,5 +1,5 @@
 <!--
-목적 : select 기반 select 컴포넌트
+목적 : AutoComplete 기반 select 컴포넌트
 Detail :
   comboConfig.js 정보를 참고하여 컴포넌트 렌더링시 select 데이터 조회 해서 option 추가
  * 
@@ -8,9 +8,9 @@ examples:
 -->
 <template>
   <div>
-    <v-select
+    <v-autocomplete
       v-if="editable"
-      ref="select"
+      ref="autocomplete"
       :color="color"
       :label="label"
       :name="name"
@@ -22,7 +22,7 @@ examples:
       :hide-selected="hideSelected"
       :error="error"
       :error-messages="errorMsg"
-    ></v-select>
+    ></v-autocomplete>
     <v-text-field
       v-else
       v-model="text"
@@ -37,7 +37,7 @@ examples:
 import comboConfig from '@/js/comboConfig'
 export default {
   /* attributes: name, components, props, data */
-  name: 'y-select',
+  name: 'y-autocomplete',
   $_veeValidate: {
     name() {
       return this.name;
@@ -86,10 +86,6 @@ export default {
     },
     color: {
       type: String
-    },
-    type: { // select 종류: edit, search 두 가지가 있음, (등록화면은 '선택하세요'로 조회화면은 '전체로 표시)
-      type: String,
-      default: 'edit'
     }
   },
   data() {
@@ -140,7 +136,7 @@ export default {
         self.items = typeof _result.content !== 'undefined' ? _result.content : _result
         if (self.items.length > 0) {
           var item = {}
-          item[this.item.itemName] = this.type === 'search' ? this.$t('message.all') :  this.$t('message.select')
+          item[this.item.itemName] = '-'
           item[this.item.itemKey] = null
           self.items.unshift(item)
         }
@@ -152,7 +148,7 @@ export default {
     input() {
       // TODO : 부모에게 변경여부 전달
       this.$emit('input', this.vValue)
-      this.$refs.select.$refs.input.blur()
+      this.$refs.autocomplete.$refs.input.blur()
       window.getApp.$emit('APP_KEYBOARD_HIDE')
       // 선택후 텍스트 값 초기화
       if (this.isClearText) {
