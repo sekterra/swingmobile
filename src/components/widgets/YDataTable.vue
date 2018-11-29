@@ -6,7 +6,7 @@ examples:
  *  
 -->
 <template>
-    <v-card>
+    <v-card :flat=flat>
       <v-toolbar card dense color="grey lighten-3">
         <v-toolbar-title class="subheading">{{title}}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -15,7 +15,7 @@ examples:
           icon
           small
           color="indigo lighten-3"
-          @click.prevent="create">
+          @click.prevent="moveCreatePage">
           <v-icon color="white">add</v-icon>
         </v-btn>
       </v-toolbar>
@@ -188,6 +188,10 @@ export default {
     itemKey: {
       type: String,
       default: ''
+    },
+    flat: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -215,6 +219,7 @@ export default {
       // [bug fix] : 페이지가 처음 로딩시 그리드 데이터가 바인딩되었는데도, pagination이 표현 안되는 현상 발생했으나
       //                  우연히 totalItems를 강제로 할당해주니 표시가 됨(이유는 모름)
       this.pagination.totalItems = this.items.length
+      this.hideLoading()
     }
   },
   computed: {
@@ -237,8 +242,8 @@ export default {
       // TODO : 1초 후 로딩표시 제거
       setTimeout(() => {self.loading = false}, 1000) 
     },
-    create() {
-      if (this.createUrl) this.$comm.movePage(this.$router, this.createUrl)
+    moveCreatePage() {
+      if (this.createUrl) this.$comm.movePageReplace(this.$router, this.createUrl)
       else {
         if(this.popupCallback) this.$emit(this.popupCallback)
       }

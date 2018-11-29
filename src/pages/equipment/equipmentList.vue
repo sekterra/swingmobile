@@ -4,7 +4,7 @@
       <v-layout row wrap>
         <v-flex xs12>
           <v-card>
-            <v-toolbar color="grey lighten-3" white flat dense cad>
+            <v-toolbar color="indigo lighten-3" dark flat dense cad>
               <v-toolbar-title class="subheading">{{$t('title.searchOption')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
@@ -54,18 +54,18 @@
           </v-card>
         </v-flex>           
       </v-layout>
-      <v-layout>
+      <v-layout mt-3>
         <!-- 그리드 영역 -->
         <v-flex xs12>
           <y-data-table 
-          ref="dataTable"
-          :title="$t('title.woList')"
-          :headers="gridHeaderOptions"
-          :items="gridData"
-          :loading="gridLoading"
-          :editable="isGridEditable"
-          :grid-type="gridType"
-          @selectedData="selectedData"
+            ref="dataTable"
+            :title="$t('title.equipmentList')"
+            :headers="gridHeaderOptions"
+            :items="gridData"
+            :loading="gridLoading"
+            :editable="isGridEditable"
+            :grid-type="gridType"
+            @selectedData="selectedData"
           >
           </y-data-table>
         </v-flex>

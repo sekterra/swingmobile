@@ -15,7 +15,9 @@ examples:
           flat
           >
           <v-toolbar-title>
-            <v-icon>search</v-icon>
+            <v-btn icon @click.stop="">
+              <v-icon>open_in_browser</v-icon>
+            </v-btn>
             {{title}}
           </v-toolbar-title>
           <v-spacer></v-spacer>

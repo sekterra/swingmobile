@@ -158,7 +158,7 @@ export default [
   },
   {
     path: '/inspectionCalendar',
-    meta: { breadcrumb: true },
+    // meta: { breadcrumb: true },
     name: 'inspectionCalendar',
     props: (route) => ({ type: route.query.type }),
     component: () => import(

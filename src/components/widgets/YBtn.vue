@@ -87,32 +87,32 @@ export default {
     initButtonType () {
       var type = this.type.toLowerCase()
       if (type === 'search') {
-        this.color = 'success'
+        this.color = 'success lighten-1'
         this.actionMethod = 'requestGet'
       }
       else if (type === 'save') {
-        this.color = 'success'
+        this.color = 'success lighten-1'
         if (this.actionType.toUpperCase() === 'POST') this.actionMethod = 'requestPost'
         else if (this.actionType.toUpperCase() === 'PUT') this.actionMethod = 'requestPut'
       }
       else if (type === 'select') {
-        this.color = 'success'
+        this.color = 'success lighten-1'
       }
       else if (type === 'delete') {
-        this.color = 'error'
+        this.color = 'error lighten-1'
         if (this.actionType.toUpperCase() === 'POST') this.actionMethod = 'requestPost'
         else if (this.actionType.toUpperCase() === 'PUT') this.actionMethod = 'requestPut'
       }
       else if (type === 'cancel') {
-        this.color = 'primary'
+        this.color = 'grey lighten-1'
       } 
       else if (type === 'close')  this.color = 'primary'
       else if (type === 'clear') {
-        this.color = 'info'
+        this.color = 'info lighten-1'
       }
-      else if (type === 'test') this.color = 'success'
+      else if (type === 'test') this.color = 'success lighten-3'
       else {
-        this.color = 'error'
+        this.color = 'error lighten-1'
         this.hasButtonError = true
       }
     },

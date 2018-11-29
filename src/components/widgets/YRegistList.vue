@@ -13,8 +13,8 @@
       <!-- <v-toolbar color="primary" flat  dark> -->
       <v-toolbar color="white" white flat dense cad>
         <v-toolbar-side-icon>
-          <v-icon v-if="editable" color="indigo">{{icon}}</v-icon>
-          <v-icon v-else>https</v-icon>
+          <v-icon v-if="editable" color="indigo lighten-3">{{icon}}</v-icon>
+          <v-icon v-else color="indigo lighten-3">https</v-icon>
         </v-toolbar-side-icon>
         <v-toolbar-title class="hidden-sm-and-down theme--light">{{controlTitle}}</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -96,7 +96,7 @@
                   icon
                   @click.prevent="setCancel(item)"
                 >
-                  <v-icon color="indigo">highlight_off</v-icon>
+                  <v-icon color="indigo lighten-3">highlight_off</v-icon>
                 </v-btn>
               </v-list-tile-action>
             </v-list-tile>

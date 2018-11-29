@@ -4,13 +4,18 @@
       <v-layout column>
         <v-flex xs12>
           <v-card>
-            <v-toolbar color="primary darken-1" dark="" flat dense cad>
+            <v-toolbar color="indigo lighten-3" dark flat dense cad>
               <v-toolbar-title class="subheading">{{$t('title.inspectionCalendar')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
             <v-divider></v-divider>
             <v-card-text>
-              <full-calendar ref="calendar" :config="config" :events="events" @view-render="getInspectionData" @event-selected="openInspectionDetail"/>
+              <full-calendar 
+                ref="calendar" 
+                :config="config" 
+                :events="events" 
+                @view-render="getInspectionData" 
+                @event-selected="openInspectionDetail"/>
             </v-card-text>
           </v-card>
         </v-flex>           
@@ -20,13 +25,12 @@
       :is-open-dialog="isOpenDialog"
       :is-popup="true"
       :is-fullscreen="true"
-      :title="popupTitle"
+      :title="config.popupTitle"
       type="info"
       @dialogResult="dialogResult"
     >
       <y-inspection-detail
         :pk="selectedPk"
-        :title="$t('title.')"
         slot="body"
       >
       </y-inspection-detail>
@@ -48,8 +52,8 @@ export default {
 			config: {
         defaultView: 'month',
         height: 'auto',
-        locale: this.$comm.moment().locale(),
-        defaultDate: this.$comm.moment(),
+        locale: null,
+        defaultDate: null,
         eventLimit: true,
         popupTitle: '',
         header: {
@@ -71,6 +75,7 @@ export default {
   mounted() {
     window.getApp.$on('LOCALE_CHANGE', (_localeCode) => {
       this.locale = this.$comm.moment().locale()
+      this.defaultDate = this.$comm.moment()
       $('#calendar').fullCalendar('option', 'locale', this.locale);
     });
   },
@@ -93,7 +98,7 @@ export default {
           event.mastName = _item.chkMastNm
           event.title = '[' + _item.chkPlanNo + '] ' + _item.chkMastNm
           event.start = _item.chkPlanDt.substr(0, 4) + '-' + _item.chkPlanDt.substr(4, 2) + '-' + _item.chkPlanDt.substr(6, 2)
-          event.color = _item.chkStatus === 'Y' ? 'green' : 'indigo'
+          event.color = _item.chkStatus === 'Y' ? '#66BB6A' : '#5C6BC0'
           // event.color = _item.chkPlanPk === null ? '#BDBDBD' : '#D88168'
           self.events.push(event)
         })
@@ -105,8 +110,7 @@ export default {
     openInspectionDetail(_event, _jsEvent, _view) {
       this.selectedPk = _event.pk
       this.isOpenDialog = true
-      this.popupTitle = _event.mastName + ' ' + this.$t('title.inspection')
-      console.log('event:' + this.selectedPk)
+      this.config.popupTitle = _event.mastName + ' ' + this.$t('title.inspection')
     }
   }
 }

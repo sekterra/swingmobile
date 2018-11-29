@@ -5,6 +5,7 @@ var comm = {
   baseDeviceSize : 600,
   getFixedSizeByDevice: null,
   movePage: null,
+  movePageReplace: null,
   clone: null,
   today: new Date(moment().format()),
   getToday: null,
@@ -48,8 +49,11 @@ comm.getFixedSizeByDevice = function (_baseSize, _breakpoint) {
 }
 
 comm.movePage = function (_$router, _path) {
-  console.log('movePage : ' + _path)
   _$router.push({'path': _path})
+}
+
+comm.movePageReplace = function (_$router, _path) {
+  _$router.replace({'path': _path})
 }
 
 /**

@@ -12,7 +12,7 @@ examples:
       <v-layout row wrap>
         <v-flex sm12>
           <!-- title 영역 -->
-          <v-toolbar color="primary darken-1" dark="" flat dense cad>
+          <v-toolbar color="indigo lighten-3" dark flat dense cad>
             <v-toolbar-title class="subheading">{{$t('menu.inspectionResult')}}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-tooltip bottom>
@@ -128,6 +128,7 @@ examples:
                             <v-alert
                               :value="true"
                               type="info"
+                              color="blue lighten-1"
                             >
                               {{$t('message.noDocumentUpload')}}
                             </v-alert>
@@ -176,7 +177,7 @@ examples:
                             <v-btn 
                               small
                               dark
-                              color="indigo"
+                              color="indigo lighten-1"
                               @click.prevent="issueWO(checkItem)">
                               <v-icon>description</v-icon>
                               {{$t('title.issueWo')}}
@@ -287,7 +288,7 @@ examples:
                                 <v-btn 
                                   small
                                   dark
-                                  color="indigo">
+                                  color="indigo lighten-1">
                                   <v-icon>description</v-icon>
                                   {{$t('title.issueWo')}}
                                 </v-btn>
@@ -336,12 +337,13 @@ examples:
             {{$t('message.inspectionComplete')}}
           </v-alert>
           <v-btn
-              color="primary"
+              color="indigo lighten-1"
+              dark
               @click.prevent="backToList" 
             >
-            <v-icon>
+            <!-- <v-icon>
               list
-            </v-icon>
+            </v-icon> -->
             {{$t('button.list')}}
             </v-btn>
         </div>

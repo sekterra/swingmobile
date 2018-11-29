@@ -10,21 +10,26 @@
   <div class="caption grey--text">{{title}}</div>
   <v-card>
     <v-card-title class="pa-0 ma-0">
-      <v-toolbar color="primary" flat  dark>
+      <v-toolbar color="white" flat white>
         <v-toolbar-side-icon>
-          <v-icon v-if="editable">{{icon}}</v-icon>
-          <v-icon v-else>https</v-icon>
+          <v-icon v-if="editable" color="indigo lighten-3">{{icon}}</v-icon>
+          <v-icon v-else color="indigo lighten-3">https</v-icon>
         </v-toolbar-side-icon>
-        <v-toolbar-title>{{controlTitle}}</v-toolbar-title>
+        <v-toolbar-title class="indigo--text subheading">
+          {{controlTitle}}
+        </v-toolbar-title>
         <v-spacer></v-spacer>
           <v-btn 
             icon
+            small
+            color="indigo lighten-3"
             @click.prevent="openSearchPopup"
             >
-            <v-icon>add</v-icon>
+            <v-icon color="white">add</v-icon>
           </v-btn>
       </v-toolbar>
       </v-card-title>
+      <v-divider></v-divider>
       <v-card flat>
         <v-card-title class="caption grey--text">{{$t('title.selectedItems')}}</v-card-title>
         <v-card-media max-height="300" class="vscroll">

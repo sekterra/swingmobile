@@ -64,17 +64,17 @@ examples:
       <v-layout>
         <v-flex xs12>
           <div v-if="inspectionInfo.chkStatusCd === 'CHK_STATUS_N'">
-            <v-subheader class="pa-0 mt-3">
-              {{$t('title.checkList')}}
+            <v-subheader class="pa-0 mt-1">
+              <!-- {{$t('title.checkList')}} -->
               <v-spacer></v-spacer>
               <v-btn 
                 small
                 dark
-                color="success"
+                color="success lighten-1"
                 @click.prevent="doInspection"
               >
-                <v-icon>list_alt</v-icon>
-                {{$t('title.inspection')}}
+                <!-- <v-icon>list_alt</v-icon> -->
+                {{$t('title.inspectionResult')}}
               </v-btn>
             </v-subheader>
             <y-data-table 
@@ -85,7 +85,7 @@ examples:
               :editable="false"
             >
             </y-data-table>
-            <div></div>
+            <p></p>
             <y-data-table 
               :title="$t('title.inspectionEquipment')"
               ref="equipmentDataTable"
@@ -100,10 +100,11 @@ examples:
             <v-tabs
               dark
               v-model="tabIndex"
-              color="primary"
+              color="indigo lighten-3"
               show-arrows
+              flat
             >
-              <v-tabs-slider color="yellow"></v-tabs-slider>
+              <v-tabs-slider color="yellow lighten-3"></v-tabs-slider>
               <v-tab
                 v-for="(item, i) in chkResultData"
                 :href="'#tab-' + i"
@@ -118,14 +119,14 @@ examples:
                   :id="'tab-' + i"
                   :key="item.equipCd"
                 >
-                  <v-card>
-                    <v-card-text class="px-0 pt-1 pb-0">
+                  <v-card color="grey lighten-5" flat>
+                    <v-card-text class="px-2 py-2">
                       <y-data-table 
                         :title="item.equipCd + ' ' + $t('title.checkList')"
-                        ref="itemDataTable"
                         :headers="inspectionCheckResultHeaderOptions"
                         :items="item.equipChkItemRslts"
                         :editable="false"
+                        flat
                       >
                       </y-data-table>
                     </v-card-text>
@@ -161,7 +162,6 @@ export default {
     inspectionEquipmentListData: [],
     chkResultData: [],
     isCheckListLoading: false,
-    isCheckItemResultListLoading: false,
     tabIndex: 'tab-0'
   }),
   watch: {
@@ -220,12 +220,18 @@ export default {
       this.$ajax.url = inspectionConfig.inspectionCheckList.url + this.pk
       this.$ajax.requestGet((_result) => {
         this.inspectionCheckListData = _result
+        this.$refs.dataTable.hideLoading()
+      }, () => {
+        this.$refs.dataTable.hideLoading()
       })
     },
     getInspectionEquipmentList() {
       this.$ajax.url = inspectionConfig.inspectionEquipmentList.url + this.pk
       this.$ajax.requestGet((_result) => {
         this.inspectionEquipmentListData = _result
+        this.$refs.equipmentDataTable.hideLoading()
+      }, () => {
+        this.$refs.equipmentDataTable.hideLoading()
       })
     },
     getInspectionResult(_chkRsltPks) {
@@ -236,9 +242,9 @@ export default {
         this.$ajax.url = url + _chkRsltPks[key]
         this.$ajax.requestGet((data) => {
           this.chkResultData.push(data)
-          setTimeout(() => {self.isCheckItemResultListLoading = false}, 1000) 
+          // this.$refs.itemDataTable.hideLoading()
         }, () => {
-          setTimeout(() => {self.isCheckItemResultListLoading = false}, 1000) 
+          // this.$refs.itemDataTable.hideLoading()
         })
       }
     },

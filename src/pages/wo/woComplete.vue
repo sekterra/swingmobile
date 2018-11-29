@@ -348,32 +348,33 @@
                     <v-flex xs12>
                       <v-card>
                         <v-card-title class="pa-0 ma-0">
-                          <v-toolbar color="primary" flat  dark>
+                          <v-toolbar color="white" flat white>
                             <v-toolbar-side-icon>
-                              <v-icon v-if="editable">event_note</v-icon>
-                              <v-icon v-else>https</v-icon>
+                              <v-icon v-if="editable" color="indigo lighten-3">event_note</v-icon>
+                              <v-icon v-else color="indigo lighten-3">https</v-icon>
                             </v-toolbar-side-icon>
-                            <v-toolbar-title>{{$t('title.summary')}}</v-toolbar-title>
+                            <v-toolbar-title class="indigo--text subheading">{{$t('title.summary')}}</v-toolbar-title>
                           </v-toolbar>
                           </v-card-title>
+                          <v-divider></v-divider>
                           <v-card-text>
                             <v-layout row wrap align-center justify-start>
-                              <v-flex xs6>
+                              <v-flex xs12 sm6>
                                 <div>
                                   <v-icon>location_city</v-icon> {{$t('title.outsourcingCost')}}: {{$comm.setNumberSeperator(saveData.workOrder.outsideCost)}}
                                 </div>
                               </v-flex>
-                              <v-flex xs6>
+                              <v-flex xs12 sm6>
                                 <div>
-                                  <v-icon>people</v-icon><v-icon>business_center</v-icon> {{$t('title.laborCost')}}: {{$comm.setNumberSeperator(laborCost)}}
+                                  <v-icon>people</v-icon> {{$t('title.laborCost')}}: {{$comm.setNumberSeperator(laborCost)}}
                                 </div>
                               </v-flex>
-                              <v-flex xs6>
+                              <v-flex xs12 sm6>
                                 <div>
                                   <v-icon>category</v-icon> {{$t('title.materialCost')}}: {{$comm.setNumberSeperator(saveData.workOrder.mtrlCost)}}
                                 </div>
                               </v-flex>
-                              <v-flex xs6>
+                              <v-flex xs12 sm6>
                                 <div>
                                   <v-text-field
                                   v-if="editable"
@@ -387,14 +388,14 @@
                                   </span>
                                 </div>
                               </v-flex>
-                              <v-divider></v-divider>
-                              <v-flex xs12>
-                                <div class="title indigo--text text-xs-right">                                 
-                                  {{$t('title.totalCost')}}: {{$comm.setNumberSeperator(totCost)}}
-                                </div>
-                              </v-flex>
                             </v-layout>
                           </v-card-text>
+                          <v-divider></v-divider>
+                          <v-card-actions>
+                            <div class="body-1 indigo--text">
+                              {{$t('title.totalCost')}}: {{$comm.setNumberSeperator(totCost)}}
+                            </div>
+                          </v-card-actions>
                       </v-card>
                     </v-flex>
                   </v-layout>
