@@ -4,7 +4,7 @@
       <v-layout row wrap>
         <v-flex xs12>
           <v-card>
-            <v-toolbar color="grey lighten-3" white flat dense cad>
+            <v-toolbar color="indigo lighten-3" dark flat dense cad>
               <v-toolbar-title class="subheading">{{$t('title.searchOption')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
@@ -56,9 +56,6 @@
       <v-layout>
         <!-- 그리드 영역 -->
         <v-flex xs12>
-          <v-subheader>
-            {{$t('title.requestPeriod')}}: {{searchData.startDate + ' ~ ' + searchData.endDate}}
-          </v-subheader>
           <y-data-table 
             :title="$t('title.woList')"
             ref="dataTable"
@@ -72,6 +69,9 @@
             @editItem="editItem"
           >
           </y-data-table>
+          <div class="caption text-xs-right mt-1 pr-2 grey--text">
+            {{$t('title.requestPeriod')}}: {{searchData.startDate + ' ~ ' + searchData.endDate}}
+          </div>
         </v-flex>
       </v-layout>
     </v-container>

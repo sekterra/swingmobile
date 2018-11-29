@@ -11,7 +11,7 @@ examples:
       <v-layout row wrap>
         <v-flex xs12>
           <v-card>
-            <v-toolbar color="primary darken-1" dark="" flat dense cad>
+            <v-toolbar color="indigo lighten-3" dark flat dense cad>
               <v-toolbar-title class="subheading">{{$t('menu.woCompleteList')}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
@@ -63,9 +63,6 @@ examples:
       <v-layout>
         <!-- 그리드 영역 -->
         <v-flex xs12>
-          <v-subheader>
-            {{$t('title.workDate')}}: {{searchData.startDate + ' ~ ' + searchData.endDate}}
-          </v-subheader>
           <y-data-table 
             :title="$t('title.woCompleteList')"
             grid-type="edit"
@@ -78,6 +75,9 @@ examples:
             @editItem="editItem"
           >
           </y-data-table>
+          <div class="caption text-xs-right mt-1 pr-2 grey--text">
+            {{$t('title.workDate')}}: {{searchData.startDate + ' ~ ' + searchData.endDate}}
+          </div>
         </v-flex>
       </v-layout>
     </v-container>

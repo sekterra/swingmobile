@@ -20,7 +20,7 @@
       "remedy": "Remedy",
       "project": "Project",
       "woImageFileUpload": "Uploading the Equipment Status Picture",
-      "workDate": "Workdate",
+      "workDate": "WO period",
       "woRequestFromDate": "WO request from",
       "woRequestToDate": "WO request to",
       "RequestDepartment": "Request Department",
@@ -174,7 +174,8 @@
       "woCreateInformation": "WO Create Information",
       "searchOption": "Search Options",
       "equipmentList": "List of equiments",
-      "woSearch": "Search WO"
+      "woSearch": "Search WO",
+      "inspectionPeriod": "Inspection period"
     },
     "message": {
       "woNo": "Will be automatically generated.",

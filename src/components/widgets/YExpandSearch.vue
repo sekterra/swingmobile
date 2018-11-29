@@ -6,10 +6,13 @@ examples:
  *  
 -->
 <template>
-<v-expansion-panel expand>
-  <v-expansion-panel-content>
-    <div slot="header" :style="'color:' + titleColor">{{title}}</div>
-    <v-container fluid grid-list-md>
+<v-expansion-panel expand white>
+  <v-expansion-panel-content class="grey lighten-5">
+    <div slot="header">{{title}}</div>
+    <v-container 
+      fluid 
+      grid-list-md
+      >
       <v-layout row wrap>
         <v-flex 
           d-flex 
@@ -72,10 +75,6 @@ export default {
     title: {
       type: String,
       default : '터치하면 확장검색이 가능합니다.'
-    },
-    titleColor: {
-      type: String,
-      default: '#BABABA'
     },
     givenSearchData: {
       type: Object,

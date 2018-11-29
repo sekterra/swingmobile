@@ -14,7 +14,7 @@ examples:
           v-if="createUrl || popupCallback"
           icon
           small
-          color="indigo"
+          color="indigo lighten-3"
           @click.prevent="create">
           <v-icon color="white">add</v-icon>
         </v-btn>
@@ -65,7 +65,7 @@ examples:
               <v-checkbox
                 :input-value="props.selected"
                 :indeterminate="props.indeterminate"
-                color="indigo"
+                color="indigo lighten-3"
                 hide-details />
             </td>
             <td v-else-if="gridType === 'edit' && editable">
@@ -73,7 +73,7 @@ examples:
                 small 
                 icon
                 outline
-                color="indigo"
+                color="indigo lighten-3"
                 :loading="props.selected"
                 @click.prevent="editItem(props);"
               >
@@ -92,7 +92,7 @@ examples:
                 small 
                 icon
                 outline
-                color="indigo"
+                color="indigo lighten-3"
                 @click.prevent="selectedData(props.item)"
               >
                 <v-icon small>done</v-icon>
@@ -131,6 +131,7 @@ examples:
           v-model="pagination.page" 
           :length="pages"
           :total-visible="pagingSize"
+          color="indigo lighten-3"
           circle
         ></v-pagination>
       </div>
@@ -239,7 +240,6 @@ export default {
     create() {
       if (this.createUrl) this.$comm.movePage(this.$router, this.createUrl)
       else {
-        console.log('this.popupCallback:' + this.popupCallback)
         if(this.popupCallback) this.$emit(this.popupCallback)
       }
     },

@@ -173,7 +173,8 @@
       "woCreateInformation": "WO 작성 정보",
       "searchOption": "검색조건",
       "equipmentList": "설비 목록",
-      "woSearch": "WO 검색"
+      "woSearch": "WO 검색",
+      "inspectionPeriod": "점검기간"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
