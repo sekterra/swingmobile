@@ -53,7 +53,7 @@ examples:
                 <!-- 오늘의 점검 완료율 -->
                 <v-flex xs12>
                   <circle-statistic
-                    :title="$t('title.InspectionCompleteRate')"
+                    :title="$t('title.inspectionCompleteRate')"
                     :sub-title="dataset.inspection.todayCompleteStatus.headline"
                     :caption="$t('title.complete')"
                     :icon="dataset.inspection.todayCompleteStatus.icon.label"
@@ -356,7 +356,7 @@ export default {
       var series = [
         {name: this.$t('title.inspectionCompleteCount'), type: 'bar'},
         {name: this.$t('title.inspectionInompleteCount'), type: 'bar'},
-        {name: this.$t('title.InspectionCompleteRate'), type: 'line', yAxisIndex: 1},
+        {name: this.$t('title.inspectionCompleteRate'), type: 'line', yAxisIndex: 1},
       ]
       
       var completeCount = 0;

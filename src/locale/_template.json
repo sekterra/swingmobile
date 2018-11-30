@@ -75,7 +75,7 @@
       "woCompleteRate": "",
       "pmCompleteRate": "",
       "complete": "",
-      "InspectionCompleteRate": "",
+      "inspectionCompleteRate": "",
       "equipment": "",
       "number": "",
       "installedEquipment": "",
@@ -169,7 +169,10 @@
       "woCreateInformation": "",
       "searchOption": "",
       "equipmentList": "",
-      "woSearch": ""
+      "woSearch": "",
+      "woCost": "",
+      "woHour": "",
+      "setupDashboard": ""
     },
     "message": {
       "woNo": "",

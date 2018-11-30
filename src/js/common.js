@@ -76,19 +76,19 @@ comm.getToday = function (_isLocalSet) {
   * @param {} _gapOfDate : 현재일 기준 이전 날짜, 기본값 : 1y (예) 10d - 10일전, 10m - 10개월 전, 10y - 10년전
   * 사용예) comm.getPrevDate('10d')
  */
-comm.getPrevDate = function (_gapOfDate, _isLocalSet) {
+comm.getPrevDate = function (_gapOfDate, _format) {
   let gapOfDate = config.defaultGapOfDate
   if (_gapOfDate) gapOfDate = _gapOfDate
   let div = gapOfDate.substr(gapOfDate.length - 1, 1).toLowerCase()
   let gap = Number(gapOfDate.substring(0, gapOfDate.length - 1))
-  let today = new Date(comm.today)
-  if (div === 'd') today.setDate(today.getDate() - gap)
-  else if (div === 'm') today.setMonth(today.getMonth() - gap)
-  else if (div === 'y') today.setYear(today.getFullYear() - gap)
+  let date = new Date(comm.today)
+  if (div === 'd') date.setDate(date.getDate() - gap)
+  else if (div === 'm') date.setMonth(date.getMonth() - gap)
+  else if (div === 'y') date.setYear(date.getFullYear() - gap)
 
   var prevDate = null;
-  var dateFormat = _isLocalSet ? 'L' : 'YYYY-MM-DD';  // default : ISO format('YYYY-MM-DD)
-  return  moment(today).format(dateFormat)
+  var dateFormat = _format ? _format : 'YYYY-MM-DD';  // default : ISO format('YYYY-MM-DD)
+  return  moment(date).format(dateFormat)
 }
 
 comm.fixStr = function (_str, _size, _div) {

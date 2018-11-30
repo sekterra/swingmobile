@@ -12,8 +12,50 @@
           <v-icon>phonelink_setup</v-icon>
         </v-btn>
       </div>
-      <!-- TODO : summary -->
-      <v-card color="orange lighten-5" flat>
+      <!-- TODO : dashboard config -->
+      <v-card color="indigo lighten-5" flat>
+        <v-card-text>
+          <v-layout row wrap>
+            <v-flex 
+              v-for="item in dashboard" :key="item.key"
+              :xs12="item.xs12"
+              :sm6='item.sm6' 
+              :lg4='item.lg4'
+              :lg8="item.lg8">
+              <mini-statistic
+                v-if="statusConfig[item.key].type === 'mini-statistic'"
+                :icon="item.taskIcon"
+                :iconTitle="$t('title.' + item.key)"
+                :title="statusData[item.key]"
+                :sub-title="$t('title.' + item.subTitleKey)"
+                :color="item.color"
+              >
+              </mini-statistic>
+              <y-gauge-chart
+                v-if="statusConfig[item.key].type === 'y-gauge-chart'"
+                :title="$t('title.' + item.key)"
+                :icon="item.taskIcon"
+                :color="item.color"
+                :data-list="statusData[item.key]"
+              >
+              </y-gauge-chart>
+              <circle-statistic
+                v-if="statusConfig[item.key].type === 'circle-statistic'"
+                :title="$t('title.' + item.key)"
+                :sub-title="$t('title.' + item.subTitleKey)"
+                :caption="$t('title.' + item.complete)"
+                :icon="item.taskIcon"
+                :color="item.color"
+                :value="statusData[item.key]"
+              >
+              </circle-statistic>
+            </v-flex>
+            
+          </v-layout>
+        </v-card-text>
+      </v-card>
+      <!-- / TODO : dashboard config -->
+      <v-card color="indigo lighten-5" flat>
         <v-card-title>
           <div>
           {{$t('title.summaryThisYear')}}
@@ -28,7 +70,7 @@
                 :iconTitle="$t('title.installedEquipment')"
                 :title="dataset.equipment.totalCount"
                 :sub-title="$t('title.number')"
-                color="success  darken-1"      
+                color="success  darken-1"
               >
               </mini-statistic>  
             </v-flex>
@@ -40,7 +82,7 @@
                 :iconTitle="$t('title.breakdownEquipment')"
                 :title="dataset.equipment.totalBreakdownCount"
                 :sub-title="$t('title.number')"
-                color="red darken-1"      
+                color="red darken-1"
               >
               </mini-statistic>  
             </v-flex>
@@ -161,7 +203,7 @@
         <!-- 오늘의 점검율 -->
         <v-flex lg4 sm6 xs12>
           <circle-statistic
-            :title="$t('title.InspectionCompleteRate')"
+            :title="$t('title.inspectionCompleteRate')"
             :sub-title="dataset.inspection.todayCompleteStatus.headline"
             :caption="$t('title.complete')"
             :icon="dataset.inspection.todayCompleteStatus.icon.label"
@@ -432,6 +474,22 @@
         @setupDashboard="setupDashboard"
       >
       <v-card slot="body" flat>
+        <v-card-title>
+          <v-btn-toggle  multiple>
+            <v-btn flat>
+              <v-icon>format_bold</v-icon>
+            </v-btn>
+            <v-btn flat>
+              <v-icon>format_italic</v-icon>
+            </v-btn>
+            <v-btn flat>
+              <v-icon>format_underlined</v-icon>
+            </v-btn>
+            <v-btn flat>
+              <v-icon>format_color_fill</v-icon>
+            </v-btn>
+          </v-btn-toggle>
+        </v-card-title>
         <v-card-text>
       <v-list two-line>
         <draggable v-model="dashboard" :options="{handle:'.handle'}">
@@ -524,6 +582,8 @@ import selectConfig from '@/js/selectConfig.js'
 import $ from 'jquery'
 import draggable from 'vuedraggable';
 import dashboardConfig from '@/js/dashboardConfig.js'
+import statusConfig from '@/js/statusConfig.js'
+import statusMethod from '@/js/statusMethod.js'
 
 export default {
   /* attributes: name, components, props, data */
@@ -553,6 +613,9 @@ export default {
     woDashboardData: {},
     userInfo: null,
     isOpenPopup: false,
+    statusData: {}, // 통계 데이터
+    dashboardConfig: dashboardConfig,
+    statusConfig: statusConfig,
     sampleDataset: {
       sinData: SinData,
       monthVisit: monthVisitData,
@@ -727,6 +790,23 @@ export default {
     // TODO : 배포시에는 바로 아래 문장을 활성화 시켜야 함
     // this.loadDashboardSettings()
     Object.assign(this.$data, this.$options.data());
+
+    window.getApp.$on('STATUS_METHOD_CALLBACK', (_statusData) => {
+      try {
+        var key = _statusData.key
+        var data = _statusData.data
+        for(var _key in data) {
+          var valueKey = statusConfig[key].hasOwnProperty('valueKey') ? statusConfig[key].valueKey: key
+          var value = data[valueKey]
+          this.$set(this.statusData, key, value)
+        }
+        // console.log(':::::: this.statusData:' + JSON.stringify(this.statusData))
+      } catch (e) {
+        window.alert(e.message)
+      }
+    })
+    
+    // 과거 통계 조회(statusMethod.js로 이동 예정))
     this.getWoTotalCostAndHour()
     this.getPmCompleteRate()
     this.getInspectionCompleteRate()
@@ -738,8 +818,7 @@ export default {
     this.getDelayStatus()
   },
   mounted() {
-    if (localStorage.dashboardSetting) this.dashboard = localStorage.dashboardSetting
-    else this.dashboard = this.$comm.clone(dashboardConfig)
+    this.setDashboardData()    
   },
   /* methods */
   methods: {
@@ -748,6 +827,44 @@ export default {
       if (localStorage.dashboard) {
         this.dataset.keyList = JSON.parse(localStorage.dashboard)
       }
+    },
+    /**
+     * dashboard에 설정된 데이터를 
+     */
+    setDashboardData () {
+      // 1. 대쉬보드 설정 로딩
+      if (localStorage.dashboardSetting) this.dashboard = localStorage.dashboardSetting
+      else this.dashboard = this.$comm.clone(dashboardConfig)
+
+      // 2. 대쉬보드 안의 통계자료 조회
+      $.each(this.dashboard, (_i, _item) => {
+        // 2-1. 현재 loop의 키값으로 statusData에 동적으로 item 생성
+        // this.statusData[_item.key] = {}
+        var thisStatusConfig = statusConfig[_item.key]
+        // 2-2. statusMethod.js 내 함수에서 사용될 파라미터 설정
+        //  *data 정보는 필수 값으로써, 함수 호출시 데이터를 동적으로 바인딩 시켜주기 위함
+
+        var valueKey = thisStatusConfig.hasOwnProperty('valueKey') ? thisStatusConfig.valueKey: _item.key
+        // 2-3 이미 데이터가 존재하면 다시 조회 하지 않음
+        if (this.statusData.hasOwnProperty(valueKey)) {
+          console.log('statusData:' + valueKey + ' already exists.')
+          return
+        }
+
+        var param = _item.hasOwnProperty('param') ? _item.param : {}
+        param.key = _item.key;
+
+        // 2-3-1. statusMethod.js에서 직접 참고할 함수명이 존재한다면 호출
+        if (thisStatusConfig.hasOwnProperty('methodKey')) {
+          if (typeof statusMethod[thisStatusConfig.methodKey] === 'function') statusMethod[thisStatusConfig.methodKey].call(this, param)
+          else window.alert('[개발자용 오류 메시지]\\n' + thisStatusConfig.methodKey + '함수가 statusMethod.js에 정의되지 않았습니다.')
+        }
+        // 2-3-2. methodKey 항목이 정의되지 않으면 _item.key 정보로 함수명이 존재함
+        else {
+            if (typeof statusMethod[_item.key] === 'function') statusMethod[_item.key].call(this, param)
+            else window.alert('[개발자용 오류 메시지]\\n' + _item.key + '함수가 statusMethod.js에 정의되지 않았습니다.')
+        }
+      })
     },
     /**
      * 이달의 WO 비용
@@ -839,8 +956,6 @@ export default {
           }
           self.dataset.equipment.totalCount++;
         })
-        // self.dataset.equipment.statusOfToday.data = items
-        // self.dataset.equipment.statusOfToday.title = self.$t('title.equipmentStatusOfToday')  // TODO : 오늘의 설비현황
         self.dataset.equipment.statusOfToday.data = [{value: this.$comm.getPercentage(self.dataset.equipment.totalCount - self.dataset.equipment.totalBreakdownCount, self.dataset.equipment.totalCount), name: this.$t('title.equipmentUtilizationRate')}]
         self.dataset.equipment.statusOfToday.title = this.$t('title.equipmentUtilizationRate')  // TODO : 오늘의 설비현황
       }, (_error) => {

@@ -75,7 +75,7 @@
       "woCompleteRate": "WO 완료율",
       "pmCompleteRate": "PM 수행율",
       "complete": "완료",
-      "InspectionCompleteRate": "점검 완료율",
+      "inspectionCompleteRate": "점검 완료율",
       "equipment": "설비",
       "number": "개",
       "installedEquipment": "설치된 설비수",
@@ -174,7 +174,10 @@
       "searchOption": "검색조건",
       "equipmentList": "설비 목록",
       "woSearch": "WO 검색",
-      "inspectionPeriod": "점검기간"
+      "inspectionPeriod": "점검기간",
+      "woCost": "정비비용",
+      "woHour": "정비시간",
+      "setupDashboard": "Dashboard 설정"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

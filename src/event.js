@@ -162,5 +162,11 @@ export default [
     name: 'APP_KEYBOARD_HIDE',
     callback: function () {
     }
+  },
+  {
+    name: 'STATUS_METHOD_CALLBACK',
+    callback: function (_data) {
+      return _data
+    }
   }
 ];

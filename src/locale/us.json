@@ -75,7 +75,7 @@
       "woCompleteRate": "WO complete rate",
       "pmCompleteRate": "PM complete rate",
       "complete": "Complete",
-      "InspectionCompleteRate": "Inspection complete rate",
+      "inspectionCompleteRate": "Inspection complete rate",
       "equipment": "Equipment",
       "number": "Numbers",
       "installedEquipment": "Installed Equipment",
@@ -175,7 +175,10 @@
       "searchOption": "Search Options",
       "equipmentList": "List of equiments",
       "woSearch": "Search WO",
-      "inspectionPeriod": "Inspection period"
+      "inspectionPeriod": "Inspection period",
+      "woCost": "WO Cost",
+      "woHour": "WO Hour",
+      "setupDashboard": "Dashboard Setting"
     },
     "message": {
       "woNo": "Will be automatically generated.",
