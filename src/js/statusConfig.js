@@ -6,7 +6,7 @@
  let statusConfig = {
   // 설치된 설비  
   installedEquipment: {
-    group: 'equipment',
+    taskGroup: 'equipment',
     type: 'mini-statistic',
     taskIcon: 'domain',
     statusIcon: 'style',
@@ -20,13 +20,13 @@
     // methodKey: 'setEquipmentCardStatus'
   },
   breakdownEquipment: {
-    group: 'equipment',
+    taskGroup: 'equipment',
     type: 'mini-statistic',
     valueKey: 'totalBreakdownCount',
     methodKey: 'setEquipmentCardStatus'
   },
   equipmentUtilizationRate: {
-    group: 'equipment',
+    taskGroup: 'equipment',
     type: 'y-gauge-chart',
     taskIcon: 'domain',
     statusIcon: 'network_check',
@@ -39,27 +39,27 @@
     // methodKey: 'setEquipmentCardStatus'
   },
   woCost: {
-    group: 'wo',
+    taskGroup: 'wo',
     type: 'mini-statistic',
     valueKey: 'totalCosts',
     methodKey: 'woTotalCostAndHour'
   },
   woHour: {
-    group: 'wo',
+    taskGroup: 'wo',
     type: 'mini-statistic',
     valueKey: 'totalHours',
     methodKey: 'woTotalCostAndHour'
   },
   inspectionCompleteRate: {
-    group: 'inspection',
+    taskGroup: 'inspection',
     type: 'mini-statistic'
   },
   pmCompleteRate: {
-    group: 'pm',
+    taskGroup: 'pm',
     type: 'mini-statistic'
   },
   woCompleteRate: {
-    group: 'wo',
+    taskGroup: 'wo',
     type: 'circle-statistic',
     taskIcon: 'description',
     statusIcon: 'circle_chart',
@@ -74,7 +74,7 @@
     // methodKey: 'woPmCompleteStatus'
   },
   maintenanceCost: {
-    group: 'equipment',
+    taskGroup: 'equipment',
     type: 'y-multibar-chart',
     seriesKeys: ['totalCost'],
     chartTypes: ['bar'],
@@ -82,6 +82,23 @@
     statusIcon: 'style',
     xlableKey: 'equipCd',
     color: 'success  darken-1',
+    backgroundColor: '',
+    remark: '',
+    defaultParam: {
+      dateType: 'MON',
+      startDate: '0m',
+      endDate: '0m',
+      unit: 1000,
+    },
+    xs12: true,
+    sm6: true
+  },
+  woCauseStatus: {
+    taskGroup: 'wo',
+    type: 'y-pie-chart',
+    taskIcon: 'domain',
+    statusIcon: 'style',
+    legendKey: 'causeNm',
     backgroundColor: '',
     remark: '',
     defaultParam: {

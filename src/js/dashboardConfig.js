@@ -124,8 +124,11 @@
   { // 작업 완료율
     key: 'woCompleteRate'
   },
-  {
+  { // 설비별 유지비용
     key: 'maintenanceCost'
+  },
+  { // 원인별 WO 현황
+    key: 'woCauseStatus'
   }
 ];
 

@@ -56,21 +56,22 @@
                 :x-axis-labels="statusData[item.key].xAxisLabels"
                 :data-list="statusData[item.key].value"
                 :unit="statusConfig[item.key].unit"
-                :icon="statusConfig[item.key].taskIcon"
-                :color="statusConfig[item.key].indigo"
                 :series-keys="statusConfig[item.key].seriesKeys"
                 :chart-types="statusConfig[item.key].chartTypes"
+                :icon="statusConfig[item.key].taskIcon"
+                :color="statusConfig[item.key].indigo"
                 :background-color="statusConfig[item.key].backgroundColor">
               </y-multibar-chart>
-              <!-- <y-pie-chart
-                :title="$t('title.woCauseStatus')"
-                :data-list="dataset.woCauseMonths.data"
-                :legend-data ="dataset.woCauseMonths.legendData"
-                icon="pie_chart"
-                color="indigo"
-                background-color="#F1F8E9"
+              <y-pie-chart
+                v-if="statusConfig[item.key].type === 'y-pie-chart' && statusData[item.key]"
+                :title="$t('title.' + item.key)"
+                :data-list="statusData[item.key].value"
+                :legend-data ="statusData[item.key].legendData"
+                :icon="statusConfig[item.key].taskIcon"
+                :color="statusConfig[item.key].indigo"
+                :background-color="statusConfig[item.key].backgroundColor"
               >
-              </y-pie-chart> -->
+              </y-pie-chart>
               <!-- <span v-if="statusConfig[item.key].type === 'y-multibar-chart' && statusData[item.key]">
               </span> -->
             </v-flex>
@@ -609,6 +610,7 @@ import dashboardConfig from '@/js/dashboardConfig.js'
 import statusConfig from '@/js/statusConfig.js'
 import statusMethod from '@/js/statusMethod.js'
 import YMultibarChart from '@/components/widgets/chart/YMultibarChart';
+import YPieChart from '@/components/widgets/chart/YPieChart';
 
 export default {
   /* attributes: name, components, props, data */
@@ -631,7 +633,8 @@ export default {
     YDashboardCard,
     YGaugeChart,
     draggable,
-    YMultibarChart
+    YMultibarChart,
+    YPieChart
   },
   data: () => ({
     color: Material,

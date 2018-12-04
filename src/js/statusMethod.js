@@ -197,6 +197,7 @@ let statusMethod = {
       appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
     })
   },
+  // 설비별 유지보수 비용
   maintenanceCost(_param) {
     var url = selectConfig.equipment.maintenanceCost.url
     if (_param.dateType === 'YEAR') url += 'year'
@@ -206,7 +207,7 @@ let statusMethod = {
     ajax.param.dateType =  _param.dateType
     if (comm.moment.isDate(_param.startDate) && comm.moment.isDate(_param.endDate)) {
       ajax.param.startDate = _param.startDate
-      ajax.param.endDate = _param.endDate, dateFormat
+      ajax.param.endDate = _param.endDate
     } else {
       var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
       ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
@@ -231,9 +232,42 @@ let statusMethod = {
       statusData.data = {}
       statusData.data.value = dataList
       statusData.data.xAxisLabels = xAxisLabels
-      console.log('statusData.data.xAxisLabels:' + JSON.stringify(statusData.xAxisLabels))
       appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
     })
+  },
+  // 원인별 WO 현황
+  woCauseStatus(_param) {
+    this.$ajax.url = selectConfig.woList[1].url
+    this.$ajax.param = this.$comm.clone(selectConfig.woList[1].searchData)
+    this.$ajax.param.dateType = _param.dateType
+    if (comm.moment.isDate(_param.startDate) && comm.moment.isDate(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
+
+    let self = this
+    this.$ajax.requestGet((_result) => {
+      var data = []
+      var legendData= []
+      $.each(_result, (_i, _item) => {
+        data.push({
+          value: _item.workOrderCnt,
+          name: _item.causeNm
+        })
+        legendData.push(_item.causeNm)
+      })
+
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = data
+      statusData.data.legendData = legendData
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    });
   }
 }
 
