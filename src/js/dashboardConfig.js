@@ -13,6 +13,7 @@
   // },
   { // 설치된 설비수
     key: 'installedEquipment',
+    enable: true,  // 활성화 여부
   },
   // { // 고장 설비수
   //   key: 'breakdownEquipment',
@@ -96,6 +97,7 @@
   // },
   { // 가동 설비 현황
     key: 'equipmentUtilizationRate',
+    enable: true,  // 활성화 여부
   },
   // { // 가동 설비 현황
   //   key: 'equipmentUtilizationRate',
@@ -122,13 +124,16 @@
   //   lg4: true
   // },
   { // 작업 완료율
-    key: 'woCompleteRate'
+    key: 'woCompleteRate',
+    enable: true,  // 활성화 여부
   },
   { // 설비별 유지비용
-    key: 'maintenanceCost'
+    key: 'maintenanceCost',
+    enable: true,  // 활성화 여부
   },
   { // 원인별 WO 현황
-    key: 'woCauseStatus'
+    key: 'woCauseStatus',
+    enable: true,  // 활성화 여부
   }
 ];
 

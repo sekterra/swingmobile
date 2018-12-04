@@ -8,7 +8,7 @@ import App from './App'
 import router from './router'
 
 // TODO : global node_modules
-import _ from 'lodash/core'
+import _ from 'lodash'
 import VueI18n from 'vue-i18n';
 var krLanguages = require('@/locale/kr.json');
 var usLanguages = require('@/locale/us.json');

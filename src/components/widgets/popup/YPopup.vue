@@ -133,7 +133,10 @@ export default {
      * Event Bus를 통해 수신된 정보를 저장
      */
     selectedData(_item) {
-      if (!_item) return
+      if (!_item) {
+        this.$emit(this.eventForReturn)
+        return
+      }
       if (this.gridType === 'radio') {
         this.selectedItems.push(_item)
       }
@@ -147,7 +150,11 @@ export default {
         this.selectedItems = this.$refs.checkboxList.getCheckedData()
       }
 
-      if (!this.selectedItems || this.selectedItems.length <= 0) return
+      if (!this.selectedItems || this.selectedItems.length <= 0) {
+        this.dialog = false
+        this.$emit(this.eventForReturn)
+        return
+      }
       this.$emit(this.eventForReturn, this.selectedItems)
       this.selectedItems = []
       this.dialog = false

@@ -119,6 +119,12 @@ export default {
     }
   }),
   //* Vue lifecycle: created, mounted, destroyed, etc */
+  mounted() {
+    this.$nextTick(() => {
+      // chart에 크기 조정 요청
+      window.dispatchEvent(new Event('resize'));
+    })
+  },
   //* methods */
   methods: {
   }

@@ -72,8 +72,6 @@
                 :background-color="statusConfig[item.key].backgroundColor"
               >
               </y-pie-chart>
-              <!-- <span v-if="statusConfig[item.key].type === 'y-multibar-chart' && statusData[item.key]">
-              </span> -->
             </v-flex>
             
           </v-layout>
@@ -500,32 +498,58 @@
       >
       <v-card slot="body" flat>
         <v-card-title>
-          <v-btn-toggle  multiple>
-            <v-btn flat>
-              <v-icon>format_bold</v-icon>
-            </v-btn>
-            <v-btn flat>
-              <v-icon>format_italic</v-icon>
-            </v-btn>
-            <v-btn flat>
-              <v-icon>format_underlined</v-icon>
-            </v-btn>
-            <v-btn flat>
-              <v-icon>format_color_fill</v-icon>
-            </v-btn>
-          </v-btn-toggle>
+          <v-container fluid class="pa-0">
+            <v-layout row wrap>
+              <v-btn-toggle  
+                v-model="toggleTask"
+                multiple
+                @change="toggleTaskChanged">
+                <v-btn flat>
+                  <v-icon>domain</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>description</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>list_alt</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>assignment</v-icon>
+                </v-btn>
+              </v-btn-toggle>
+            </v-layout>
+            <v-layout row wrap>
+              <v-btn-toggle  
+                v-model="toggleChart"
+                multiple
+                @change="toggleChartChanged"
+              >
+                <v-btn flat>
+                  <v-icon>style</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>bar_chart</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>pie_chart</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>donut_large</v-icon>
+                </v-btn>
+                <v-btn flat>
+                  <v-icon>network_check</v-icon>
+                </v-btn>
+              </v-btn-toggle>
+            </v-layout>
+          </v-container>
         </v-card-title>
         <v-card-text>
-      <v-list two-line>
-        <draggable v-model="dashboard" :options="{handle:'.handle'}">
-          <template v-for="(item, index) in dashboard">
-            <!-- <v-subheader
-              v-if="index === 0"
-              :key="index"
-            >
-              dashboard 설정
-            </v-subheader> -->
-
+      <v-list 
+        two-line
+        class="yscroll"
+      >
+        <draggable v-model="dashboardSettings" :options="{handle:'.handle'}">
+          <template v-for="item in dashboardSettings">
             <v-list-tile
               :key="item.key"
               avatar
@@ -554,11 +578,11 @@
 
               <v-list-tile-content>
                 <v-list-tile-title v-html="$t('title.' + item.key)"></v-list-tile-title>
-                <v-list-tile-sub-title v-html="item.remark"></v-list-tile-sub-title>
+                <v-list-tile-sub-title v-html="$t('title.' + statusConfig[item.key].remark)"></v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-avatar>
-                <v-icon>{{item.taskIcon}}</v-icon>
-                <v-icon>{{item.statusIcon}}</v-icon>
+                <v-icon>{{statusConfig[item.key].taskIcon}}</v-icon>
+                <v-icon>{{statusConfig[item.key].chartTypeIcon}}</v-icon>
               </v-list-tile-avatar>
             </v-list-tile>
             <!-- <v-divider 
@@ -643,6 +667,8 @@ export default {
     userInfo: null,
     isOpenPopup: false,
     statusData: {}, // 통계 데이터
+    toggleTask: [0, 1, 2, 3],
+    toggleChart: [0, 1, 2, 3, 4],
     dashboardConfig: dashboardConfig,
     statusConfig: statusConfig,
     sampleDataset: {
@@ -785,6 +811,7 @@ export default {
     // ],
     costDivider: '1,000',
     dashboard: [],
+    dashboardSettings: [],
     // TODO : 샘플
     items: [
           {
@@ -810,14 +837,12 @@ export default {
     },
     locationData () {
       return API.getLocation;
-    }
+    },
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
   },
   beforeMount() {
-    // TODO : 배포시에는 바로 아래 문장을 활성화 시켜야 함
-    // this.loadDashboardSettings()
     Object.assign(this.$data, this.$options.data());
 
     window.getApp.$on('STATUS_METHOD_CALLBACK', (_statusData) => {
@@ -849,22 +874,23 @@ export default {
     this.getDelayStatus()
   },
   mounted() {
-    this.setDashboardData()    
+    this.setDashboardData()
+    this.setDashboardSettings()
   },
   /* methods */
   methods: {
-    // TODO : 사용자 정의 dashboard가 있다면 가져온다.
-    loadDashboardSettings() {
-      if (localStorage.dashboard) {
-        this.dataset.keyList = JSON.parse(localStorage.dashboard)
-      }
-    },
+    // // TODO : 사용자 정의 dashboard가 있다면 가져온다.
+    // loadDashboardSettings() {
+    //   if (localStorage.dashboard) {
+    //     this.dataset.keyList = JSON.parse(localStorage.dashboard)
+    //   }
+    // },
     /**
      * dashboard에 설정된 데이터를 
      */
     setDashboardData () {
-      // 1. 대쉬보드 설정 로딩
-      if (localStorage.dashboardSetting) this.dashboard = localStorage.dashboardSetting
+      // 1. 사용자 정의 dashboard가 있다면 가져온다.
+      if (localStorage.dashboardSetting) this.dashboard = JSON.parse(localStorage.dashboardSetting)
       else this.dashboard = this.$comm.clone(dashboardConfig)
 
       // 2. 대쉬보드 안의 통계자료 조회
@@ -896,6 +922,25 @@ export default {
             else window.alert('[개발자용 오류 메시지]\\n' + _item.key + '함수가 statusMethod.js에 정의되지 않았습니다.')
         }
       })
+    },
+    setDashboardSettings() {
+      if (!this.dashboard || this.dashboard.length <= 0) return
+      var dashboardSettings = []
+      // this.$_.forEach(this.statusConfig, (_item) => {
+      //   dashboard.push(_item)
+      // })
+
+      for(var key in this.statusConfig) {
+        var enable = this.$_.filter(this.dashboard, (_item) => {
+          return _item.key === key
+        }).length > 0;
+
+        dashboardSettings.push({
+          key: key,
+          enable: enable
+        });
+      }
+      this.$set(this, 'dashboardSettings', dashboardSettings);
     },
     /**
      * 이달의 WO 비용
@@ -1140,8 +1185,60 @@ export default {
       this.isOpenPopup = false
     },
     setupDashboard () {
+      var dashboard = this.$_.filter(this.dashboardSettings, (_item) => {
+        return _item.enable
+      })
+      this.$set(this, 'dashboard', dashboard)
+      localStorage.dashboardSetting = JSON.stringify(dashboard)
+      console.log('localStorage.dashboardSetting:' + localStorage.dashboardSetting)
+      this.isOpenPopup = false
+    },
+    toggleTaskChanged(_data) {
+      if (!this.dashboardSettings || this.dashboardSettings.length <= 0) return
+      var dashboard = this.$comm.clone(this.dashboardSettings)
+      
+      var self = this
+      var taskGroup = ''
+      var filteredByTask = []
+      $.each(this.toggleTask, (_i, _item) => {
+        if (_item === 0) taskGroup = 'equipment'
+        else if (_item === 1) taskGroup = 'wo'
+        else if (_item === 2) taskGroup = 'inspection'
+        else if (_item === 3) taskGroup = 'pm'
+        var filtered = dashboard.filter((__item) => {
+          return self.statusConfig[__item.key].taskGroup === taskGroup
+        })
+        filteredByTask = filteredByTask.concat(filtered)
+      })
+
+
+      // console.log('filteredByTask:' + JSON.stringify(filteredByTask))
+
+      // var chartTypeIcon = ''
+      // var filterByChartType = []
+      // $.each(this.toggleChart, (_i, _item) => {
+      //   if (_item === 0) chartTypeIcon = 'style'
+      //   else if (_item === 1) chartTypeIcon = 'bar_chart'
+      //   else if (_item === 2) chartTypeIcon = 'pie_chart'
+      //   else if (_item === 3) chartTypeIcon = 'donut_large'
+      //   else if (_item === 4) chartTypeIcon = 'network_check'
+      //   var filtered = filteredByTask.filter((__item) => {
+      //     return self.statusConfig[__item.key].chartTypeIcon === chartTypeIcon
+      //   })
+      //   // filterByChartType = this.$_.merge(filterByChartType, filtered)
+      //   filterByChartType = filterByChartType.concat(filtered)
+      // })
+      return dashboard
+    },
+    toggleChartChanged() {
 
     }
   }
 };
 </script>
+<style>
+.yscroll {
+  height: 300px;
+  overflow-y: auto;
+}
+</style>
