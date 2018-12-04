@@ -224,7 +224,6 @@ export default {
       this.chartInstance.setOption(_object.merge(this.option, this.$data._defaultOption));
     },
     optionString() {
-      console.log('this.option changed in echart.js:' + JSON.stringify(this.option))
       this.chartInstance.setOption(this.option)
     }
   },

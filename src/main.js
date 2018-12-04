@@ -161,6 +161,7 @@ Vue.use(Vuetify, {
 Vue.prototype.$rules = rules
 Vue.prototype.$ajax = ajax
 Vue.prototype.$comm = comm
+Vue.prototype.$_ = _
 
 // Import App Custom Styles
 //import AppStyles from './assets/sass/main.scss'

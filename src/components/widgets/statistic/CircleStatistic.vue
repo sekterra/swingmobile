@@ -6,9 +6,9 @@
             <v-icon>{{icon}}</v-icon>
             {{title}}
           </div>
-          <div class="icon">
+          <!-- <div class="icon">
             <v-icon color="indigo lighten-1">settings</v-icon>
-          </div>
+          </div> -->
         </div>
       </v-card-title>
       <v-card-text>

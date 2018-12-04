@@ -13,131 +13,120 @@
   // },
   { // 설치된 설비수
     key: 'installedEquipment',
-    enable: true,
-    taskIcon: 'domain',
-    statusIcon: 'style',
-    subTitleKey: 'number',
-    color: 'success  darken-1',
-    remark: 'test',
-    xs12: true,
-    sm6: true,
-    lg4: true
   },
-  { // 고장 설비수
-    key: 'breakdownEquipment',
-    enable: true,
-    taskIcon: 'domain',
-    statusIcon: 'bar_chart',
-    subTitleKey: 'number',
-    color: 'red darken-1',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
-  },
-  { // 작업비용
-    key: 'woCost',
-    enable: false,
-    taskIcon: 'description',
-    statusIcon: 'pie_chart',
-    subTitleKey: 'cost',
-    param: {
-      dateType: 'YEAR',
-      startDate: '0y',
-      endDate: '0y',
-    },
-    color: 'purple darken-1',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
-  },
-  { // 작업시간
-    key: 'woHour',
-    enable: true,
-    taskIcon: 'description',
-    statusIcon: 'trending_up',
-    subTitleKey: 'workHours',
-    param: {
-      dateType: 'YEAR',
-      startDate: '0y',
-      endDate: '0y',
-    },
-    color: 'purple darken-1',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
-  },
-  { // 점검완료율
-    key: 'inspectionCompleteRate',
-    enable: true,
-    taskIcon: 'list_alt',
-    statusIcon: 'network_check',
-    subTitleKey: 'complete',
-    param: {
-      dateType: 'MONTH',
-      startDate: '0m',
-      endDate: '0m',
-    },
-    color: 'indigo  darken-1',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
-  },
-  { // PM완료율
-    key: 'pmCompleteRate',
-    enable: true,
-    taskIcon: 'assignment',
-    statusIcon: 'style',
-    subTitleKey: 'complete',
-    param: {
-      dateType: 'MONTH',
-      startDate: '0m',
-      endDate: '0m',
-    },
-    color: 'cyan darken-1',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
-  },
+  // { // 고장 설비수
+  //   key: 'breakdownEquipment',
+  //   enable: true,
+  //   taskIcon: 'domain',
+  //   statusIcon: 'bar_chart',
+  //   subTitleKey: 'number',
+  //   color: 'red darken-1',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
+  // { // 작업비용
+  //   key: 'woCost',
+  //   enable: false,
+  //   taskIcon: 'description',
+  //   statusIcon: 'pie_chart',
+  //   subTitleKey: 'cost',
+  //   param: {
+  //     dateType: 'YEAR',
+  //     startDate: '0y',
+  //     endDate: '0y',
+  //   },
+  //   color: 'purple darken-1',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
+  // { // 작업시간
+  //   key: 'woHour',
+  //   enable: true,
+  //   taskIcon: 'description',
+  //   statusIcon: 'trending_up',
+  //   subTitleKey: 'workHours',
+  //   param: {
+  //     dateType: 'YEAR',
+  //     startDate: '0y',
+  //     endDate: '0y',
+  //   },
+  //   color: 'purple darken-1',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
+  // { // 점검완료율
+  //   key: 'inspectionCompleteRate',
+  //   enable: true,
+  //   taskIcon: 'list_alt',
+  //   statusIcon: 'network_check',
+  //   subTitleKey: 'complete',
+  //   param: {
+  //     dateType: 'MONTH',
+  //     startDate: '0m',
+  //     endDate: '0m',
+  //   },
+  //   color: 'indigo  darken-1',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
+  // { // PM완료율
+  //   key: 'pmCompleteRate',
+  //   enable: true,
+  //   taskIcon: 'assignment',
+  //   statusIcon: 'style',
+  //   subTitleKey: 'complete',
+  //   param: {
+  //     dateType: 'MONTH',
+  //     startDate: '0m',
+  //     endDate: '0m',
+  //   },
+  //   color: 'cyan darken-1',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
   { // 가동 설비 현황
     key: 'equipmentUtilizationRate',
-    enable: true,
-    taskIcon: 'domain',
-    statusIcon: 'network_check',
-    color: 'info',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
   },
-  { // 가동 설비 현황
-    key: 'equipmentUtilizationRate',
-    enable: true,
-    taskIcon: 'domain',
-    statusIcon: 'network_check',
-    color: 'info',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
+  // { // 가동 설비 현황
+  //   key: 'equipmentUtilizationRate',
+  //   enable: true,
+  //   taskIcon: 'domain',
+  //   statusIcon: 'network_check',
+  //   color: 'info',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
+  // { // 가동 설비 현황
+  //   key: 'woCompleteRate',
+  //   enable: true,
+  //   taskIcon: 'description',
+  //   statusIcon: 'circle_chart',
+  //   subTitleKey: 'headline',
+  //   caption: 'complete',
+  //   color: 'info',
+  //   remark: '',
+  //   xs12: true,
+  //   sm6: true,
+  //   lg4: true
+  // },
+  { // 작업 완료율
+    key: 'woCompleteRate'
   },
-  { // 가동 설비 현황
-    key: 'woCompleteRate',
-    enable: true,
-    taskIcon: 'description',
-    statusIcon: 'circle_chart',
-    subTitleKey: 'complete',
-    caption: 'complete',
-    color: 'info',
-    remark: '',
-    xs12: true,
-    sm6: true,
-    lg4: true
-  },
+  {
+    key: 'maintenanceCost'
+  }
 ];
 
 export default dashboardConfig;

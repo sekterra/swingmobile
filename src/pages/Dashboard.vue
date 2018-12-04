@@ -23,32 +23,56 @@
               :lg4='item.lg4'
               :lg8="item.lg8">
               <mini-statistic
-                v-if="statusConfig[item.key].type === 'mini-statistic'"
-                :icon="item.taskIcon"
+                v-if="statusConfig[item.key].type === 'mini-statistic' && statusData[item.key]"
+                :icon="statusConfig[item.key].taskIcon"
                 :iconTitle="$t('title.' + item.key)"
-                :title="statusData[item.key]"
-                :sub-title="$t('title.' + item.subTitleKey)"
-                :color="item.color"
+                :title="statusData[item.key].value"
+                :sub-title="$t('title.' + statusConfig[item.key].subTitleKey)"
+                :color="statusConfig[item.key].color"
               >
               </mini-statistic>
               <y-gauge-chart
-                v-if="statusConfig[item.key].type === 'y-gauge-chart'"
+                v-if="statusConfig[item.key].type === 'y-gauge-chart' && statusData[item.key]"
                 :title="$t('title.' + item.key)"
-                :icon="item.taskIcon"
-                :color="item.color"
-                :data-list="statusData[item.key]"
+                :icon="statusConfig[item.key].taskIcon"
+                :color="statusConfig[item.key].color"
+                :data-list="statusData[item.key].value"
               >
               </y-gauge-chart>
               <circle-statistic
-                v-if="statusConfig[item.key].type === 'circle-statistic'"
+                v-if="statusConfig[item.key].type === 'circle-statistic' && statusData[item.key]"
                 :title="$t('title.' + item.key)"
-                :sub-title="$t('title.' + item.subTitleKey)"
-                :caption="$t('title.' + item.complete)"
-                :icon="item.taskIcon"
-                :color="item.color"
-                :value="statusData[item.key]"
+                :sub-title="statusData[item.key][statusConfig[item.key].subTitleKey]"
+                :caption="$t('title.' + statusConfig[item.key].caption)"
+                :icon="statusConfig[item.key].taskIcon"
+                :color="statusConfig[item.key].color"
+                :value="statusData[item.key].value"
               >
               </circle-statistic>
+              <!-- bar, line chart -->
+              <y-multibar-chart
+                v-if="statusConfig[item.key].type === 'y-multibar-chart' && statusData[item.key]"
+                :title="$t('title.' + item.key)"
+                :x-axis-labels="statusData[item.key].xAxisLabels"
+                :data-list="statusData[item.key].value"
+                :unit="statusConfig[item.key].unit"
+                :icon="statusConfig[item.key].taskIcon"
+                :color="statusConfig[item.key].indigo"
+                :series-keys="statusConfig[item.key].seriesKeys"
+                :chart-types="statusConfig[item.key].chartTypes"
+                :background-color="statusConfig[item.key].backgroundColor">
+              </y-multibar-chart>
+              <!-- <y-pie-chart
+                :title="$t('title.woCauseStatus')"
+                :data-list="dataset.woCauseMonths.data"
+                :legend-data ="dataset.woCauseMonths.legendData"
+                icon="pie_chart"
+                color="indigo"
+                background-color="#F1F8E9"
+              >
+              </y-pie-chart> -->
+              <!-- <span v-if="statusConfig[item.key].type === 'y-multibar-chart' && statusData[item.key]">
+              </span> -->
             </v-flex>
             
           </v-layout>
@@ -584,6 +608,7 @@ import draggable from 'vuedraggable';
 import dashboardConfig from '@/js/dashboardConfig.js'
 import statusConfig from '@/js/statusConfig.js'
 import statusMethod from '@/js/statusMethod.js'
+import YMultibarChart from '@/components/widgets/chart/YMultibarChart';
 
 export default {
   /* attributes: name, components, props, data */
@@ -605,7 +630,8 @@ export default {
     PlainTableOrder,
     YDashboardCard,
     YGaugeChart,
-    draggable
+    draggable,
+    YMultibarChart
   },
   data: () => ({
     color: Material,
@@ -792,15 +818,17 @@ export default {
     Object.assign(this.$data, this.$options.data());
 
     window.getApp.$on('STATUS_METHOD_CALLBACK', (_statusData) => {
-      try {
-        var key = _statusData.key
-        var data = _statusData.data
-        for(var _key in data) {
-          var valueKey = statusConfig[key].hasOwnProperty('valueKey') ? statusConfig[key].valueKey: key
-          var value = data[valueKey]
-          this.$set(this.statusData, key, value)
-        }
-        // console.log(':::::: this.statusData:' + JSON.stringify(this.statusData))
+    try {
+        var mainKey = _statusData.key
+        // var data = _statusData.data
+        // var tmp = {}
+        // for(var _key in data) {
+        //   // var valueKey = statusConfig[mainKey].hasOwnProperty('valueKey') ? statusConfig[mainKey].valueKey: mainKey
+        //   // var value = data[valueKey]
+        //   tmp[_key] = data[_key]
+        // }
+        this.$set(this.statusData, mainKey, _statusData.data)
+        console.log('check:' + JSON.stringify(this.statusData))
       } catch (e) {
         window.alert(e.message)
       }
@@ -851,7 +879,7 @@ export default {
           return
         }
 
-        var param = _item.hasOwnProperty('param') ? _item.param : {}
+        var param = thisStatusConfig.hasOwnProperty('defaultParam') ? thisStatusConfig.defaultParam : {}
         param.key = _item.key;
 
         // 2-3-1. statusMethod.js에서 직접 참고할 함수명이 존재한다면 호출

@@ -8,8 +8,16 @@
   installedEquipment: {
     group: 'equipment',
     type: 'mini-statistic',
-    valueKey: 'totalCount',
-    methodKey: 'setEquipmentCardStatus'
+    taskIcon: 'domain',
+    statusIcon: 'style',
+    subTitleKey: 'number',
+    color: 'success  darken-1',
+    remark: 'test',
+    xs12: true,
+    sm6: true,
+    lg4: true
+    // valueKey: 'totalCount',
+    // methodKey: 'setEquipmentCardStatus'
   },
   breakdownEquipment: {
     group: 'equipment',
@@ -20,8 +28,15 @@
   equipmentUtilizationRate: {
     group: 'equipment',
     type: 'y-gauge-chart',
-    valueKey: 'utilizationRate',
-    methodKey: 'setEquipmentCardStatus'
+    taskIcon: 'domain',
+    statusIcon: 'network_check',
+    color: 'info',
+    remark: '',
+    xs12: true,
+    sm6: true,
+    lg4: true
+    // valueKey: 'utilizationRate',
+    // methodKey: 'setEquipmentCardStatus'
   },
   woCost: {
     group: 'wo',
@@ -46,8 +61,37 @@
   woCompleteRate: {
     group: 'wo',
     type: 'circle-statistic',
-    valueKey: 'woCompleteRate',
-    methodKey: 'woPmCompleteStatus'
+    taskIcon: 'description',
+    statusIcon: 'circle_chart',
+    subTitleKey: 'headline',
+    caption: 'complete',
+    color: 'info',
+    remark: '',
+    xs12: true,
+    sm6: true,
+    lg4: true
+    // valueKey: 'woCompleteRate',
+    // methodKey: 'woPmCompleteStatus'
+  },
+  maintenanceCost: {
+    group: 'equipment',
+    type: 'y-multibar-chart',
+    seriesKeys: ['totalCost'],
+    chartTypes: ['bar'],
+    taskIcon: 'domain',
+    statusIcon: 'style',
+    xlableKey: 'equipCd',
+    color: 'success  darken-1',
+    backgroundColor: '',
+    remark: '',
+    defaultParam: {
+      dateType: 'MON',
+      startDate: '0m',
+      endDate: '0m',
+      unit: 1000,
+    },
+    xs12: true,
+    sm6: true
   }
  };
 

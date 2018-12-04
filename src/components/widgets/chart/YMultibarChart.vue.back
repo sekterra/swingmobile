@@ -8,11 +8,11 @@ examples:
 <template>
   <v-card class="ma-0 pa-0" :color="backgroundColor">
       <v-card-title>
-        <div class="layout row ma-0">
-          <!-- <div class="icon">
-          </div> -->
-          <v-icon :color="color">{{icon}}</v-icon>
+        <div class="layout row ma-0 justify-space-between">
           <div class="subheading">{{title}}</div>
+          <div class="icon">
+            <v-icon :color="color">{{icon}}</v-icon>
+          </div>
         </div>
       </v-card-title>
       <v-card-text>
@@ -60,15 +60,15 @@ var gradients = [
 // 공통적으로 적용되는 label 옵션
 var labelOption = {
     normal: {
-      show: true,
-      position: 'insideBottom',
-      distance: 15,
-      align: 'left',
-      verticalAlign: 'middle',
-      rotate: 90,
-      formatter: '{a} {c}',
-      fontSize: 10,
-      color: '#BABABA',
+        show: true,
+        position: 'insideBottom',
+        distance: 15,
+        align: 'left',
+        verticalAlign: 'middle',
+        rotate: 90,
+        formatter: '{a} {c}',
+        fontSize: 10,
+        color: '#BABABA',
     }
 };
 
@@ -181,15 +181,12 @@ export default {
   name: 'y-multibar-chart',
   props: {
     title: String,
-    // series: {
-    //   type: Array,  // name, type  속성
-    //   default: null
-    // },
-    xAxisLabels: Array, // 
-    dataList: {
-      type: Array,
+    series: {
+      type: Array,  // name, type  속성
       default: null
     },
+    xAxisLabels: Array, // 
+    dataList: Array,
     icon: String,
     color: String,
     chartColor: {
@@ -200,51 +197,15 @@ export default {
       type: Number,
       default: null
     },
-    backgroundColor: '',
-    seriesKeys: Array,
-    chartTypes: Array,
-    xlableKey: {
-      type: String,
-      default: ''
-    }
+    backgroundColor: ''
   },
   data: () => ({
     option: null,
-    optionString: null,
-    series: null
+    optionString: null
   }),
-  computed: {
-    // series() {
-    //   var name = this.seriesKeys ? this.$t('title.' + this.seriesKeys) : 'test'
-    //   return { name: name, type: this.chartType }
-    // },
-    // xAxisLabels() {
-    //   return this.$_.map(this.dataList, this.xlableKey)
-    // }
-  },
   watch: {
-  },
-  /* Vue lifecycle: created, mounted, destroyed, etc */
-  mounted() {
-    this.series = []
-    $.each(this.seriesKeys, (_i, _key) => {
-      this.series.push({
-        name: this.seriesKeys ? this.$t('title.' + _key) : 'chart' + _i
-        ,type: this.chartTypes[_i] ? this.chartTypes[_i] : 'bar'
-      })
-    })
-    // this.series = [{ name: name, type: this.chartType }]
-    this.setSeries()
-    this.$nextTick(() => {
-      // chart에 크기 조정 요청
-      window.dispatchEvent(new Event('resize'));
-    })
-  },
-  /* methods */
-  methods: {
-    setSeries() {
+    series() {
       if (!this.series) return
-      
       defaultOption.series = []
       var legendNames = []
       let self = this
@@ -253,6 +214,7 @@ export default {
 
       if (this.unit) {
         defaultOption.yAxis[0].name = this.$t('title.unit') + '\n(' + this.unit + ')'
+        console.log('this.unit setting:' + this.unit)
       } else defaultOption.yAxis[0].name = ''
         
       $.each(this.series, (_i, _item) => {
@@ -263,6 +225,7 @@ export default {
           thisSeries.yAxisIndex = _item.yAxisIndex
           thisSeries.label.normal.formatter = '{c}%'
           thisSeries.label.normal.rotate = 0
+          console.log('thisSeries:' + JSON.stringify(thisSeries))
         }
         thisSeries.data = dataList[_i]
         var normalGradient = [
@@ -288,6 +251,10 @@ export default {
       if (this.chartColor) this.option.color = this.chartColor
       this.optionString = JSON.stringify(defaultOption)
     }
+  },
+  /* Vue lifecycle: created, mounted, destroyed, etc */
+  /* methods */
+  methods: {
   }
 }
 </script>
