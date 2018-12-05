@@ -214,7 +214,8 @@
       "ImageUploadFailed": "There was an error uploading the picture. Please take a picture again and upload it.",
       "cancelReason": "When canceling the WO, you must enter the reason.",
       "select": "Select item",
-      "all": "All"
+      "all": "All",
+      "initialize": "초기화 작업을 진행하시겠습니까?"
     },
     "error": {
       "requestError": "An error occurred during data processing.",

@@ -109,7 +109,10 @@ export default {
       default: 'indigo'
     },
     legendData: Array,
-    dataList: Array,
+    dataList: {
+      type: Array,
+      default: null
+    },
     backgroundColor: ''
   },
   data: () => ({
@@ -118,12 +121,13 @@ export default {
         formatter: "{b} : {c}%"
     }
   }),
+  watch: {
+    dataList() {
+      window.dispatchEvent(new Event('resize'));
+    }
+  },
   //* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    this.$nextTick(() => {
-      // chart에 크기 조정 요청
-      window.dispatchEvent(new Event('resize'));
-    })
   },
   //* methods */
   methods: {

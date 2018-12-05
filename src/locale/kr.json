@@ -214,7 +214,8 @@
       "ImageUploadFailed": "사진 업로드 도중 에러가 발생하였습니다. 사진을 다시 찍어서 업로드하시기 바랍니다.",
       "cancelReason": "WO 취소시 사유는 반드시 입력하셔야 합니다.",
       "select": "선택하세요",
-      "all": "전체"
+      "all": "전체",
+      "initialize": "초기화 작업을 진행하시겠습니까?"
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",

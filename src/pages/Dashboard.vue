@@ -500,7 +500,9 @@
         <v-card-title>
           <v-container fluid class="pa-0">
             <v-layout row wrap>
-              <v-btn-toggle  
+              <v-flex xs12 sm4>
+              <v-toolbar dense flat :card="true">
+              <v-btn-toggle 
                 v-model="toggleTask"
                 multiple
                 @change="toggleTaskChanged">
@@ -512,8 +514,11 @@
                   <v-icon>{{btnItem}}</v-icon>
                 </v-btn>
               </v-btn-toggle>
-            </v-layout>
-            <v-layout row wrap>
+              <!-- <v-divider vertical class="mx-3"></v-divider> -->
+              </v-toolbar>
+                </v-flex>
+              <v-flex xs12 sm8>
+                <v-toolbar dense flat>
               <v-btn-toggle  
                 v-model="toggleChart"
                 multiple
@@ -527,18 +532,21 @@
                   <v-icon>{{btnItem}}</v-icon>
                 </v-btn>
               </v-btn-toggle>
-            </v-layout>
-            <v-layout row wrap>
+              <!-- <v-divider vertical class="ml-2"></v-divider> -->
+              <v-spacer></v-spacer>
               <v-btn
                 flat
                 small
                 icon
-                color="indigo lighten-1"
+                color="black"
                 dark
                 @click.prevent="btnClearClicked" 
               >
                 <v-icon>settings_backup_restore</v-icon>
               </v-btn>
+              </v-toolbar>
+              </v-flex>
+              
             </v-layout>
           </v-container>
         </v-card-title>
@@ -946,7 +954,7 @@ export default {
 
       dashboardSettings = this.$_.sortBy(dashboardSettings, ['order', 'taskGroup', 'type'])
       this.$set(this, 'dashboardSettings', dashboardSettings);
-      console.log('dashboardSettings:' + JSON.stringify(dashboardSettings))
+      // console.log('dashboardSettings:' + JSON.stringify(dashboardSettings))
     },
     /**
      * 이달의 WO 비용
@@ -1247,9 +1255,15 @@ export default {
       this.$set(this, 'dashboardSettings', dashboardSettings)
     },
     btnClearClicked() {
+      window.getApp.$emit('APP_CONFIRM', this.$t('message.initialize'));
+      window.getApp.$on('APP_CONFIRM_REPLY', this.initDashboardSetting);
+    },
+    initDashboardSetting(_isInit) {
+      if (!_isInit) return
       localStorage.removeItem('dashboardSetting');
       this.dashboard = this.$comm.clone(this.dashboardConfig)
       this.setDashboardSettings();
+      window.getApp.$off('APP_CONFIRM_REPLY', this.initDashboardSetting);
     }
   }
 };
