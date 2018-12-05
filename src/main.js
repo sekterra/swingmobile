@@ -54,6 +54,7 @@ import YExpantionGrid from '@/components/widgets/YExpantionGrid'
 import rules from '@/js/rules.js'
 import ajax from '@/js/ajax.js'
 import comm from '@/js/common.js'
+import iconMapper from '@/js/iconMapper.js'
 // import 'expose-loader?$!expose-loader?jQuery!jquery'
 
 // Vue.use(Vuetify)
@@ -162,6 +163,7 @@ Vue.prototype.$rules = rules
 Vue.prototype.$ajax = ajax
 Vue.prototype.$comm = comm
 Vue.prototype.$_ = _
+Vue.prototype.$iconMapper = iconMapper
 
 // Import App Custom Styles
 //import AppStyles from './assets/sass/main.scss'

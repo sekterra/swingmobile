@@ -13,6 +13,7 @@
   // },
   { // 설치된 설비수
     key: 'installedEquipment',
+    order: 1,
     enable: true,  // 활성화 여부
   },
   // { // 고장 설비수
@@ -97,6 +98,7 @@
   // },
   { // 가동 설비 현황
     key: 'equipmentUtilizationRate',
+    order: 2,
     enable: true,  // 활성화 여부
   },
   // { // 가동 설비 현황
@@ -125,14 +127,17 @@
   // },
   { // 작업 완료율
     key: 'woCompleteRate',
+    order: 3,
     enable: true,  // 활성화 여부
   },
   { // 설비별 유지비용
     key: 'maintenanceCost',
+    order: 4,
     enable: true,  // 활성화 여부
   },
   { // 원인별 WO 현황
     key: 'woCauseStatus',
+    order: 5,
     enable: true,  // 활성화 여부
   }
 ];

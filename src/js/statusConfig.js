@@ -8,8 +8,6 @@
   installedEquipment: {
     taskGroup: 'equipment',
     type: 'mini-statistic',
-    taskIcon: 'domain',
-    chartTypeIcon: 'style',
     subTitleKey: 'number',
     color: 'success  darken-1',
     remark: 'test',
@@ -22,16 +20,12 @@
   breakdownEquipment: {
     taskGroup: 'equipment',
     type: 'mini-statistic',
-    taskIcon: 'domain',
-    chartTypeIcon: 'style',
     valueKey: 'totalBreakdownCount',
     methodKey: 'setEquipmentCardStatus'
   },
   equipmentUtilizationRate: {
     taskGroup: 'equipment',
     type: 'y-gauge-chart',
-    taskIcon: 'domain',
-    chartTypeIcon: 'network_check',
     color: 'info',
     remark: '',
     xs12: true,
@@ -43,8 +37,6 @@
   woCost: {
     taskGroup: 'wo',
     type: 'mini-statistic',
-    taskIcon: 'domain',
-    chartTypeIcon: 'network_check',
     valueKey: 'totalCosts',
     methodKey: 'woTotalCostAndHour'
   },
@@ -65,8 +57,6 @@
   woCompleteRate: {
     taskGroup: 'wo',
     type: 'circle-statistic',
-    taskIcon: 'description',
-    chartTypeIcon: 'donut_large',
     subTitleKey: 'headline',
     caption: 'complete',
     color: 'info',
@@ -82,8 +72,6 @@
     type: 'y-multibar-chart',
     seriesKeys: ['totalCost'],
     chartTypes: ['bar'],
-    taskIcon: 'domain',
-    chartTypeIcon: 'bar_chart',
     xlableKey: 'equipCd',
     color: 'success  darken-1',
     backgroundColor: '',
@@ -100,8 +88,6 @@
   woCauseStatus: {
     taskGroup: 'wo',
     type: 'y-pie-chart',
-    taskIcon: 'description',
-    chartTypeIcon: 'pie_chart',
     legendKey: 'causeNm',
     backgroundColor: '',
     remark: '',
