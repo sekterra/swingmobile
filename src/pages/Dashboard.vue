@@ -24,7 +24,7 @@
               :lg8="item.lg8">
               <mini-statistic
                 v-if="statusConfig[item.key].type === 'mini-statistic' && statusData[item.key]"
-                :icon="$iconMapper.task[item.taskGroup]"
+                :icon="$iconMapper.task[statusConfig[item.key].taskGroup]"
                 :iconTitle="$t('title.' + item.key)"
                 :title="statusData[item.key].value"
                 :sub-title="$t('title.' + statusConfig[item.key].subTitleKey)"
