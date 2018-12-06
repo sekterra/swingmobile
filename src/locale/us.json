@@ -178,7 +178,12 @@
       "inspectionPeriod": "Inspection period",
       "woCost": "WO Cost",
       "woHour": "WO Hour",
-      "setupDashboard": "Dashboard Setting"
+      "setupDashboard": "Dashboard Setting",
+      "month": "M",
+      "year": "Y",
+      "month6": "6M",
+      "hour": "hours",
+      "woCompleteRateToday": "WO complete rate of today"
     },
     "message": {
       "woNo": "Will be automatically generated.",

@@ -73,7 +73,6 @@
               >
               </y-pie-chart>
             </v-flex>
-            
           </v-layout>
         </v-card-text>
       </v-card>
@@ -852,22 +851,8 @@ export default {
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
-
-    window.getApp.$on('STATUS_METHOD_CALLBACK', (_statusData) => {
-    try {
-        var mainKey = _statusData.key
-        // var data = _statusData.data
-        // var tmp = {}
-        // for(var _key in data) {
-        //   // var valueKey = statusConfig[mainKey].hasOwnProperty('valueKey') ? statusConfig[mainKey].valueKey: mainKey
-        //   // var value = data[valueKey]
-        //   tmp[_key] = data[_key]
-        // }
-        this.$set(this.statusData, mainKey, _statusData.data)
-      } catch (e) {
-        window.alert(e.message)
-      }
-    })
+    console.log(':::::::::::::: dahsboard before mount ::::::::::::::')
+    window.getApp.$on('STATUS_METHOD_CALLBACK', this.setStatusData);
     
     // 과거 통계 조회(statusMethod.js로 이동 예정))
     this.getWoTotalCostAndHour()
@@ -884,6 +869,10 @@ export default {
     this.setDashboardData()
     this.setDashboardSettings()
   },
+  beforeDestroy() {
+    console.log(':::::::::::::: dahsboard before destory ::::::::::::::')
+    window.getApp.$off('STATUS_METHOD_CALLBACK', this.setStatusData);
+  },
   /* methods */
   methods: {
     // // TODO : 사용자 정의 dashboard가 있다면 가져온다.
@@ -893,7 +882,7 @@ export default {
     //   }
     // },
     /**
-     * dashboard에 설정된 데이터를 
+     * dashboard에 설정된 데이터를 조회
      */
     setDashboardData () {
       // 1. 사용자 정의 dashboard가 있다면 가져온다.
@@ -918,16 +907,20 @@ export default {
         var param = thisStatusConfig.hasOwnProperty('defaultParam') ? thisStatusConfig.defaultParam : {}
         param.key = _item.key;
 
+        // 2-4. methodKey 항목이 정의되지 않으면 _item.key 정보로 함수명이 존재함
+        if (typeof statusMethod[_item.key] === 'function') statusMethod[_item.key].call(this, param)
+        else window.alert('[개발자용 오류 메시지]\\n' + _item.key + '함수가 statusMethod.js에 정의되지 않았습니다.')
+
         // 2-3-1. statusMethod.js에서 직접 참고할 함수명이 존재한다면 호출
-        if (thisStatusConfig.hasOwnProperty('methodKey')) {
-          if (typeof statusMethod[thisStatusConfig.methodKey] === 'function') statusMethod[thisStatusConfig.methodKey].call(this, param)
-          else window.alert('[개발자용 오류 메시지]\\n' + thisStatusConfig.methodKey + '함수가 statusMethod.js에 정의되지 않았습니다.')
-        }
-        // 2-3-2. methodKey 항목이 정의되지 않으면 _item.key 정보로 함수명이 존재함
-        else {
-            if (typeof statusMethod[_item.key] === 'function') statusMethod[_item.key].call(this, param)
-            else window.alert('[개발자용 오류 메시지]\\n' + _item.key + '함수가 statusMethod.js에 정의되지 않았습니다.')
-        }
+        // if (thisStatusConfig.hasOwnProperty('methodKey')) {
+        //   if (typeof statusMethod[thisStatusConfig.methodKey] === 'function') statusMethod[thisStatusConfig.methodKey].call(this, param)
+        //   else window.alert('[개발자용 오류 메시지]\\n' + thisStatusConfig.methodKey + '함수가 statusMethod.js에 정의되지 않았습니다.')
+        // }
+        // // 2-3-2. methodKey 항목이 정의되지 않으면 _item.key 정보로 함수명이 존재함
+        // else {
+        //     if (typeof statusMethod[_item.key] === 'function') statusMethod[_item.key].call(this, param)
+        //     else window.alert('[개발자용 오류 메시지]\\n' + _item.key + '함수가 statusMethod.js에 정의되지 않았습니다.')
+        // }
       })
     },
     /**
@@ -1264,7 +1257,11 @@ export default {
       this.dashboard = this.$comm.clone(this.dashboardConfig)
       this.setDashboardSettings();
       window.getApp.$off('APP_CONFIRM_REPLY', this.initDashboardSetting);
-    }
+    },
+    setStatusData(_statusData) {
+      console.log('::::::::::::: STATUS_METHOD_CALLBACK receive dashboard :::::::::::::')
+      this.$set(this.statusData, _statusData.key, _statusData.data);
+    },
   }
 };
 </script>

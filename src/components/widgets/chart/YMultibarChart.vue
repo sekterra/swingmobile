@@ -223,14 +223,18 @@ export default {
     // }
   },
   watch: {
+    dataList() {
+      this.setSeries();
+      window.dispatchEvent(new Event('resize'));
+    }
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
     this.series = []
     $.each(this.seriesKeys, (_i, _key) => {
       this.series.push({
-        name: this.seriesKeys ? this.$t('title.' + _key) : 'chart' + _i
-        ,type: this.chartTypes[_i] ? this.chartTypes[_i] : 'bar'
+        name: this.seriesKeys ? this.$t('title.' + _key) : 'chart' + _i,
+        type: this.chartTypes[_i] ? this.chartTypes[_i] : 'bar'
       })
     })
     // this.series = [{ name: name, type: this.chartType }]

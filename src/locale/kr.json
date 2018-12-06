@@ -177,7 +177,12 @@
       "inspectionPeriod": "점검기간",
       "woCost": "정비비용",
       "woHour": "정비시간",
-      "setupDashboard": "Dashboard 설정"
+      "setupDashboard": "Dashboard 설정",
+      "month": "월",
+      "year": "년",
+      "month6": "6월",
+      "hour": "시간",
+      "woCompleteRateToday": "오늘의 WO 완료율"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",

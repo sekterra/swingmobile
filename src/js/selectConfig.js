@@ -15,7 +15,7 @@ var selectConfig = {
       },
     },
     {
-      url: 'stat/equipment/equip/breakdowntime/month',
+      url: 'stat/equipment/equip/breakdowntime/',
       searchData: {
         dateType: 'MON',
         startDate: null,

@@ -16,18 +16,11 @@
     order: 1,
     enable: true,  // 활성화 여부
   },
-  // { // 고장 설비수
-  //   key: 'breakdownEquipment',
-  //   enable: true,
-  //   taskIcon: 'domain',
-  //   statusIcon: 'bar_chart',
-  //   subTitleKey: 'number',
-  //   color: 'red darken-1',
-  //   remark: '',
-  //   xs12: true,
-  //   sm6: true,
-  //   lg4: true
-  // },
+  { // 설치된 설비수
+    key: 'breakdownEquipment',
+    order: 1,
+    enable: true,  // 활성화 여부
+  },
   // { // 작업비용
   //   key: 'woCost',
   //   enable: false,

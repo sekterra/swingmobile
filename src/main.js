@@ -164,6 +164,7 @@ Vue.prototype.$ajax = ajax
 Vue.prototype.$comm = comm
 Vue.prototype.$_ = _
 Vue.prototype.$iconMapper = iconMapper
+Vue.prototype.$eventBus = new Vue(); // Global event bus
 
 // Import App Custom Styles
 //import AppStyles from './assets/sass/main.scss'

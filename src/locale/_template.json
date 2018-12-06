@@ -172,7 +172,12 @@
       "woSearch": "",
       "woCost": "",
       "woHour": "",
-      "setupDashboard": ""
+      "setupDashboard": "",
+      "month": "",
+      "year": "",
+      "month6": "",
+      "hour": "",
+      "woCompleteRateToday": ""
     },
     "message": {
       "woNo": "",
