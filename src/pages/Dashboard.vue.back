@@ -18,10 +18,10 @@
           <v-layout row wrap>
             <v-flex 
               v-for="item in dashboard" :key="item.key"
-              :xs12="statusConfig[item.key].xs12"
-              :sm6='statusConfig[item.key].sm6' 
-              :lg4='statusConfig[item.key].lg4'
-              :lg8="statusConfig[item.key].lg8">
+              :xs12="item.xs12"
+              :sm6='item.sm6' 
+              :lg4='item.lg4'
+              :lg8="item.lg8">
               <mini-statistic
                 v-if="statusConfig[item.key].type === 'mini-statistic' && statusData[item.key]"
                 :icon="$iconMapper.task[statusConfig[item.key].taskGroup]"
@@ -861,7 +861,7 @@ export default {
     this.getEquipmentStatusOfToday()
     this.getWoPmCompleteStatusOfToday()
     this.getInspectionStatusOfToday()
-    // this.getBreakdownTime()
+    this.getBreakdownTime()
     this.getCauseStatus()
     this.getDelayStatus()
   },
