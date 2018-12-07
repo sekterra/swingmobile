@@ -169,10 +169,10 @@ export default [
       return _data
     }
   },
-  {
-    name: 'USER_INFO',
-    callback: function (_userInfo) {
-      return _userInfo
-    }
-  }
+  // {
+  //   name: 'USER_INFO',
+  //   callback: function (_userInfo) {
+  //     return _userInfo
+  //   }
+  // }
 ];

@@ -81,7 +81,7 @@ export default {
       themeColor: 'indigo',
       sideBarOption: 'light',
       colors: colors,
-      userInfo: null
+      userInfo: {}
     };
   },
   computed: {
@@ -185,11 +185,11 @@ export default {
     }
   },
   mounted() {
-    // this.userInfo = window.getApp.getUserInfo()
-    window.getApp.$on('USER_INFO', this.setUserInfo)
+    this.userInfo = window.getApp.getUserInfo()
+    // window.getApp.$on('USER_INFO', this.setUserInfo)
   },
   beforeDestroy() {
-    window.getApp.$off('USER_INFO', this.setUserInfo)
+    // window.getApp.$off('USER_INFO', this.setUserInfo)
   },
   methods: {
     setUserInfo(_userInfo) {

@@ -194,6 +194,11 @@ export default {
     });
     this.$on('APP_KEYBOARD_HIDE', this.hideKeyboard);
 
+    // TODO : device가 준비되었다면, 모바일의 상태바를 숨긴다.
+    this.document.addEventListener('deviceready', () => {
+      if (StatusBar) StatusBar.hide()
+    })
+
     this.document.addEventListener('offline', () => {
       this.networkInfo.isConnected = false
       this.networkInfo.type = null
@@ -208,18 +213,6 @@ export default {
     // 참고 url
     // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
     // - http://blog.eedler.com/5
-
-    window.alert('mounted')
-    try {
-      if (StatusBar) {
-        StatusBar.hide()
-        window.alert('status bar on')
-      } else {
-        window.alert('status bar off')
-      }
-    } catch (e) {
-      window.alert('status bar : ' + e.message)
-    }
 
     this.$nextTick(() => {
       this.$vuetify.goTo(0);
@@ -294,7 +287,6 @@ export default {
       let self = this
       this.$ajax.requestGet((_result) => {
         self.$set(this, 'userInfo', _result)
-        this.$emit('USER_INFO', _result)
       })
     },
     getUserInfo() {

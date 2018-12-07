@@ -50,6 +50,7 @@
         <icon height="50" src="res/icon/ios/Icon-Small-50.png" width="50" />
         <icon height="100" src="res/icon/ios/Icon-Small-50@2x.png" width="100" />
     </platform>
+    <preference name="StatusBarOverlaysWebView" value="false" />
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
