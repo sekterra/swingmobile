@@ -86,6 +86,12 @@ examples:
                     :background-color="statusConfig[item.key].backgroundColor"
                   >
                   </y-pie-chart>
+
+                  <plain-table-order
+                    v-if="statusConfig[item.key].type === 'plain-table-order' && statusData[item.key]"
+                    :title="$t('title.' + item.key)"
+                    :data="statusData[item.key].value">
+                  </plain-table-order>
                 </v-flex>
               </v-layout>
             </v-card-text>       

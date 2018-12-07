@@ -209,6 +209,17 @@
     xs12: true,
     sm6: true
   },
+  // 지연 작업 현황(grid)
+  woDelay: {
+    taskGroup: 'wo',
+    type: 'plain-table-order',
+    remark: '',
+    defaultParam: {
+      dateType: 'MON',
+      startDate: '0m',
+      endDate: '0m',
+    },
+  },
   /******* wo *******/
 
   /******* inspection *******/

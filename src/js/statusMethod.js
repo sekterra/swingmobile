@@ -569,6 +569,29 @@ let statusMethod = {
         appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
       });
     },
+    woDelay(_param) {
+      ajax.url = selectConfig.woList[2].url
+      ajax.param = comm.clone(selectConfig.woList[2].searchData)
+      ajax.param.dateType = _param.dateType
+      if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+        ajax.param.startDate = _param.startDate
+        ajax.param.endDate = _param.endDate
+      } else {
+        var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
+        ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+        ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+      }
+      
+      ajax.requestGet((_result) => {
+        var filteredArray = _result
+        if (_result.length > 10) filteredArray = _result.splice(0, 9)
+        var statusData = {}
+        statusData.key = _param.key
+        statusData.data = {}
+        statusData.data.value = filteredArray
+        appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+      })
+    },
   /******* wo *******/
 
   /******* inspection *******/

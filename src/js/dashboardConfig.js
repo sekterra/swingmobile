@@ -132,6 +132,11 @@
     key: 'woCauseStatus',
     order: 5,
     enable: true,  // 활성화 여부
+  },
+  { // 원인별 WO 현황
+    key: 'woDelay',
+    order: 6,
+    enable: true,  // 활성화 여부
   }
 ];
 
