@@ -177,7 +177,6 @@
                         :error-msg="errors.first('finishDate')"
                       >
                       </y-datepicker>
-                      {{finishDate}} : {{saveData.workOrder.finishDt}} : {{finishTime}}
                     </v-flex>
                     <!-- 작업종료 시간 -->
                     <v-flex 

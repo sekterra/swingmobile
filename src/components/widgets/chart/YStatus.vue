@@ -82,6 +82,15 @@
           :title="$t('title.' + item.key)"
           :data="statusData[item.key].value">
         </plain-table-order>
+        <div 
+          v-if="!statusData[item.key]"
+          class="text-xs-center"
+        >
+          <v-progress-circular
+            indeterminate
+            color="success lighten-1"
+          ></v-progress-circular>
+        </div>
       </v-flex>
     </v-layout>
   </div>
