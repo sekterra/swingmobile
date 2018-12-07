@@ -125,6 +125,11 @@ export default {
     statusData: {},
     datePicker: null,
   }),
+  watch: {
+    statusList() {
+      this.getStatusData()
+    }
+  },
   //* Vue lifecycle: created, mounted, destroyed, etc */
   beforeMount() {
     Object.assign(this.$data, this.$options.data());

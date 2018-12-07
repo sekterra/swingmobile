@@ -157,7 +157,7 @@ export default {
     isOpenPopup: false,
     statusData: {}, // 통계 데이터
     toggleTask: [0, 1, 2, 3],
-    toggleChart: [0, 1, 2, 3, 4],
+    toggleChart: [0, 1, 2, 3, 4, 5],
     dashboardConfig: dashboardConfig,
     statusConfig: statusConfig,
     dashboard: [],
@@ -267,7 +267,6 @@ export default {
       var dashboard = this.$_.filter(this.dashboardSettings, (_item) => {
         return _item.enable
       })
-
       this.$set(this, 'dashboard', dashboard)
       localStorage.dashboardSetting = JSON.stringify(dashboard)
       this.isOpenPopup = false
