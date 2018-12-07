@@ -8,9 +8,10 @@
               <v-toolbar-title class="subheading">{{$t('title.requestInformation')}}</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn
-                color="grey darken-1"
+                color="indigo lighten-3"
                 dark
                 small
+                v-if="editable"
                 @click.prevent="openWoPopup"
               >
                {{$t('title.woCopy')}}
@@ -261,7 +262,7 @@
           <v-layout>
             <v-flex xs12>
               <div class="text-xs-center">
-                <y-btn
+                <!-- <y-btn
                   v-if="!pk || saveData.workOrder.workOrderApproval.woStatusCd !== 'WO_STATUS_R'"
                   type="save"
                   :title="$t('button.save')"
@@ -269,9 +270,24 @@
                   :action-type="requestType"
                   :param="saveData"
                   :is-valid-by-parent="isValid"
+                  :is-submit="isSubmit"
+                  beforeSubmit = "beforeSubmit"
                   @btnClicked="btnSaveClicked" 
                   @btnClickedError="btnClickedError"
                   @checkValidation="checkValidation"
+                ></y-btn> -->
+                <y-btn
+                    v-if="editable"
+                    type="save"
+                  :title="$t('button.save')"
+                  :action-url="url"
+                  :action-type="requestType"
+                  :param="saveData"
+                  :is-submit="isSubmit"
+                  beforeSubmit = "beforeSubmit"
+                  @btnClicked="btnSaveClicked" 
+                  @btnClickedError="btnClickedError"
+                  @beforeSubmit="beforeSubmit"
                 ></y-btn>
                 <y-btn
                   v-if="pk"
@@ -368,7 +384,7 @@ export default {
     popupSearchItem: '',
     // TODO(중요) : 쓰기 권한 여부이며, 페이지내 컨트롤에 적용됨
     // editable: true,
-    isValid: false,
+    isSubmit: false,
     breakdownDate: null,
     breakdownTime: null,
     imagePath: '',
@@ -464,12 +480,15 @@ export default {
     },
     btnClickedError(_error) {
       // console.log('error:' + JSON.stringify(_error))
-      this.isValid = false
+      this.isSubmit = false
+    },
+    beforeSubmit() {
+      this.checkValidation()
     },
     btnSaveClicked(_result) {
       // TODO : 전역 성공 메시지 처리
       // 이벤트는 ./event.js 파일에 선언되어 있음
-      if (!this.isValid) return
+      if (!this.isSubmit) return
       // window.alert(JSON.stringify(_result))
       this.uploadImages(_result.returnResult.workOrderPk)
       this.saveData = this.$comm.clone(this.defaultSaveData)
@@ -521,12 +540,12 @@ export default {
      */
     checkValidation() {
       this.$validator.validateAll().then((_result) => {
-        this.isValid = _result
+        this.isSubmit = _result
         // TODO : 전역 성공 메시지 처리
         // 이벤트는 ./event.js 파일에 선언되어 있음
-        if (!this.isValid) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
+        if (!this.isSubmit) window.getApp.$emit('APP_VALID_ERROR', this.$t('error.validError'))
       }).catch(() => {
-        this.isValid = false
+        this.isSubmit = false
       });
     },
     /**

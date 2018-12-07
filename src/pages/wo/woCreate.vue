@@ -8,9 +8,10 @@
               <v-toolbar-title class="subheading">{{$t('title.woCreateInformation')}}</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn
-                color="grey darken-1"
+                color="indigo lighten-3"
                 dark
                 small
+                v-if="editable"
                 @click.prevent="openWoPopup"
               >
                {{$t('title.woCopy')}}
@@ -244,7 +245,7 @@
       </v-layout>
 
       <!-- 작업 인력 -->
-      <v-layout row wrap fill-height>
+      <!-- <v-layout row wrap fill-height>
         <v-flex xs12>
           <y-regist-list
             ref="employee"
@@ -265,7 +266,7 @@
           >
           </y-regist-list>
         </v-flex>
-      </v-layout>
+      </v-layout> -->
 
       <!-- 작업 직종 -->
       <v-layout row wrap fill-height>
@@ -281,7 +282,7 @@
             hint-key="wageCost"
             :hint-title="$t('title.wageUnitPrice')"
             :is-hint-number="true"
-            icon="business_center"
+            icon="people"
             :editable="editable"
             :items="jobClassList"
           >
@@ -633,7 +634,7 @@ export default {
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
       this.isOpenDialog = false
     },
-     beforeSubmit() {
+    beforeSubmit() {
       this.mappedSaveData()
       this.checkValidation()
     },
@@ -681,7 +682,7 @@ export default {
       this.saveData.woLabors = []
 
       var workOrderSuppliers = this.$refs.outsourcing.getSelectedItems()
-      var employeeList = this.$refs.employee.getSelectedItems()
+      // var employeeList = this.$refs.employee.getSelectedItems()
       var jobClassList = this.$refs.jobClass.getSelectedItems()
 
       // 공급업체
@@ -696,15 +697,15 @@ export default {
       }
 
       // 직원 목록
-      if (employeeList.length) {
-        $.each(employeeList, (_i, _item) => {
-          this.saveData.woLabors.push({
-            userInfo: Number(_item.pk),
-            jobClass: null,
-            workHr: Number(_item.value)
-          })
-        })
-      }
+      // if (employeeList.length) {
+      //   $.each(employeeList, (_i, _item) => {
+      //     this.saveData.woLabors.push({
+      //       userInfo: Number(_item.pk),
+      //       jobClass: null,
+      //       workHr: Number(_item.value)
+      //     })
+      //   })
+      // }
 
       // 직종 목록
       if (jobClassList.length) {

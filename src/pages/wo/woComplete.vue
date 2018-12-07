@@ -277,7 +277,7 @@
                   </v-layout>
 
                   <!-- 작업 인력 -->
-                  <v-layout row wrap fill-height>
+                  <!-- <v-layout row wrap fill-height>
                     <v-flex xs12>
                       <y-regist-list
                         ref="employee"
@@ -299,7 +299,7 @@
                       >
                       </y-regist-list>
                     </v-flex>
-                  </v-layout>
+                  </v-layout> -->
 
                   <!-- 작업 직종 -->
                   <v-layout row wrap fill-height>
@@ -315,7 +315,7 @@
                         hint-key="wageCost"
                         :hint-title="$t('title.wageUnitPrice')"
                         :is-hint-number="true"
-                        icon="business_center"
+                        icon="people"
                         :editable="editable"
                         :items="jobClassList"
                         @registListChanged="jobClassListChanged"
@@ -334,7 +334,7 @@
                         :controlTitle="$t('title.woMaterialInput')"
                         :sub-title="$t('title.numberOfSelects')"
                         :title-of-total="$t('title.cost')"
-                        icon="category"
+                        icon="people"
                         :editable="editable"
                         @openSearchPopup="openSearchPopup"
                         @registListChanged="materialListAdd"
@@ -854,7 +854,7 @@ export default {
       this.mappedFinishDate()
 
       var workOrderSuppliers = this.$refs.outsourcing.getSelectedItems()
-      var employeeList = this.$refs.employee.getSelectedItems()
+      // var employeeList = this.$refs.employee.getSelectedItems()
       var jobClassList = this.$refs.jobClass.getSelectedItems()
       var materialList = this.$refs.materialList.getSelectedItems()
 
@@ -872,17 +872,17 @@ export default {
       }
 
       // 직원 목록
-      if (employeeList.length) {
-        $.each(employeeList, (_i, _item) => {
-          self.saveData.woLabors.push({
-            workOrder: Number(pk),
-            userInfo: Number(_item.pk),
-            jobClass: null,
-            workHr: Number(_item.workHr),
-            realWorkHr: Number(_item.value)
-          })
-        })
-      }
+      // if (employeeList.length) {
+      //   $.each(employeeList, (_i, _item) => {
+      //     self.saveData.woLabors.push({
+      //       workOrder: Number(pk),
+      //       userInfo: Number(_item.pk),
+      //       jobClass: null,
+      //       workHr: Number(_item.workHr),
+      //       realWorkHr: Number(_item.value)
+      //     })
+      //   })
+      // }
 
       // 직종 목록
       if (jobClassList.length) {

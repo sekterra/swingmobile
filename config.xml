@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.yullin.swing" version="1.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <hook src="hooks/hookers.js" type="before_prepare" />
-    <hook src="hooks/beforedep.js" type="before_deploy" />
+    <hook src="hooks/hookers.js" type="before_prepare"/>
+    <hook src="hooks/beforedep.js" type="before_deploy"/>
     <name>swing</name>
     <description>
         swing CMMS mobile Application
@@ -9,57 +9,57 @@
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Software development team of Yullin Technologies
     </author>
-    <content src="index.html" />
-    <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-    <allow-navigation href="http://*/*" />
-    <allow-navigation href="http://*/*" />
+    <content src="index.html"/>
+    <access origin="*"/>
+    <allow-intent href="http://*/*"/>
+    <allow-intent href="https://*/*"/>
+    <allow-intent href="tel:*"/>
+    <allow-intent href="sms:*"/>
+    <allow-intent href="mailto:*"/>
+    <allow-intent href="geo:*"/>
+    <allow-navigation href="http://*/*"/>
+    <allow-navigation href="http://*/*"/>
     <platform name="android">
-        <allow-intent href="market:*" />
-        <icon density="ldpi" src="res/icon/android/ldpi.png" />
-        <icon density="mdpi" src="res/icon/android/mdpi.png" />
-        <icon density="hdpi" src="res/icon/android/hdpi.png" />
-        <icon density="xhdpi" src="res/icon/android/xhdpi.png" />
+        <allow-intent href="market:*"/>
+        <icon density="ldpi" src="res/icon/android/ldpi.png"/>
+        <icon density="mdpi" src="res/icon/android/mdpi.png"/>
+        <icon density="hdpi" src="res/icon/android/hdpi.png"/>
+        <icon density="xhdpi" src="res/icon/android/xhdpi.png"/>
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
-            <application android:networkSecurityConfig="@xml/network_security_config" />
+            <application android:networkSecurityConfig="@xml/network_security_config"/>
         </edit-config>
-        <resource-file src="configuration_android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
-        <resource-file src="configuration_android/raw/swingcmms.pem" target="app/src/main/res/raw/swingcmms.pem" />
+        <resource-file src="configuration_android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml"/>
+        <resource-file src="configuration_android/raw/swingcmms.pem" target="app/src/main/res/raw/swingcmms.pem"/>
     </platform>
     <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-        <icon height="180" src="res/icon/ios/Icon-60@3x.png" width="180" />
-        <icon height="60" src="res/icon/ios/Icon-60.png" width="60" />
-        <icon height="120" src="res/icon/ios/Icon-60@2x.png" width="120" />
-        <icon height="76" src="res/icon/ios/Icon-76.png" width="76" />
-        <icon height="152" src="res/icon/ios/Icon-76@2x.png" width="152" />
-        <icon height="40" src="res/icon/ios/Icon-40.png" width="40" />
-        <icon height="80" src="res/icon/ios/Icon-40@2x.png" width="80" />
-        <icon height="57" src="res/icon/ios/Icon.png" width="57" />
-        <icon height="114" src="res/icon/ios/Icon@2x.png" width="114" />
-        <icon height="72" src="res/icon/ios/Icon-72.png" width="72" />
-        <icon height="144" src="res/icon/ios/Icon-72@2x.png" width="144" />
-        <icon height="29" src="res/icon/ios/Icon-small.png" width="29" />
-        <icon height="58" src="res/icon/ios/Icon-small@2x.png" width="58" />
-        <icon height="50" src="res/icon/ios/Icon-Small-50.png" width="50" />
-        <icon height="100" src="res/icon/ios/Icon-Small-50@2x.png" width="100" />
+        <allow-intent href="itms:*"/>
+        <allow-intent href="itms-apps:*"/>
+        <icon height="180" src="res/icon/ios/Icon-60@3x.png" width="180"/>
+        <icon height="60" src="res/icon/ios/Icon-60.png" width="60"/>
+        <icon height="120" src="res/icon/ios/Icon-60@2x.png" width="120"/>
+        <icon height="76" src="res/icon/ios/Icon-76.png" width="76"/>
+        <icon height="152" src="res/icon/ios/Icon-76@2x.png" width="152"/>
+        <icon height="40" src="res/icon/ios/Icon-40.png" width="40"/>
+        <icon height="80" src="res/icon/ios/Icon-40@2x.png" width="80"/>
+        <icon height="57" src="res/icon/ios/Icon.png" width="57"/>
+        <icon height="114" src="res/icon/ios/Icon@2x.png" width="114"/>
+        <icon height="72" src="res/icon/ios/Icon-72.png" width="72"/>
+        <icon height="144" src="res/icon/ios/Icon-72@2x.png" width="144"/>
+        <icon height="29" src="res/icon/ios/Icon-small.png" width="29"/>
+        <icon height="58" src="res/icon/ios/Icon-small@2x.png" width="58"/>
+        <icon height="50" src="res/icon/ios/Icon-Small-50.png" width="50"/>
+        <icon height="100" src="res/icon/ios/Icon-Small-50@2x.png" width="100"/>
     </platform>
     <feature name="Camera">
-        <param name="ios-package" value="CDVCamera" />
+        <param name="ios-package" value="CDVCamera"/>
     </feature>
     <feature name="File">
-        <param name="android-package" value="org.apache.cordova.FileUtils" />
-        <param name="ios-package" value="CDVFile" />
+        <param name="android-package" value="org.apache.cordova.FileUtils"/>
+        <param name="ios-package" value="CDVFile"/>
     </feature>
     <feature name="FileTransfer">
-        <param name="android-package" value="org.apache.cordova.FileTransfer" />
-        <param name="ios-package" value="CDVFileTransfer" />
+        <param name="android-package" value="org.apache.cordova.FileTransfer"/>
+        <param name="ios-package" value="CDVFileTransfer"/>
     </feature>
     <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
         <string>need camera access to take pictures</string>
@@ -73,18 +73,18 @@
     <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryAddUsageDescription">
         <string>need photo library access to save pictures there</string>
     </edit-config>
-    <plugin name="cordova-plugin-camera" spec="^4.0.3" />
-    <plugin name="cordova-plugin-device" spec="^2.0.2" />
-    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
-    <plugin name="cordova-plugin-globalization" spec="~1.11.0" />
-    <plugin name="cordova-plugin-file-transfer" spec="~1.7.1" />
-    <plugin name="cordova-plugin-save-image" spec="~0.3.0" />
-    <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
-    <plugin name="cordova-plugin-dialogs" spec="^2.0.1" />
-    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
-    <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
-    <engine name="browser" spec="^5.0.4" />
-    <engine name="ios" spec="^4.5.5" />
-    <engine name="android" spec="^7.1.1" />
+    <plugin name="cordova-plugin-camera" spec="^4.0.3"/>
+    <plugin name="cordova-plugin-device" spec="^2.0.2"/>
+    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.1"/>
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3"/>
+    <plugin name="cordova-plugin-globalization" spec="~1.11.0"/>
+    <plugin name="cordova-plugin-file-transfer" spec="~1.7.1"/>
+    <plugin name="cordova-plugin-save-image" spec="~0.3.0"/>
+    <plugin name="cordova-plugin-keyboard" spec="^1.2.0"/>
+    <plugin name="cordova-plugin-dialogs" spec="^2.0.1"/>
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1"/>
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.2"/>
+    <engine name="browser" spec="^5.0.4"/>
+    <engine name="ios" spec="^4.5.5"/>
+    <engine name="android" spec="^7.1.1"/>
 </widget>
