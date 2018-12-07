@@ -49,7 +49,6 @@ import YDurationpicker from '@/components/widgets/YDurationpicker'
 import YRegistList from '@/components/widgets/YRegistList'
 import YExpantionGrid from '@/components/widgets/YExpantionGrid'
 
-
 // TODO : global javascript imports
 import rules from '@/js/rules.js'
 import ajax from '@/js/ajax.js'

@@ -603,10 +603,15 @@ let statusMethod = {
     ajax.url = selectConfig.inspection.completeStatus.url;
     ajax.param = comm.clone(selectConfig.inspection.completeStatus.searchData);
     var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
-    ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
-    ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    ajax.param.dateType =  _param.dateType
+    if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
 
-    var self = this
     var totalCount = 0;
     var totalCompleteCount = 0;
     ajax.requestGet((_result) => {
@@ -617,13 +622,137 @@ let statusMethod = {
       var statusData = {}
       statusData.key = _param.key
       statusData.data = {}
-      statusData.data[_param.key] = comm.getPercentage(totalCompleteCount, totalCount).toString() + '%';
+      statusData.data.value = comm.getPercentage(totalCompleteCount, totalCount).toString() + '%';
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    })
+  },
+  /**
+   * 점검이상 발견 수
+   * @param {*} _param 
+   */
+  detectedError(_param) {
+    ajax.url = selectConfig.inspection.detectedErrorStatus.url
+    ajax.param = comm.clone(selectConfig.inspection.detectedErrorStatus.searchData)
+    var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
+    ajax.param.dateType =  _param.dateType
+    if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
+
+    ajax.requestGet((_result) => {
+      var result = _result.content        
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = result.length;
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    })
+  },
+  // 오늘의 점검 수행현황
+  inspectionCompleteRateToday(_param) {
+    ajax.url = selectConfig.inspectionList[0].url
+    ajax.param = selectConfig.inspectionList[0].searchData
+    ajax.param.startDate = comm.getToday()
+    ajax.param.endDate = comm.getToday()
+    let self = this
+    ajax.requestGet((_result) => {
+      var result = _result.content
+      var completeArray = result.filter((_item) => {
+        return _item.chkDt
+      })
+
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = comm.getPercentage(completeArray.length, result.length);
+      statusData.data.headline = completeArray.length.toString() + '/' + result.length.toString() + ' ';
+
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    })
+  },
+  /**
+   * 점검 수행현황
+   * @param {*} _param 
+   */
+  inspectionPerformanceStatus(_param) {
+    ajax.url = selectConfig.inspection.completeStatus.url;
+    ajax.param = comm.clone(selectConfig.inspection.completeStatus.searchData);
+    var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
+    ajax.param.dateType =  _param.dateType
+    if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
+
+    var xAxisLabels = []
+    var dataList = []
+    
+    var completeCount = 0;
+    var incompleteCount = 0;
+    
+    ajax.requestGet((_result) => {
+      for (var i=0; i < 3; i++) {
+        dataList.push(new Array())
+      }
+
+      $.each(_result, (_i, _item) => {
+        // 완료수
+        completeCount += _item.finishCnt
+        // 미완료수
+        incompleteCount += _item.notFinishCnt
+      })
+
+      dataList[0].unshift(completeCount)
+      dataList[1].unshift(incompleteCount)
+      dataList[2].unshift(comm.getPercentage(completeCount / (completeCount + incompleteCount)))
+
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = dataList
+      statusData.data.xAxisLabels = xAxisLabels
       appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
     })
   },
   /******* inspection *******/
 
   /******* pm *******/
+  /**
+   * 올해의 pm 발행수
+   * @param {*} _param 
+   */
+  pmCount(_param) {
+    ajax.url = selectConfig.pm.completeStatusYear.url;
+    ajax.param = comm.clone(selectConfig.pm.completeStatusYear.searchData);
+    var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
+    ajax.param.dateType =  _param.dateType
+    if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
+
+    var totalCount = 0;
+    ajax.requestGet((_result) => {
+      $.each(_result, (_i, _item) => {
+        totalCount += _item.totCnt;
+      })
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = comm.setNumberSeperator(totalCount)
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    })
+  },
   /**
    * PM 완료율을 가져오는 함수
    * @param {*object} _param 
@@ -632,9 +761,15 @@ let statusMethod = {
     ajax.url = selectConfig.pm.completeStatus.url;
     ajax.param = comm.clone(selectConfig.pm.completeStatus.searchData);
     var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
-    ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
-    ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
-    var self = this
+    ajax.param.dateType =  _param.dateType
+    if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
+
     var totalCount = 0;
     var totalCompleteCount = 0;
     ajax.requestGet((_result) => {
@@ -645,10 +780,118 @@ let statusMethod = {
       var statusData = {}
       statusData.key = _param.key
       statusData.data = {}
-      statusData.data[_param.key] = comm.getPercentage(totalCompleteCount, totalCount).toString() + '%';
+      statusData.data.value = comm.getPercentage(totalCompleteCount, totalCount).toString() + '%';
       appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
     })
   },
+  /**
+   * 오늘의 점검 완료율
+   * @param {*} _param 
+   */
+  pmCompleteRateToday(_param) {
+    ajax.url = selectConfig.woList[0].url
+    ajax.param = comm.clone(selectConfig.woList[0].searchData)
+    ajax.param.woStatus = ['WO_STATUS_P', 'WO_STATUS_C']  // WO 승인, 완료만 조회
+    ajax.param.woStatusEx = ['WO_STATUS_X'] // WO 취소는 제외
+    ajax.param.dateConds = 'startdt'
+    ajax.param.startDate = comm.getToday()
+    ajax.param.endDate = comm.getToday()
+    let self = this
+    ajax.requestGet((_result) => {
+      var result = _result.content
+      // PM 완료율 계산
+      var pmArray = result.filter((_item) => {
+        return _item.pmPk
+      })
+      var pmCompleteArray = result.filter((_item) => {
+        return _item.pmPk && _item.woStatusCd === 'WO_STATUS_C'
+      })
+
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = comm.getPercentage(pmCompleteArray.length, pmArray.length);
+      statusData.data.headline = pmCompleteArray.length.toString() + '/' + pmArray.length.toString() + ' ';
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    })
+  },
+  /**
+   * PM 수행률
+   * @param {*} _param 
+   */
+  pmPerformanceStatus(_param) {
+    if (_param.dateType === 'YEAR') {
+      ajax.url = selectConfig.pm.completeStatusYear.url;
+      ajax.param = comm.clone(selectConfig.pm.completeStatusYear.searchData);
+    } else {
+      ajax.url = selectConfig.pm.completeStatus.url;
+      ajax.param = comm.clone(selectConfig.pm.completeStatus.searchData);
+    }
+
+    var dateFormat = _param.dateType === 'YEAR' ? 'YYYY' : 'YYYYMM'
+    ajax.param.dateType =  _param.dateType
+    if (!isNaN(_param.startDate) && !isNaN(_param.endDate)) {
+      ajax.param.startDate = _param.startDate
+      ajax.param.endDate = _param.endDate
+    } else {
+      ajax.param.startDate = comm.getPrevDate(_param.startDate, dateFormat)
+      ajax.param.endDate = comm.getPrevDate(_param.endDate, dateFormat)
+    }
+
+    var self = this
+    var xAxisLabels = []
+    var dataList = []
+    
+    var completeCount = 0;
+    var incompleteCount = 0;
+
+    ajax.requestGet((_result) => {
+      for(var i = 0; i < 3; i++) {
+        dataList.push(new Array())
+      }
+      
+      var startDate = comm.moment(_param.startDate, dateFormat)
+      var endDate = comm.moment(_param.endDate, dateFormat)
+      var dateDiff = _param.dateType === 'YEAR' ? endDate.diff(startDate, 'years') : endDate.diff(startDate, 'months')
+      dateDiff = Math.abs(dateDiff) ? Math.abs(dateDiff) : 1
+
+      for(var i = 0; i < dateDiff; i++) {
+        var curData = _param.dateType === 'YEAR' ? comm.getPrevYear(i) : comm.getPrevMonth(i)
+        xAxisLabels.unshift(curData)
+
+        var tmpArray = _result.filter((_item) => {
+          return curData === _item.yearMon.split('.').join('')
+        })
+        
+        if (tmpArray.length <= 0) {
+          dataList[0].unshift(0)
+          dataList[1].unshift(0)
+          dataList[2].unshift(0)
+        }
+        else {
+          // 완료수
+          completeCount = tmpArray.reduce(function (sum, _item) {
+              return sum + _item.finishCnt;
+          }, 0);
+          // 미완료수
+          incompleteCount = tmpArray.reduce(function (sum, _item) {
+              return sum + _item.notFinishCnt;
+          }, 0);
+
+          dataList[0].unshift(completeCount)
+          dataList[1].unshift(incompleteCount)
+          dataList[2].unshift(comm.getPercentage(completeCount / (completeCount + incompleteCount)))
+        }
+      }
+
+      var statusData = {}
+      statusData.key = _param.key
+      statusData.data = {}
+      statusData.data.value = dataList
+      statusData.data.xAxisLabels = xAxisLabels
+      appVue.$emit('STATUS_METHOD_CALLBACK', statusData)
+    })
+  }
   /******* pm *******/
 }
 

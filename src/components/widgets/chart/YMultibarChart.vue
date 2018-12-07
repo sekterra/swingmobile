@@ -234,7 +234,8 @@ export default {
     $.each(this.seriesKeys, (_i, _key) => {
       this.series.push({
         name: this.seriesKeys ? this.$t('title.' + _key) : 'chart' + _i,
-        type: this.chartTypes[_i] ? this.chartTypes[_i] : 'bar'
+        type: this.chartTypes[_i] ? this.chartTypes[_i] : 'bar',
+        // yAxisIndex: this.yAxisIndex ? this.yAxisIndex[_i] : 0
       })
     })
     // this.series = [{ name: name, type: this.chartType }]

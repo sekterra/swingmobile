@@ -177,7 +177,9 @@
       "year": "",
       "month6": "",
       "hour": "",
-      "woCompleteRateToday": ""
+      "woCompleteRateToday": "",
+      "inspectionCompleteRateToday": "",
+      "pmCompleteRateToday": ""
     },
     "message": {
       "woNo": "",

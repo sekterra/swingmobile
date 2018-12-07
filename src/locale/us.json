@@ -183,7 +183,9 @@
       "year": "Y",
       "month6": "6M",
       "hour": "hours",
-      "woCompleteRateToday": "WO complete rate of today"
+      "woCompleteRateToday": "WO complete rate of today",
+      "inspectionCompleteRateToday": "Inspection complete rate of today",
+      "pmCompleteRateToday": "PM complete rate of today"
     },
     "message": {
       "woNo": "Will be automatically generated.",

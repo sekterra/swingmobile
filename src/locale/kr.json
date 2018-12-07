@@ -182,7 +182,9 @@
       "year": "년",
       "month6": "6월",
       "hour": "시간",
-      "woCompleteRateToday": "오늘의 WO 완료율"
+      "woCompleteRateToday": "오늘의 WO 완료율",
+      "inspectionCompleteRateToday": "오늘의 점검 완료율",
+      "pmCompleteRateToday": "오늘의 PM 완료율"
     },
     "message": {
       "woNo": "WO 번호는 자동생성됩니다.",
