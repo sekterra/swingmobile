@@ -64,6 +64,7 @@ import color from 'vuetify/es5/util/colors';
 import selectConfig from '@/js/selectConfig'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
+import noImage from '@/static/no-image-icon.png';
 
 export default {
   /* attributes: name, components, props, data */
@@ -110,6 +111,7 @@ export default {
       cm: 0,
       no: 0,
     },
+    noImage: noImage
   }),
   watch: {
     pk() {
@@ -214,7 +216,7 @@ export default {
 
       this.$ajax.requestGet((_result) => {
         if (!_result.length) {
-          this.thumbnailUrl = 'static/no-image.png'
+          this.thumbnailUrl = noImage
           this.equipmentTitleColor = 'indigo--text'
           return
         }

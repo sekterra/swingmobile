@@ -253,7 +253,8 @@
                       flat
                       tile 
                       class="d-flex">
-                      <v-img src="static/no-image-icon.png"/>
+                      <!-- <v-img src="./static/no-image-icon.png"/> -->
+                      <img :src="noImage" style="width:100%;"/>
                     </v-card>
                     </v-flex>
                   </v-layout>
@@ -354,6 +355,7 @@ import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
 import { setTimeout } from 'timers';
+import noImage from '@/static/no-image-icon.png';
 
 let transaction = transactionConfig.wo.request
 export default {
@@ -407,7 +409,8 @@ export default {
       isSubmit: false
     },
     transactionCancel: transactionConfig.wo.cancel,
-    popupTitle: ''
+    popupTitle: '',
+    noImage: noImage
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {

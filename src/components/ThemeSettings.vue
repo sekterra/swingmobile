@@ -173,8 +173,7 @@ export default {
   watch: {
     themeColor: {
       handler (val) {
-        this.$vuetify.theme.primary = this.colors[val].base;
-        
+        this.$vuetify.theme.primary = this.colors[val].base;        
       },
       immediate: true
     },
@@ -184,9 +183,18 @@ export default {
       },
       immediate: true      
     }
-  },  
+  },
   mounted() {
-    this.userInfo = window.getApp.getUserInfo()
+    // this.userInfo = window.getApp.getUserInfo()
+    window.getApp.$on('USER_INFO', this.setUserInfo)
+  },
+  beforeDestroy() {
+    window.getApp.$off('USER_INFO', this.setUserInfo)
+  },
+  methods: {
+    setUserInfo(_userInfo) {
+      this.$set(this, 'userInfo', _userInfo)
+    }
   }
 };
 </script>

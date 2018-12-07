@@ -132,7 +132,7 @@ export default {
       type: null  // 네트워크 접속 방식(wifi, 4g 등)
     },
     ajaxRequestList: [],  // 백업용 요청 목록
-    ajaxFileRequestList: [] // 백업용 파일 요청 목록
+    ajaxFileRequestList: [], // 백업용 파일 요청 목록
   }),
   watch: {
     userPk() {
@@ -152,14 +152,20 @@ export default {
     }
   },
   beforeCreate() {
-    // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
-    // 참고 url
-    // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
-    // - http://blog.eedler.com/5
-    try {
-      if (StatusBar) StatusBar.hide()
-    } catch (e) {
-    }
+    // // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
+    // // 참고 url
+    // // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
+    // // - http://blog.eedler.com/5
+    // try {
+    //   if (StatusBar) {
+    //     StatusBar.hide()
+    //     this.$emit('APP_REQUEST_SUCCESS', 'status bar');
+    //   } else {
+    //     this.$emit('APP_REQUEST_ERROR', 'status bar not');
+    //   }
+    // } catch (e) {
+
+    // }
   },
   created () {
     AppEvents.forEach(item => {
@@ -176,7 +182,9 @@ export default {
       this.changeLocale(_localeCode);
     });
     this.$on('USER_LOGIN', (_userPk) => {
+      console.log('USER_LOGIN EVENT OCCUR')
       this.userPk = _userPk;
+      this.setUserInfo(this.userPk)
       // this.isLogin = true
       // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
       setTimeout(() => {
@@ -196,14 +204,32 @@ export default {
     })
   },
   mounted() {
+    // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
+    // 참고 url
+    // - https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-statusbar/
+    // - http://blog.eedler.com/5
+
+    window.alert('mounted')
+    try {
+      if (StatusBar) {
+        StatusBar.hide()
+        window.alert('status bar on')
+      } else {
+        window.alert('status bar off')
+      }
+    } catch (e) {
+      window.alert('status bar : ' + e.message)
+    }
+
     this.$nextTick(() => {
       this.$vuetify.goTo(0);
     })
 
+    console.log(localStorage.userPk + ':' + this.userPk)
     // 화면이 다시 렌더링 되었을 경우 로그인 유저 처리
-    if (localStorage.getItem('userPk')) {
-      console.log(':::::: emit USER_LOGIN : ' + localStorage.getItem('userPk'))
-      this.$emit('USER_LOGIN', localStorage.getItem('userPk'))
+    if (localStorage.userPk) {
+      console.log(':::::: emit USER_LOGIN : ' + localStorage.userPk)
+      this.$emit('USER_LOGIN', localStorage.userPk)
     }
   },
   beforeDestroy () {
@@ -267,7 +293,8 @@ export default {
       this.$ajax.url = selectConfig.userInfo.url + this.userPk
       let self = this
       this.$ajax.requestGet((_result) => {
-        self.userInfo = _result
+        self.$set(this, 'userInfo', _result)
+        this.$emit('USER_INFO', _result)
       })
     },
     getUserInfo() {
@@ -438,7 +465,7 @@ export default {
      * 앱 또는 브라우저가 종료되기 전에 해야할 작업
      */
     beforeAppClose() {
-      localStorage.removeItem('userPk');
+      // localStorage.removeItem('userPk');
     }
   },
 };

@@ -348,10 +348,8 @@
                         flat
                         tile 
                         class="d-flex">
-                        <v-img
-                          src="static/no-image-icon.png"
-                        >
-                        </v-img>
+                        <!-- <v-img src="static/no-image-icon.png"> </v-img> -->
+                        <img :src="noImage" style="width:100%;"/>
                       </v-card>
                     </v-card-text>
                   </v-card>
@@ -449,6 +447,7 @@ import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import noImage from '@/static/no-image-icon.png';
 
 let transaction = transactionConfig.wo.woCreate
 export default {
@@ -517,7 +516,8 @@ export default {
       isSubmit: false
     },
     transactionCancel: transactionConfig.wo.cancel,
-    popupTitle: ''
+    popupTitle: '',
+    noImage: noImage
   }),
   watch: {
     breakdownDate() {

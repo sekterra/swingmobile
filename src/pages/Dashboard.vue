@@ -164,6 +164,7 @@ export default {
     dashboardSettings: [],
   }),
   computed: {
+    
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   created() {
@@ -173,6 +174,7 @@ export default {
     
     if (localStorage.dashboardSetting) this.dashboard = JSON.parse(localStorage.dashboardSetting)
     else this.dashboard = this.$comm.clone(this.dashboardConfig)
+    console.log(':::: beforeMount :::' + JSON.stringify(this.dashboard))
   },
   mounted() {
     // this.setDashboardData()

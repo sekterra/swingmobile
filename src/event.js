@@ -168,5 +168,11 @@ export default [
     callback: function (_data) {
       return _data
     }
+  },
+  {
+    name: 'USER_INFO',
+    callback: function (_userInfo) {
+      return _userInfo
+    }
   }
 ];

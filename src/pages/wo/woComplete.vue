@@ -14,15 +14,22 @@
               <v-layout row>
                 <v-flex xs12>
                   <v-card>
+                    <div class="text-xs-center">
                     <v-img v-if="woImage"
                       :src="woImage"
                       height="200px"
                     />
-                    <v-img 
+                    <img 
+                      v-else
+                      :src="noImage"
+                      height="200px"
+                    >
+                    </div>
+                    <!-- <v-img 
                       v-else 
                       src="static/no-image-icon.png"
                       height="200px"
-                    />
+                    /> -->
                     <v-card-title primary-title>
                       <div>
                         <div class="headline">{{ '[' + requestData.equipCd + '] ' + requestData.equipNm }}</div>
@@ -430,10 +437,11 @@
                       v-else
                       tile 
                       class="d-flex">
-                      <v-img
+                      <!-- <v-img
                         src="static/no-image-icon.png"
                       >
-                      </v-img>
+                      </v-img> -->
+                      <img :src="noImage" style="width:100%;"/>
                     </v-card>
                     </v-flex>
                   </v-layout>
@@ -547,6 +555,7 @@ import config from '@/js/config.js'
 import $ from 'jquery'
 import ajaxFile from '@/js/ajaxFile'
 import YMaterialInfoList from '@/components/widgets/YMaterialInfoList'
+import noImage from '@/static/no-image-icon.png';
 
 let transaction = transactionConfig.wo.woCreate
 export default {
@@ -618,7 +627,8 @@ export default {
     },
     transactionCancel: transactionConfig.wo.cancel,
     // 알림 메시지
-    isOpenDialog: false
+    isOpenDialog: false,
+    noImage: noImage
   }),
   watch: {
     uploadedImagesCount() {
