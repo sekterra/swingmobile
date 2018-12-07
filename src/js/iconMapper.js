@@ -14,7 +14,8 @@
      'y-gauge-chart': 'network_check',
      'circle-statistic': 'donut_large',
      'y-multibar-chart': 'bar_chart',
-     'y-pie-chart': 'pie_chart'
+     'y-pie-chart': 'pie_chart',
+     'plain-table-order': 'table_chart',
    }
  }
 

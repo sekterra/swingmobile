@@ -96,6 +96,7 @@ import YLineChart from '@/components/widgets/chart/YLineChart';
 import YMultibarChart from '@/components/widgets/chart/YMultibarChart';
 import YPieChart from '@/components/widgets/chart/YPieChart'
 import YGaugeChart from '@/components/widgets/chart/YGaugeChart'
+import PlainTableOrder from '@/components/widgets/list/PlainTableOrder';
 import statusConfig from '@/js/statusConfig.js'
 import statusMethod from '@/js/statusMethod.js'
 import $ from 'jquery'
@@ -109,7 +110,8 @@ export default {
     YLineChart,
     YMultibarChart,
     YPieChart,
-    YGaugeChart
+    YGaugeChart,
+    PlainTableOrder
   },
   name: 'y-status',
   props: {

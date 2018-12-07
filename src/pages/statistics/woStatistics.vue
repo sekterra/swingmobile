@@ -51,7 +51,8 @@ export default {
       {key: 'woCompleteRateToday'},
       {key: 'woCompleteRate', searchYn: true},
       {key: 'woCosts', searchYn: true},
-      {key: 'woCauseStatus', searchYn: true}
+      {key: 'woCauseStatus', searchYn: true},
+      {key: 'woDelay'},
     ]
   },
   mounted() {

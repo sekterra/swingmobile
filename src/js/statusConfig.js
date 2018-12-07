@@ -219,6 +219,7 @@
       startDate: '0m',
       endDate: '0m',
     },
+    xs12: true
   },
   /******* wo *******/
 
