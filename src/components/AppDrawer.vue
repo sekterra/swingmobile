@@ -54,11 +54,11 @@
                 </v-list-tile>
               </template>
             </v-list-group>
-            <v-subheader v-else-if="item.header" :key="i">{{ item.header }}</v-subheader>
+            <v-subheader v-else-if="item.header && item.display" :key="i">{{ item.header }}</v-subheader>
             <v-divider v-else-if="item.divider" :key="i"></v-divider>
             <!--top-level link-->
             <v-list-tile 
-              v-else 
+              v-else-if="item.display"
               :to="!item.href ? { name: item.name } : null" 
               :href="item.href" 
               :disabled="item.disabled" 
@@ -89,6 +89,8 @@
 <script>
 import menu from '@/api/menu';
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
+import selectConfig from '@/js/selectConfig.js'
+
 export default {
   name: 'app-drawer',
   components: {
@@ -126,6 +128,10 @@ export default {
       this.drawer = true;
     });
   },
+  beforeMount() {
+    console.log('AppDrawer beforeMount')
+    this.getSwingMenus();
+  },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     // 모든 이벤트 제거
@@ -147,6 +153,61 @@ export default {
       //   // window.getApp.$router.go(0)
       // } else this.routedPath = window.getApp.$route.fullPath
       // window.getApp.$emit('APP_DRAWER_TOGGLED');
+    },
+    // swing pc 버전의 메뉴를 가져온다.
+    getSwingMenus() {
+      this.$ajax.url = selectConfig.menu.url;
+      this.$ajax.param = null;
+      this.$ajax.requestGet((_result) => {
+        // var level1Menus = this.$_.filter(_result, (_menu) => {
+        //   console.log('_menu.menuLevel:' + _menu.menuLevel.toString() + ':' + (_menu.menuLevel === 1).toString())
+        //   return _menu.menuLevel === 1;
+        // })
+        // console.log('swing 1 menus : ' + level1Menus.length)
+        var swingMenus = this.$_.keyBy(_result, 'progPath');
+        // 1. wo 체크
+        var filter = null
+        var task = 'wo'
+        filter = this.$_.filter(this.menus, (_item) => {
+          return _item.group === task
+        })
+        this.$_.forEach(filter, function(_item) {
+          _item.display = typeof swingMenus['/' + task] !== 'undefined';
+        })
+
+        // 2. inspection 체크
+        task = 'inspection'
+        filter = this.$_.filter(this.menus, (_item) => {
+          return _item.group === task
+        })
+        this.$_.forEach(filter, function(_item) {
+          _item.display = typeof swingMenus['/' + task] !== 'undefined';
+        })
+
+        // 3. pm 체크
+        task = 'pm'
+        filter = this.$_.filter(this.menus, (_item) => {
+          return _item.group === task
+        })
+        this.$_.forEach(filter, function(_item) {
+          _item.display = typeof swingMenus['/' + task] !== 'undefined';
+        })
+
+        // 4. 통계
+        task = 'report'
+        filter = this.$_.filter(this.menus, (_item) => {
+          return _item.group === task
+        })
+        this.$_.forEach(filter, function(_item) {
+          _item.display = typeof swingMenus['/' + task] !== 'undefined';
+        })
+
+        this.$_.forEach(this.menus, (_item) => {
+          _item.editable = true
+        })
+
+        console.log('Menu Setting')
+      })
     }
   }
 };

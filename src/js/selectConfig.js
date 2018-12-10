@@ -322,6 +322,9 @@ var selectConfig = {
         useYn: null
       }
     }
+  },
+  menu: {
+    url: '/member/user/menu/tree/'
   }
 }
 

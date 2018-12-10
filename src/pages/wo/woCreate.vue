@@ -583,6 +583,8 @@ export default {
       this.getLaborList(pk)
       this.getImagePks(pk)
     }
+
+    console.log('editable:' + this.$attrs.editable)
     this.defaultSaveData = this.$comm.clone(this.saveData)
     // this.getExsupplier()
     

@@ -10,14 +10,20 @@ const Menu =  [
     group: 'apps',
     icon: 'dashboard',
     name: 'Dashboard',
+    display:  true
   },
-  { header: 'WO' },
+  { 
+    header: 'WO',
+    group: 'wo',
+    display:  true
+  },
   {
     title: 'WO 요청',
     menuPk: 1,
     group: 'wo',
     icon: 'description',
     name: 'woRequest',
+    display:  true,
   },
   {
     title: 'WO 작성',
@@ -25,6 +31,7 @@ const Menu =  [
     group: 'wo',
     icon: 'description',
     name: 'woCreate',
+    display:  true
   },
   {
     title: 'WO 요청목록',
@@ -32,6 +39,7 @@ const Menu =  [
     group: 'wo',
     icon: 'list',
     name: 'woList',
+    display:  true
   },
   {
     title: 'WO 완료목록',
@@ -39,14 +47,20 @@ const Menu =  [
     group: 'wo',
     icon: 'done',
     name: 'woCompleteList',
+    display:  true
   },
-  { header: 'Inspection' },
+  { 
+    header: 'Inspection',
+    group: 'inspection',
+    display:  true
+  },
   {
     title: '점검목록',
     menuPk: 5,
     group: 'inspection',
     icon: 'list_alt',
     name: 'inspectionList',
+    display:  true
   },
   {
     title: '점검일정',
@@ -54,35 +68,44 @@ const Menu =  [
     group: 'inspection',
     icon: 'event',
     name: 'inspectionCalendar',
+    display:  true
   },
-  { header: 'Statistics' },
+  { 
+    header: 'Statistics',
+    group: 'report',
+    display:  true
+   },
   {
     title: '설비 통계',
     menuPk: 7,
-    group: 'statistics',
+    group: 'report',
     icon: 'pie_chart',
     name: 'equipmentStatistics',
+    display:  true
   },
   {
     title: 'WO',
     menuPk: 8,
-    group: 'statistics',
+    group: 'report',
     icon: 'bar_chart',
     name: 'woStatistics',
+    display:  true
   },
   {
     title: 'PM',
     menuPk: 9,
-    group: 'statistics',
+    group: 'report',
     icon: 'bubble_chart',
     name: 'pmStatistics',
+    display:  true
   },
   {
     title: '점검',
     menuPk: 10,
-    group: 'statistics',
+    group: 'report',
     icon: 'bubble_chart',
     name: 'inspectionStatistics',
+    display:  true
   },
   // { header: 'Apps' },
   // {
