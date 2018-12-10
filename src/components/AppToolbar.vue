@@ -107,7 +107,7 @@
   </v-toolbar>
 </template>
 <script>
-import NotificationList from '@/components/widgets/list/NotificationList';
+// import NotificationList from '@/components/widgets/list/NotificationList';
 import YNotification from '@/components/widgets/YNotification';
 import Util from '@/util';
 import $ from 'jquery';
@@ -117,7 +117,7 @@ import config from '@/js/config.js'
 export default {
   name: 'app-toolbar',
   components: {
-    NotificationList,
+    // NotificationList,
     YNotification
   },
   props: {

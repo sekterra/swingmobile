@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import items from '@/api/order';
+// import items from '@/api/order';
 export default {
   props: {
     title: {
