@@ -99,7 +99,6 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         xhr.setRequestHeader('accept', ajax.accept)
       }
       xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-      // xhr.setRequestHeader('X-TenantID', 'yullin') // 개발버전
       xhr.setRequestHeader('X-TenantID', config.tenantId)
     },
     success: function (xhr, status, req) {

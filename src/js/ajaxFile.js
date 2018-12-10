@@ -64,7 +64,7 @@ ajaxFile.request = function (_callbackSuccess, _callbackFail) {
       }
       xhr.setRequestHeader('accept', 'image/*; application/json;')
       xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-      xhr.setRequestHeader('X-TenantID', 'yullin') // 개발버전
+      xhr.setRequestHeader('X-TenantID', config.tenantId)
     },
     success: function (xhr, status, req) {
       if (typeof _callbackSuccess === 'function') _callbackSuccess(xhr, status, req)
@@ -102,6 +102,7 @@ ajaxFile.request = function (_callbackSuccess, _callbackFail) {
       ajaxOptions.data = comm.trim(ajaxFile.param)
     }
   }
+  console.log('File:' + JSON.stringify(ajaxOptions))
   $.ajax(ajaxOptions)
 }
 
