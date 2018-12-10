@@ -222,7 +222,8 @@
       "cancelReason": "WO 취소시 사유는 반드시 입력하셔야 합니다.",
       "select": "선택하세요",
       "all": "전체",
-      "initialize": "초기화 작업을 진행하시겠습니까?"
+      "initialize": "초기화 작업을 진행하시겠습니까?",
+      "imageUploadComplete": "이미지 업로드가 완료되었습니다."
     },
     "error": {
       "requestError": "데이터 처리도중 에러가 발생하였습니다.",

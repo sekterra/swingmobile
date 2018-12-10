@@ -185,7 +185,8 @@
       "hour": "hours",
       "woCompleteRateToday": "WO complete rate of today",
       "inspectionCompleteRateToday": "Inspection complete rate of today",
-      "pmCompleteRateToday": "PM complete rate of today"
+      "pmCompleteRateToday": "PM complete rate of today",
+      "imageUploadComplete": "Your image upload has been complete."
     },
     "message": {
       "woNo": "Will be automatically generated.",

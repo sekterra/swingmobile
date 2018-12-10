@@ -222,7 +222,8 @@
       "cancelReason": "",
       "select": "",
       "all": "",
-      "initialize": ""
+      "initialize": "",
+      "imageUploadComplete": ""
     },
     "error": {
       "requestError": "",

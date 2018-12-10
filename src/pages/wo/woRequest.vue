@@ -686,11 +686,11 @@ export default {
         attachType: this.attachType,
         fileList: this.upload.imageList
       }
-      window.alert('APP_IMAGE_UPLOAD Request')
+      // window.alert('APP_IMAGE_UPLOAD Request')
       window.getApp.$emit('APP_IMAGE_UPLOAD', uploadInfo);
     },
     completeImageUpload() {
-      window.getApp.$emit('APP_REQUEST_SUCCESS', this.upload.uploadedImagesCount + ' files');
+      // window.getApp.$emit('APP_REQUEST_SUCCESS', this.upload.uploadedImagesCount + ' files');
       this.upload.uploadedImagesCount = 0;
     },
     getImagePks(_pk) {
