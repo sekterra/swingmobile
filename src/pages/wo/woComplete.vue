@@ -412,16 +412,14 @@
                       <v-subheader class="pa-0 mt-3">
                         {{$t('title.woImageFileUpload')}}
                         <v-spacer></v-spacer>
-                        <v-btn 
-                        round
-                        color="black" 
-                        dark
-                        @click.prevent="takePicture"
-                      >
-                        <v-icon>
-                          camera
-                        </v-icon>
-                      </v-btn>
+                        <v-btn
+                          color="indigo lighten-3"
+                          small
+                          dark
+                          @click.prevent="takePicture"
+                        >
+                        {{$t('title.camera')}}
+                        </v-btn>
                       </v-subheader>
                       <v-carousel
                         v-if="carouselImageList.length"
@@ -436,12 +434,16 @@
                     <v-card
                       v-else
                       tile 
-                      class="d-flex">
+                      class="d-flex"
+                      >
                       <!-- <v-img
                         src="static/no-image-icon.png"
                       >
                       </v-img> -->
-                      <img :src="noImage" style="width:100%;"/>
+                      <img 
+                        @click.prevent="takePicture"
+                        :src="noImage" 
+                        style="width:100%;"/>
                     </v-card>
                     </v-flex>
                   </v-layout>

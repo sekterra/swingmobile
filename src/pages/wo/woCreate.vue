@@ -308,7 +308,7 @@
                             <span>Tooltip</span>
                           </v-tooltip> -->
                           <v-btn
-                            color="grey darken-1"
+                            color="indigo lighten-3"
                             small
                             dark
                             @click.prevent="takePicture"
@@ -347,7 +347,9 @@
                         v-else
                         flat
                         tile 
-                        class="d-flex">
+                        class="d-flex"
+                        @click.prevent="takePicture"
+                        >
                         <!-- <v-img src="static/no-image-icon.png"> </v-img> -->
                         <img :src="noImage" style="width:100%;"/>
                       </v-card>

@@ -203,7 +203,7 @@
                 <v-toolbar-title class="subheading">{{$t('title.currentEquipmentPic')}}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="grey darken-1"
+                  color="indigo lighten-3"
                   small
                   dark
                   @click.prevent="takePicture"
@@ -252,7 +252,9 @@
                       v-else
                       flat
                       tile 
-                      class="d-flex">
+                      class="d-flex"
+                      @click.prevent="takePicture"
+                      >
                       <!-- <v-img src="./static/no-image-icon.png"/> -->
                       <img :src="noImage" style="width:100%;"/>
                     </v-card>

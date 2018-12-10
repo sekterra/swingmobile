@@ -341,7 +341,7 @@ export default {
       // 네트워크가 다시 연결될 경우, request, fileupload 처리
       if (this.networkInfo.isConnected) {
         var test = (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList)
-        this.$emit('APP_REQUEST_SUCCESS', this.$t('message.internetConnected')  + ' : ' + test);
+        this.$emit('APP_REQUEST_SUCCESS', this.$t('message.internetConnected'));
         // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
         if (this.userPk) {
           this.checkRemainedRequest();
