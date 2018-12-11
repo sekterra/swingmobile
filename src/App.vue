@@ -136,6 +136,7 @@ export default {
     },
     ajaxRequestList: [],  // 백업용 요청 목록
     ajaxFileRequestList: [], // 백업용 파일 요청 목록
+    isLogin: false
   }),
   watch: {
     userPk() {
@@ -150,11 +151,11 @@ export default {
     isRetry() {
       return localStorage.ajaxRequestList || localStorage.ajaxFileRequestList
     },
-    isLogin() {
+    // isLogin() {
       // console.log('this.$ajax.isLogin:' + this.$ajax.isLogin().toString())
       // console.log('this.userPk:' + this.userPk.toString())
-      return this.$ajax.isLogin() && (this.userPk !== null || this.userPk !== '')
-    }
+      // return this.$ajax.isLogin() && (this.userPk !== null || this.userPk !== '')
+    // }
   },
   beforeCreate() {
     // // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
@@ -188,6 +189,7 @@ export default {
     });
     this.$on('USER_LOGIN', (_userPk) => {
       this.userPk = _userPk;
+      this.isLogin = this.$ajax.isLogin();
       this.setUserInfo(this.userPk)
       // this.isLogin = true
       // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
