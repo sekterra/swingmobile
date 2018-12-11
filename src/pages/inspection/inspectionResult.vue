@@ -207,6 +207,7 @@ examples:
                                     flat
                                     :text-color="saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid ? 'light-blue darken-1' : 'grey darken-1'"
                                     @click.prevent="() => {
+                                      if (!editable) return
                                       saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid = !saveData.equipChkItems[(n * item.equipChkItemRslts.length) + i].isValid;
                                       changedOkYn(saveData.equipChkItems, (n * item.equipChkItemRslts.length) + i, item)
                                     }">
@@ -313,11 +314,13 @@ examples:
         <div class="text-xs-center">
           <span v-if="inspectionInfo.chkStatusCd === 'CHK_STATUS_N'">
             <v-btn
+              v-if="editable"
               color="success"
               @click.prevent="btnSaveClicked" 
               @btnClickedError="btnClickedError"
             >{{$t('button.save')}}</v-btn>
             <y-btn
+              v-if="editable"
               type="save"
               :action-url="completeUrl"
               :action-type="requestType"
@@ -380,11 +383,11 @@ export default {
     // form 유효성 여부
     isValidForm: true,
     // TODO(중요) : 쓰기 권한 여부이며, 페이지내 컨트롤에 적용됨
-    editable: true,
     isValid: false,
     index: 1,
     steps: 1,
     chkResultData: [],
+    editableByAuth: false,  // 메뉴별 수정 권한 여부(가장 강력한 권한)
   }),
   watch: {
   },
@@ -394,10 +397,19 @@ export default {
     },
     inspectionResult() {
       return this.$t('title.pass') + ' : ' + this.inspectionInfo.okCount + '  ' + this.$t('title.fail') + ' : ' + this.inspectionInfo.failCount
+    },
+    editable() {
+      return this.editableByAuth;
     }
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
+
+    this.$nextTick(() => {
+      window.getApp.$emit('REQUEST_MENU')
+    })
+
+    window.getApp.$on('MENU_EDITABLE_SET', this.setThisMenuEditable);
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -410,7 +422,21 @@ export default {
     }
     this.defaultSaveData = this.$comm.clone(this.saveData)
   },  
+  beforeDestroy() {
+    window.getApp.$off('MENU_EDITABLE_SET', this.setThisMenuEditable)
+  },
   methods: {
+    /**
+     * 현재 메뉴의 쓰기 속성을 메뉴 권한에서 가져온다.
+     */
+    setThisMenuEditable(_menus) {
+      // 이 페이지는 menu.js에 등록되어 있지 않은 별도 페이지이므로 부모 페이지의 권한을 가져와서 설정
+      var filter = this.$_.filter(_menus, (_item) => {
+        return 'inspectionList' === _item.name
+      })
+      if (filter.length > 0) this.editableByAuth = filter[0].editable
+      console.log('filter[0].editable:' + JSON.stringify(_menus))
+    },
     // 버그 있음 : 수정 필요
     btnClearClicked () {
       this.saveData = this.$comm.clone(this.defaultSaveData);

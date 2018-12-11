@@ -70,6 +70,7 @@
                     <v-flex sm6 class="py-0">
                       <y-select
                         :label="$t('title.woDepartment')"
+                        :editable="editable"
                         item-search-key="depart"
                         name="deptPk"
                         v-model="saveData.workOrder.dept"
@@ -293,7 +294,7 @@
                   @beforeSubmit="beforeSubmit"
                 ></y-btn>
                 <y-btn
-                  v-if="pk"
+                  v-if="pk && editable"
                   type="delete"
                   :title="$t('button.woCancel')"
                   :action-url="transactionCancel.url + pk"
@@ -306,7 +307,7 @@
                   @getCancelRequest="getCancelRequest"
                 ></y-btn>
                 <y-btn
-                  v-if="!pk"
+                  v-if="!pk && editable"
                   type="clear"
                   :title="$t('button.clear')"
                   @btnClicked="btnClearClicked" 
@@ -412,7 +413,8 @@ export default {
     },
     transactionCancel: transactionConfig.wo.cancel,
     popupTitle: '',
-    noImage: noImage
+    noImage: noImage,
+    editableByAuth: false,  // 메뉴별 수정 권한 여부(가장 강력한 권한)
   }),
   watch: {
     'saveData.workOrder.planStartDt': function () {
@@ -441,11 +443,15 @@ export default {
       return isBreak
     },
     editable() {
-      return this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
+      return (this.editableByAuth && this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C')
     }
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
+    this.$nextTick(() => {
+      window.getApp.$emit('REQUEST_MENU')
+    })
+    window.getApp.$on('MENU_EDITABLE_SET', this.setThisMenuEditable)
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -469,19 +475,22 @@ export default {
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     window.getApp.$off('APP_IMAGE_UPLOAD_COMPLETE')
+    window.getApp.$off('MENU_EDITABLE_SET', this.setThisMenuEditable)
  },
   methods: {
+    /**
+     * 현재 메뉴의 쓰기 속성을 메뉴 권한에서 가져온다.
+     */
+    setThisMenuEditable(_menus) {
+      var filter = this.$_.filter(_menus, (_item) => {
+        return this.$route.name === _item.name
+      })
+      if (filter.length > 0) this.editableByAuth = filter[0].editable
+    },
     // 버그 있음 : 수정 필요
     btnClearClicked () {
       this.saveData = this.$comm.clone(this.defaultSaveData);
       this.$validator.reset();
-
-      /** 사용자 입력 요청과 처리 예제 */
-      // window.getApp.$emit('APP_CONFIRM', '테스트 하시겠습니까?');
-      // window.getApp.$on('APP_CONFIRM_REPLY', (_reply) => {
-      //   if (_reply) window.getApp.$emit('APP_REQUEST_SUCCESS', 'YES')
-      //   else window.getApp.$emit('APP_REQUEST_ERROR', 'NO')
-      // })
     },
     btnClickedError(_error) {
       // console.log('error:' + JSON.stringify(_error))
@@ -518,6 +527,7 @@ export default {
       this.isOpenDialog = false
     },
     openSearchPopup() {
+      if (!this.editable) return
       this.popupTitle = this.$t('title.equipmentSearchPopup')
       this.popupSearchItem = 'equipment'
       this.popupGridType = 'radio'
@@ -525,6 +535,7 @@ export default {
       this.eventForReturn = 'bindEquipmentData'
     },
     equipmentNameChanged() {
+      if (!this.editable) return
       this.equipment.equipNm = null
       this.equipment.equipPk = null
     },

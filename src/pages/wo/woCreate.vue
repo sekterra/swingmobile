@@ -89,6 +89,7 @@
                     </v-flex>
                     <v-flex sm6 class="py-0">
                       <y-select
+                        :editable="editable"
                         :label="$t('title.woDepartment')"
                         item-search-key="depart"
                         name="deptPk"
@@ -519,7 +520,8 @@ export default {
     },
     transactionCancel: transactionConfig.wo.cancel,
     popupTitle: '',
-    noImage: noImage
+    noImage: noImage,
+    editableByAuth: false,  // 메뉴별 수정 권한 여부(가장 강력한 권한)
   }),
   watch: {
     breakdownDate() {
@@ -563,11 +565,15 @@ export default {
       return isBreak
     },
     editable() {
-      return this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
+      return this.editableByAuth && this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
     }
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
+    this.$nextTick(() => {
+      window.getApp.$emit('REQUEST_MENU')
+    })
+    window.getApp.$on('MENU_EDITABLE_SET', this.setThisMenuEditable)
   },
   mounted () {
     // TODO : vue router로 전달된 값이 있으면 별도로 처리한다.
@@ -584,7 +590,6 @@ export default {
       this.getImagePks(pk)
     }
 
-    console.log('editable:' + this.$attrs.editable)
     this.defaultSaveData = this.$comm.clone(this.saveData)
     // this.getExsupplier()
     
@@ -596,10 +601,22 @@ export default {
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     window.getApp.$off('APP_IMAGE_UPLOAD_COMPLETE')
+
+    window.getApp.$off('MENU_EDITABLE_SET', this.setThisMenuEditable)
+    console.log('woCreate beforeDestory')
  },
   methods: {
     scrollHanle(evt) {
       console.log(evt)
+    },
+    /**
+     * 현재 메뉴의 쓰기 속성을 메뉴 권한에서 가져온다.
+     */
+    setThisMenuEditable(_menus) {
+      var filter = this.$_.filter(_menus, (_item) => {
+        return this.$route.name === _item.name
+      })
+      if (filter.length > 0) this.editableByAuth = filter[0].editable
     },
     // 버그 있음 : 수정 필요
     btnClearClicked () {
@@ -643,6 +660,7 @@ export default {
       this.checkValidation()
     },
     openSearchPopup() {
+      if (!this.editable) return
       this.popupTitle = this.$t('title.equipmentSearchPopup')
       this.popupSearchItem = 'equipment'
       this.popupGridType = 'radio'
@@ -650,6 +668,7 @@ export default {
       this.eventForReturn = 'bindEquipmentData'
     },
     equipmentNameChanged() {
+      if (!this.editable) return
       this.equipment.equipNm = null
       this.equipment.equipPk = null
     },

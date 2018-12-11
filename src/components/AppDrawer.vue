@@ -109,7 +109,8 @@ export default {
     scrollSettings: {
       maxScrollbarLength: 160
     },
-    routedPath: ''
+    routedPath: '',
+    swingMenus: []  // swing web의 메뉴
   }),
   computed: {
     computeGroupActive () {
@@ -129,15 +130,20 @@ export default {
     });
   },
   beforeMount() {
-    console.log('AppDrawer beforeMount')
-    this.getSwingMenus();
+    window.getApp.$on('REQUEST_MENU', this.sendMenus)
+    console.log('AppDrawer BeforeMount')
+    this.setMenuAuth();
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     // 모든 이벤트 제거
     this.$off('APP_DRAWER_TOGGLED')
+    window.getApp.$off('REQUEST_MENU', this.sendMenus)
  },
   methods: {
+    sendMenus() {
+      window.getApp.$emit('MENU_EDITABLE_SET', this.menus);
+    },
     genChildTarget (item, subItem) {
       if (subItem.href) return;
       if (subItem.component) {
@@ -155,58 +161,42 @@ export default {
       // window.getApp.$emit('APP_DRAWER_TOGGLED');
     },
     // swing pc 버전의 메뉴를 가져온다.
-    getSwingMenus() {
+    setMenuAuth() {
       this.$ajax.url = selectConfig.menu.url;
       this.$ajax.param = null;
       this.$ajax.requestGet((_result) => {
-        // var level1Menus = this.$_.filter(_result, (_menu) => {
-        //   console.log('_menu.menuLevel:' + _menu.menuLevel.toString() + ':' + (_menu.menuLevel === 1).toString())
-        //   return _menu.menuLevel === 1;
-        // })
-        // console.log('swing 1 menus : ' + level1Menus.length)
         var swingMenus = this.$_.keyBy(_result, 'progPath');
-        // 1. wo 체크
-        var filter = null
-        var task = 'wo'
-        filter = this.$_.filter(this.menus, (_item) => {
-          return _item.group === task
-        })
-        this.$_.forEach(filter, function(_item) {
-          _item.display = typeof swingMenus['/' + task] !== 'undefined';
+
+        /** 1level 메뉴 접근 권한 체크 **/
+        // 메뉴 표시 처리
+        var filterItems = ['/wo', '/pm', '/inspection', '/report']
+        var filter = this.$_.filter(swingMenus, (_item) => {
+          return this.$_.includes(filterItems, _item.progPath)
         })
 
-        // 2. inspection 체크
-        task = 'inspection'
-        filter = this.$_.filter(this.menus, (_item) => {
-          return _item.group === task
+        filter = this.$_.forEach(filter, (_item) => {
+          return _item.display = typeof this.$_.includes(filterItems, _item.progPath) === 'undefined' ? false : this.$_.includes(filterItems, _item.progPath)
         })
-        this.$_.forEach(filter, function(_item) {
-          _item.display = typeof swingMenus['/' + task] !== 'undefined';
-        })
+        /** 1level 메뉴 접근 권한 체크 end **/
 
-        // 3. pm 체크
-        task = 'pm'
-        filter = this.$_.filter(this.menus, (_item) => {
-          return _item.group === task
-        })
-        this.$_.forEach(filter, function(_item) {
-          _item.display = typeof swingMenus['/' + task] !== 'undefined';
-        })
-
-        // 4. 통계
-        task = 'report'
-        filter = this.$_.filter(this.menus, (_item) => {
-          return _item.group === task
-        })
-        this.$_.forEach(filter, function(_item) {
-          _item.display = typeof swingMenus['/' + task] !== 'undefined';
-        })
-
-        this.$_.forEach(this.menus, (_item) => {
-          _item.editable = true
-        })
-
-        console.log('Menu Setting')
+        /** 2, 3level 메뉴 접근 권한 체크 **/
+        this.getMeusofLevel(filter)
+        /** 2, 3level 메뉴 접근 권한 체크 END **/
+      })
+    },
+    getMeusofLevel(_menuList) {
+      this.$_.forEach(_menuList, (_item) => {
+        if (_item.menuLevel >= 2) {
+          var filter = this.$_.filter(this.menus, (__item) => {
+            if (_item.progPath === '/inspection/schedule/list') {
+              return __item.relatePath === _item.progPath
+            } else return __item.relatePath === _item.progPath
+          })
+          if (filter.length > 0) filter[0].editable = _item.writeYn
+          if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
+        }
+        // else if (_item.menuLevel === 3 && this.$_.includes(related3Menus, _item.progPath)) this.swingMenus.push(_item)
+        else if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
       })
     }
   }

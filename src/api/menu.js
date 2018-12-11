@@ -24,6 +24,7 @@ const Menu =  [
     icon: 'description',
     name: 'woRequest',
     display:  true,
+    relatePath: '/wo/request/create'
   },
   {
     title: 'WO 작성',
@@ -31,7 +32,8 @@ const Menu =  [
     group: 'wo',
     icon: 'description',
     name: 'woCreate',
-    display:  true
+    display:  true,
+    relatePath: '/wo/master/create'
   },
   {
     title: 'WO 요청목록',
@@ -47,7 +49,8 @@ const Menu =  [
     group: 'wo',
     icon: 'done',
     name: 'woCompleteList',
-    display:  true
+    display:  true,
+    relatePath: '/wo/complete'
   },
   { 
     header: 'Inspection',
@@ -60,7 +63,8 @@ const Menu =  [
     group: 'inspection',
     icon: 'list_alt',
     name: 'inspectionList',
-    display:  true
+    display:  true,
+    relatePath: '/inspection/schedule/list'
   },
   {
     title: '점검일정',
@@ -68,7 +72,8 @@ const Menu =  [
     group: 'inspection',
     icon: 'event',
     name: 'inspectionCalendar',
-    display:  true
+    display:  true,
+    relatePath: '/inspection/schedule/calendar'
   },
   { 
     header: 'Statistics',
@@ -81,7 +86,8 @@ const Menu =  [
     group: 'report',
     icon: 'pie_chart',
     name: 'equipmentStatistics',
-    display:  true
+    display:  true,
+    relatePath: '/equipment/report'
   },
   {
     title: 'WO',
@@ -89,7 +95,8 @@ const Menu =  [
     group: 'report',
     icon: 'bar_chart',
     name: 'woStatistics',
-    display:  true
+    display:  true,
+    relatePath: '/wo/report'
   },
   {
     title: 'PM',
@@ -97,7 +104,8 @@ const Menu =  [
     group: 'report',
     icon: 'bubble_chart',
     name: 'pmStatistics',
-    display:  true
+    display:  true,
+    relatePath: '/pm/report'
   },
   {
     title: '점검',
@@ -105,7 +113,8 @@ const Menu =  [
     group: 'report',
     icon: 'bubble_chart',
     name: 'inspectionStatistics',
-    display:  true
+    display:  true,
+    relatePath: '/inspection/report'
   },
   // { header: 'Apps' },
   // {

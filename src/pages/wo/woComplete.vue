@@ -390,7 +390,7 @@
                                   v-model="saveData.workOrder.etcCost"
                                   />
                                   <span v-else>
-                                    {{$comm.setNumberSeperator(saveData.workOrder.etcCost)}}
+                                    <v-icon>scatter_plot</v-icon> {{$t('title.etcCost')}} : {{$comm.setNumberSeperator(saveData.workOrder.etcCost)}}
                                   </span>
                                 </div>
                               </v-flex>
@@ -630,7 +630,8 @@ export default {
     transactionCancel: transactionConfig.wo.cancel,
     // 알림 메시지
     isOpenDialog: false,
-    noImage: noImage
+    noImage: noImage,
+    editableByAuth: false,  // 메뉴별 수정 권한 여부(가장 강력한 권한)
   }),
   watch: {
     uploadedImagesCount() {
@@ -661,7 +662,7 @@ export default {
       return this.finishDate + ' ' + this.finishTime
     },
     editable() {
-      return this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
+      return this.editableByAuth && this.woStatusCd !== 'WO_STATUS_X' && this.woStatusCd !== 'WO_STATUS_C'
     }
   },
   watch: {
@@ -669,6 +670,10 @@ export default {
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
+    this.$nextTick(() => {
+      window.getApp.$emit('REQUEST_MENU')
+    })
+    window.getApp.$on('MENU_EDITABLE_SET', this.setThisMenuEditable)
     this.saveData = this.$comm.clone(transaction.complete.param)
     this.url = transaction.complete.url
     this.requestType = transaction.complete.requestType
@@ -702,8 +707,19 @@ export default {
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     window.getApp.$off('APP_IMAGE_UPLOAD_COMPLETE')
+
+    window.getApp.$off('MENU_EDITABLE_SET', this.setThisMenuEditable)
  },
   methods: {
+    /**
+     * 현재 메뉴의 쓰기 속성을 메뉴 권한에서 가져온다.
+     */
+    setThisMenuEditable(_menus) {
+      var filter = this.$_.filter(_menus, (_item) => {
+        return 'woCompleteList' === _item.name
+      })
+      if (filter.length > 0) this.editableByAuth = filter[0].editable
+    },
     // 단일 WO 검색
     onSearch(_pk) {
       this.$ajax.url = 'workorder/request/' + _pk

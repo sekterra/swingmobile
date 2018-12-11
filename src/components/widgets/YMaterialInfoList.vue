@@ -20,6 +20,7 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
           <v-btn 
+            v-if="editable"
             icon
             small
             color="indigo lighten-3"
@@ -27,6 +28,9 @@
             >
             <v-icon color="white">add</v-icon>
           </v-btn>
+          <span v-else>
+            {{$t('title.readOnlyMode')}}
+          </span>
       </v-toolbar>
       </v-card-title>
       <v-divider></v-divider>

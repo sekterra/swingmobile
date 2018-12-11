@@ -182,7 +182,6 @@ export default {
       this.changeLocale(_localeCode);
     });
     this.$on('USER_LOGIN', (_userPk) => {
-      console.log('USER_LOGIN EVENT OCCUR')
       this.userPk = _userPk;
       this.setUserInfo(this.userPk)
       // this.isLogin = true

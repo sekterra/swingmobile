@@ -23,13 +23,13 @@ const router =  new Router({
 router.beforeEach((to, from, next) => {
   // TODO : token이 없을 경우 발행 할 수 있도록 로그인 페이지로 이동
   if (to.path !== '/login' && !jwt.getJwtToken()) next({ path: '/login' })
-  var filter = menu.filter((_item) => {
-    return _item.name === to.name
-  })
+  // var filter = menu.filter((_item) => {
+  //   return _item.name === to.name
+  // })
 
-  if (filter.length > 0 && filter[0].hasOwnProperty('editable')) to.query.editable = filter[0].editable;
-  console.log('beforeEach to:' + JSON.stringify(to))
-  console.log('filter:' + JSON.stringify(filter))
+  // if (filter.length > 0 && filter[0].hasOwnProperty('editable')) to.query.editable = filter[0].editable;
+  // console.log('beforeEach to:' + JSON.stringify(to))
+  // console.log('filter:' + JSON.stringify(filter))
   NProgress.start();
   if (to.path !== from.path) next();
   else router.go(0)
