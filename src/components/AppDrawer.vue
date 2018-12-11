@@ -97,6 +97,10 @@ export default {
     VuePerfectScrollbar,
   },
   props: {
+    isLogin: {
+      type: Boolean,
+      default: false
+    },
     expanded: {
       type: Boolean,
       default: true
@@ -121,7 +125,14 @@ export default {
     },
     sideToolbarColor () {
       return this.$vuetify.options.extra.sideNav;
-    }    
+    }
+  },
+  watch: {
+    isLogin() {
+      if (this.isLogin) {
+        this.setMenuAuth();
+      }
+    }
   },
   created () {
     window.getApp.$on('APP_DRAWER_TOGGLED', () => {
@@ -131,14 +142,13 @@ export default {
   },
   beforeMount() {
     window.getApp.$on('REQUEST_MENU', this.sendMenus)
-    console.log('AppDrawer BeforeMount')
-    this.setMenuAuth();
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     // 모든 이벤트 제거
     this.$off('APP_DRAWER_TOGGLED')
     window.getApp.$off('REQUEST_MENU', this.sendMenus)
+    window.getApp.$off('REQUEST_MENU', this.doAfterLogin)
  },
   methods: {
     sendMenus() {
@@ -195,7 +205,6 @@ export default {
           if (filter.length > 0) filter[0].editable = _item.writeYn
           if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
         }
-        // else if (_item.menuLevel === 3 && this.$_.includes(related3Menus, _item.progPath)) this.swingMenus.push(_item)
         else if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
       })
     }

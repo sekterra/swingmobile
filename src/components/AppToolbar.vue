@@ -35,7 +35,6 @@
           </v-icon>
           {{upload.transPercent}}%
         </span>
-
         <!-- network 연결 여부 icon -->
         <v-btn
           icon
@@ -53,6 +52,9 @@
           @click.prevent="refreshPage">
           <v-icon>refresh</v-icon>
         </v-btn> -->
+        <!-- <span slot="activator">
+        {{isLogin}}
+        </span> -->
         
         <v-btn icon flat slot="activator">
           <v-badge color="teal" overlap>
@@ -65,6 +67,7 @@
         </v-btn>
         <y-notification
           v-if="isLogin"
+          :is-login="isLogin"
           :url="wo.url"
           :title="$t('title.recentWo')"
           :search-data="wo.searchData"
@@ -88,6 +91,7 @@
         </v-btn>
         <y-notification
           v-if="isLogin"
+          :is-login="isLogin"
           :url="inspection.url"
           :title="$t('title.recentInspection')"
           :search-data="inspection.searchData"
@@ -262,7 +266,7 @@ export default {
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
-    window.getApp.$off('APP_IMAGE_UPLOAD', this.handleFileUpload)
+    window.getApp.$off('APP_IMAGE_UPLOAD', this.handleFileUpload);
  },
   methods: {
     handleDrawerToggle () {

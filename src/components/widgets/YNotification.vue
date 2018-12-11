@@ -70,6 +70,10 @@ export default {
   /* attributes: name, components, props, data */
   name: 'y-notification',
   props: {
+    isLogin: {
+      type: Boolean,
+      default: false
+    },
     url: {
       type: String,
       required: true
@@ -99,6 +103,9 @@ export default {
     }
   },
   watch: {
+    isLogin() {
+      this.onSearch()
+    },
     orgItems() {
       this.items = []
       if (!this.orgItems.length) {
@@ -120,7 +127,7 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    this.onSearch()
+    if (this.isLogin) this.onSearch()
   },
   /* methods */
   methods: {

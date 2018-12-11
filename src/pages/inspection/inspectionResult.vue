@@ -435,7 +435,6 @@ export default {
         return 'inspectionList' === _item.name
       })
       if (filter.length > 0) this.editableByAuth = filter[0].editable
-      console.log('filter[0].editable:' + JSON.stringify(_menus))
     },
     // 버그 있음 : 수정 필요
     btnClearClicked () {

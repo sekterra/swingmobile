@@ -3,6 +3,7 @@
     <div class="page-header-left">
       <h2 class="breadcrumb">{{title}}</h2>
     </div>
+    <v-spacer></v-spacer>
     <v-breadcrumbs divider="/" class="py-2" v-show="isShow">
       <v-breadcrumbs-item>
       <v-icon larg color="grey darken-1">home</v-icon>
@@ -11,6 +12,16 @@
       {{ item }}
       </v-breadcrumbs-item>
     </v-breadcrumbs>
+    <v-btn
+      icon
+      flat
+      small
+      dark
+      color="indigo lighten-1"
+      @click.stop="refreshPage"
+    >
+      <v-icon>refresh</v-icon>
+    </v-btn>
   </v-layout>  
 </template>
 
@@ -59,7 +70,10 @@ export default {
         }
       });
       return breadcrumbs;
-    },    
+    }, 
+    refreshPage() {
+      this.$router.go(0)
+    }
   }
 };
 </script>

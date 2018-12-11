@@ -6,7 +6,10 @@
   <div id="appRoot">
     <template v-if="!$route.meta.public">
       <v-app id="inspire" class="app">
-        <app-drawer class="app--drawer"></app-drawer>
+        <app-drawer 
+          class="app--drawer"
+          :is-login="isLogin"
+        ></app-drawer>
         <app-toolbar 
           class="app--toolbar" 
           :is-login="isLogin"
@@ -148,7 +151,9 @@ export default {
       return localStorage.ajaxRequestList || localStorage.ajaxFileRequestList
     },
     isLogin() {
-      return this.userPk !== null || this.userPk !== ''
+      // console.log('this.$ajax.isLogin:' + this.$ajax.isLogin().toString())
+      // console.log('this.userPk:' + this.userPk.toString())
+      return this.$ajax.isLogin() && (this.userPk !== null || this.userPk !== '')
     }
   },
   beforeCreate() {
@@ -217,10 +222,8 @@ export default {
       this.$vuetify.goTo(0);
     })
 
-    console.log(localStorage.userPk + ':' + this.userPk)
     // 화면이 다시 렌더링 되었을 경우 로그인 유저 처리
     if (localStorage.userPk) {
-      console.log(':::::: emit USER_LOGIN : ' + localStorage.userPk)
       this.$emit('USER_LOGIN', localStorage.userPk)
     }
   },
