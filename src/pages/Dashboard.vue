@@ -11,7 +11,8 @@
           >
           <v-icon>phonelink_setup</v-icon>
         </v-btn>
-        <v-btn 
+        <!-- TODO: 토큰 재발행 테스트 용 -->
+        <!-- <v-btn 
           icon
           flat
           dark
@@ -28,7 +29,7 @@
           @click.prevent="getReLogin"
           >
           <v-icon>aspect_ratio</v-icon>
-        </v-btn>
+        </v-btn> -->
       </div>
       <!-- TODO : dashboard config -->
       <v-card color="grey lighten-4" flat>
