@@ -101,6 +101,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import $ from 'jquery'
 import { setTimeout } from 'timers';
 import config from '@/js/config';
+import jwt from '@/js/jwtToken';
 let localeMapper = require('@/locale/localeMapper.json');
 
 export default {
@@ -204,14 +205,14 @@ export default {
     var self = this;
     // TODO : 접속 토큰 만료시 리프레쉬 토큰을 사용해서 토큰을 리프레쉬 하고, 재요청
     this.$on('ACCESS_EXPIRED', (_requestInfo) => {
-      this.$ajax.isSetHeader = false;
+      this.$ajax.isSetHeader = true;
       this.$ajax.url = selectConfig.refresh.url; // '/auth/login'
       this.$ajax.isAuthCheck = true;
 
       this.$ajax.requestGet((_result) => {
-        if (_result.hasOwnProperty('refreshToken')) {
-          self.$ajax.isSetHeader = true;
-          jwt.setJwtToken(_result.refreshToken);
+        console.log('ACCESS_EXPIRED:' + JSON.stringify(_result));
+        if (_result.hasOwnProperty('token')) {
+          jwt.setJwtToken(_result.token);
           // 사용자 요청 재전송
           self.requestRetry(_requestInfo);
         } else {
@@ -226,8 +227,11 @@ export default {
       this.$ajax.isSetHeader = false;
       this.$ajax.url = selectConfig.login.url; // '/auth/login'
       this.$ajax.isAuthCheck = true;
+      if (localStorage.loginInfo) this.$ajax.param = JSON.parse(localStorage.loginInfo);
+      else self.$comm.movePage(self.$router, '/');
 
       this.$ajax.requestPost((_result) => {
+        console.log('REFRESH_EXPIRED:' + JSON.stringify(_result));
         if (_result.hasOwnProperty('refreshToken')) {
           self.$ajax.isSetHeader = true;
           jwt.setJwtToken(_result.token);
@@ -258,8 +262,9 @@ export default {
     })
 
     // 새로고침시 설정한 정보에 따라 backend URL 설정
-    if (localStorage.isCloudAccess) config.settingForReleaseSite()
-    else config.settingForDevSite()
+    // if (localStorage.isCloudAccess) config.settingForReleaseSite()
+    // else config.settingForDevSite()
+    config.settingForDevSite();
   },
   mounted() {
     // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
@@ -517,6 +522,7 @@ export default {
      * 요청 재전송
      */
     requestRetry(_requestInfo) {
+      if (!_requestInfo) return;
       this.$ajax.url = _requestInfo.url;
       this.$ajax.param = _requestInfo.param;
       if (_requestInfo.type === 'GET') this.$ajax.requestGet();

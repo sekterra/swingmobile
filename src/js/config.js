@@ -13,9 +13,9 @@ var config = {
     search: "blue lighten-5"
   },
   port: 9999, // current server port
-  backEndIp: backEndIp,  // backend url
-  backEndPort: backEndPort, // backend port
-  protocol: 'http://',
+  backEndIp: releaseUrl,  // backend url
+  backEndPort: '', // backend port
+  protocol: 'https://',
   backEndUrl: backEndUrl,
   backEndAuthUrl: backEndAuthUrl,
   backEndFullUrl : backEndIp + ':' + backEndPort + backEndUrl,

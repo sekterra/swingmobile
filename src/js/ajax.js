@@ -137,6 +137,13 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       if (xhr.hasOwnProperty('responseJSON') && xhr.responseJSON.statusCode === 401) {
         if (xhr.responseJSON.returnCode === 'ACCESS_EXPIRED' || xhr.responseJSON.returnCode === 'REFRESH_EXPIRED') {
           appVue.$emit(xhr.responseJSON.returnCode, thisRequest);  
+          return;
+        } else {
+          if (typeof _callbackFail === 'function') {
+            _callbackFail(xhr, status, err);
+          } else {
+            return xhr;
+          }
         }
       }
       else if (errorCode >= 400 && errorCode < 500) {

@@ -11,6 +11,24 @@
           >
           <v-icon>phonelink_setup</v-icon>
         </v-btn>
+        <v-btn 
+          icon
+          flat
+          dark
+          color="indigo lighten-1"
+          @click.prevent="getRefreshToken"
+          >
+          <v-icon>cached</v-icon>
+        </v-btn>
+        <v-btn 
+          icon
+          flat
+          dark
+          color="indigo lighten-1"
+          @click.prevent="getReLogin"
+          >
+          <v-icon>aspect_ratio</v-icon>
+        </v-btn>
       </div>
       <!-- TODO : dashboard config -->
       <v-card color="grey lighten-4" flat>
@@ -329,6 +347,12 @@ export default {
     setStatusData(_statusData) {
       console.log('::::::::::::: STATUS_METHOD_CALLBACK receive dashboard :::::::::::::')
       this.$set(this.statusData, _statusData.key, _statusData.data);
+    },
+    getRefreshToken() {
+      window.getApp.$emit('ACCESS_EXPIRED');
+    },
+    getReLogin() {
+      window.getApp.$emit('REFRESH_EXPIRED');
     },
   }
 };

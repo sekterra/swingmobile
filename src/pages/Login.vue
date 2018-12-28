@@ -39,13 +39,19 @@
                     clearable
                     v-model="loginInfo.password">
                   </v-text-field>
+                  <!-- 테스트 용
                   <v-switch
                     :label="cloudLabel"
                     v-model="isCloudAccess"
                   ></v-switch>
                   <v-btn @click.prevent="btnAutoIdSet">
                     테스트 ID 세팅
-                  </v-btn>
+                  </v-btn> -->
+
+                  <v-switch
+                    label="Remember me"
+                    v-model="rememberMe"
+                  ></v-switch>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -91,7 +97,8 @@ export default {
     locale: null,
     isCloudAccess: true,
     cloudLabel: 'cloud 접속',
-    isConnected: true
+    isConnected: true,
+    rememberMe: true  // 로그인 정보 유지 여부
   }),
   beforeMount() {
     window.getApp.$on('NETWORK_STATUS_CHANGED', (_isConnected) => {
@@ -105,7 +112,7 @@ export default {
   mounted() {
     window.getApp.isLogin = false;
     this.locale = localStorage.locale
-    this.loginInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
+    // this.loginInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
     this.isCloudAccess = localStorage.isCloudAccess ? localStorage.isCloudAccess : true
     if (localStorage.isCloudAccess) this.isCloudAccess = localStorage.isCloudAccess === 'true' ? true : false
     else this.isCloudAccess = true
@@ -114,6 +121,10 @@ export default {
     else config.settingForDevSite()
 
     localStorage.isCloudAccess = this.isCloudAccess;
+
+    this.rememberMe = localStorage.rememberMe === 'true';
+
+    if (this.rememberMe && localStorage.loginInfo) this.loginInfo = JSON.parse(localStorage.loginInfo);
 
     // App.vue에서 현재 연결 상태를 가져온다.
     this.isConnected = window.getApp.getNetworkConnection();
@@ -134,6 +145,11 @@ export default {
         this.$set(this, 'cloudLabel', '테스트 사이트 접속')
       }
       localStorage.isCloudAccess = Boolean(this.isCloudAccess)
+    },
+    rememberMe() {
+      localStorage.rememberMe = this.rememberMe;
+      if (this.rememberMe) localStorage.loginInfo = JSON.stringify(this.loginInfo);
+      else localStorage.removeItem('loginInfo');
     }
   },
   methods: {
