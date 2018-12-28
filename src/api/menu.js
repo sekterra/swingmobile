@@ -10,12 +10,12 @@ const Menu =  [
     group: 'apps',
     icon: 'dashboard',
     name: 'Dashboard',
-    display:  true
+    display:  false
   },
   { 
     header: 'WO',
     group: 'wo',
-    display:  true
+    display:  false
   },
   {
     title: 'WO 요청',
@@ -23,8 +23,8 @@ const Menu =  [
     group: 'wo',
     icon: 'description',
     name: 'woRequest',
-    display:  true,
-    relatePath: '/wo/request/create'
+    display:  false,
+    relatePath: '/wo/request/list'
   },
   {
     title: 'WO 작성',
@@ -32,16 +32,17 @@ const Menu =  [
     group: 'wo',
     icon: 'description',
     name: 'woCreate',
-    display:  true,
-    relatePath: '/wo/master/create'
+    display:  false,
+    relatePath: '/wo/master/list'
   },
   {
-    title: 'WO 요청목록',
+    title: 'WO 목록',
     menuPk: 3,
     group: 'wo',
     icon: 'list',
     name: 'woList',
-    display:  true
+    display:  false,
+    relatePath: ['/wo/master/list', '/wo/request/list']
   },
   {
     title: 'WO 완료목록',
@@ -49,13 +50,13 @@ const Menu =  [
     group: 'wo',
     icon: 'done',
     name: 'woCompleteList',
-    display:  true,
+    display:  false,
     relatePath: '/wo/complete'
   },
   { 
     header: 'Inspection',
     group: 'inspection',
-    display:  true
+    display:  false
   },
   {
     title: '점검목록',
@@ -63,7 +64,7 @@ const Menu =  [
     group: 'inspection',
     icon: 'list_alt',
     name: 'inspectionList',
-    display:  true,
+    display:  false,
     relatePath: '/inspection/schedule/list'
   },
   {
@@ -72,13 +73,13 @@ const Menu =  [
     group: 'inspection',
     icon: 'event',
     name: 'inspectionCalendar',
-    display:  true,
+    display:  false,
     relatePath: '/inspection/schedule/calendar'
   },
   { 
     header: 'Statistics',
     group: 'report',
-    display:  true
+    display:  false
    },
   {
     title: '설비 통계',
@@ -86,7 +87,7 @@ const Menu =  [
     group: 'report',
     icon: 'pie_chart',
     name: 'equipmentStatistics',
-    display:  true,
+    display:  false,
     relatePath: '/equipment/report'
   },
   {
@@ -95,7 +96,7 @@ const Menu =  [
     group: 'report',
     icon: 'bar_chart',
     name: 'woStatistics',
-    display:  true,
+    display:  false,
     relatePath: '/wo/report'
   },
   {
@@ -104,7 +105,7 @@ const Menu =  [
     group: 'report',
     icon: 'bubble_chart',
     name: 'pmStatistics',
-    display:  true,
+    display:  false,
     relatePath: '/pm/report'
   },
   {
@@ -113,7 +114,7 @@ const Menu =  [
     group: 'report',
     icon: 'bubble_chart',
     name: 'inspectionStatistics',
-    display:  true,
+    display:  false,
     relatePath: '/inspection/report'
   },
   // { header: 'Apps' },

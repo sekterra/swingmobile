@@ -4,7 +4,6 @@ import paths from './paths';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import jwt from '@/js/jwtToken'
-import menu from '@/api/menu'
 
 Vue.use(Router);
 

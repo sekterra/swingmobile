@@ -93,7 +93,6 @@ import AppDrawer from '@/components/AppDrawer';
 import AppToolbar from '@/components/AppToolbar';
 import AppFab from '@/components/AppFab';
 import PageHeader from '@/components/PageHeader';
-import menu from '@/api/menu';
 import ThemeSettings from '@/components/ThemeSettings';
 import AppEvents from  './event';
 import CountryFlag from 'vue-country-flag'
@@ -101,6 +100,7 @@ import selectConfig from '@/js/selectConfig'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar';
 import $ from 'jquery'
 import { setTimeout } from 'timers';
+import config from '@/js/config';
 let localeMapper = require('@/locale/localeMapper.json');
 
 export default {
@@ -190,6 +190,7 @@ export default {
     this.$on('USER_LOGIN', (_userPk) => {
       this.userPk = _userPk;
       this.isLogin = this.$ajax.isLogin();
+      localStorage.userPk = _userPk;
       this.setUserInfo(this.userPk)
       // this.isLogin = true
       // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
@@ -213,6 +214,12 @@ export default {
       this.networkInfo.isConnected = true
       this.networkInfo.type = navigator.connection.type
     })
+
+    // 새로고침시 설정한 정보에 따라 backend URL 설정
+    if (localStorage.isCloudAccess) config.settingForReleaseSite()
+    else config.settingForDevSite()
+
+    
   },
   mounted() {
     // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
@@ -225,8 +232,10 @@ export default {
     })
 
     // 화면이 다시 렌더링 되었을 경우 로그인 유저 처리
+    console.log('localStorage.userPk' + localStorage.userPk);
     if (localStorage.userPk) {
       this.$emit('USER_LOGIN', localStorage.userPk)
+      this.setUserInfo(localStorage.userPk)
     }
   },
   beforeDestroy () {
@@ -290,7 +299,8 @@ export default {
       this.$ajax.url = selectConfig.userInfo.url + this.userPk
       let self = this
       this.$ajax.requestGet((_result) => {
-        self.$set(this, 'userInfo', _result)
+        self.$set(this, 'userInfo', _result);
+        self.$emit('USER_INFO', _result);
       })
     },
     getUserInfo() {

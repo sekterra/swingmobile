@@ -184,15 +184,19 @@ export default {
       immediate: true      
     }
   },
+  beforeMount() {
+    
+  },
   mounted() {
-    this.userInfo = window.getApp.getUserInfo()
-    // window.getApp.$on('USER_INFO', this.setUserInfo)
+    // this.userInfo = window.getApp.getUserInfo()
+    window.getApp.$on('USER_INFO', this.setUserInfo)
   },
   beforeDestroy() {
-    // window.getApp.$off('USER_INFO', this.setUserInfo)
+    window.getApp.$off('USER_INFO', this.setUserInfo)
   },
   methods: {
     setUserInfo(_userInfo) {
+      console.log('userInfo:' + JSON.stringify(_userInfo))
       this.$set(this, 'userInfo', _userInfo)
     }
   }

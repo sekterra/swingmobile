@@ -270,6 +270,7 @@ export default {
  },
   methods: {
     handleDrawerToggle () {
+      console.log('handleDrawerToggle')
       window.getApp.$emit('APP_DRAWER_TOGGLED');
     },
     handleFullScreen () {

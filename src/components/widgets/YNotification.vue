@@ -108,11 +108,11 @@ export default {
     },
     orgItems() {
       this.items = []
+      let self = this
       if (!this.orgItems.length) {
         self.$emit('setCountBadge', self.orgItems.length)
         return
       }
-      let self = this
       for(var i = 0; i < this.orgItems.length; i++) {
         if (i === 5) break;
         var _item = this.orgItems[i];

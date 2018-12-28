@@ -74,7 +74,7 @@
               </v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>
-                  {{$t('menu.' + item.name)}}
+                  {{$t('menu.' + item.name)}} : {{item.display}}
                 </v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action v-if="item.subAction">
@@ -83,7 +83,7 @@
             </v-list-tile>
         </template>
       </v-list>        
-    </vue-perfect-scrollbar>        
+    </vue-perfect-scrollbar>
   </v-navigation-drawer>
 </template>
 <script>
@@ -109,7 +109,7 @@ export default {
   data: () => ({
     mini: false,
     drawer: false,  // left menu 오픈여부
-    menus: menu,
+    menus: [],
     scrollSettings: {
       maxScrollbarLength: 160
     },
@@ -128,27 +128,35 @@ export default {
     }
   },
   watch: {
-    isLogin() {
-      if (this.isLogin) {
-        this.setMenuAuth();
-      }
-    }
-  },
-  created () {
-    window.getApp.$on('APP_DRAWER_TOGGLED', () => {
-      // this.drawer = (!this.drawer);
-      this.drawer = true;
-    });
+    // isLogin() {
+    //   console.log('isLogin' + this.isLogin);
+    //   if (this.isLogin) {
+    //     this.setMenuAuth();
+    //   }
+    // }
   },
   beforeMount() {
+    console.log(':::::::::::::::: beforeMount ::::::::::::::::::::::')
     window.getApp.$on('REQUEST_MENU', this.sendMenus)
+    // this.menus = this.$_.clone(menu);
+    window.getApp.$on('USER_LOGIN', this.setMenuAuth);
+
+    window.getApp.$on('APP_DRAWER_TOGGLED', () => {
+      this.drawer = !this.drawer;
+      // this.drawer = true;
+    });
+  },
+  mounted() {
+    this.setMenuAuth();
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
-    // 모든 이벤트 제거
-    this.$off('APP_DRAWER_TOGGLED')
-    window.getApp.$off('REQUEST_MENU', this.sendMenus)
-    window.getApp.$off('REQUEST_MENU', this.doAfterLogin)
+    // 모든 이벤트 제거    
+    // window.getApp.$off('APP_DRAWER_TOGGLED');
+    window.getApp.$off('REQUEST_MENU', this.sendMenus);
+    window.getApp.$off('REQUEST_MENU', this.doAfterLogin);
+    window.getApp.$off('USER_LOGIN', this.setMenuAuth);
+    Object.assign(this.$data, this.$options.data());
  },
   methods: {
     sendMenus() {
@@ -172,11 +180,11 @@ export default {
     },
     // swing pc 버전의 메뉴를 가져온다.
     setMenuAuth() {
+      this.menus = this.$_.clone(menu);
       this.$ajax.url = selectConfig.menu.url;
       this.$ajax.param = null;
       this.$ajax.requestGet((_result) => {
         var swingMenus = this.$_.keyBy(_result, 'progPath');
-
         /** 1level 메뉴 접근 권한 체크 **/
         // 메뉴 표시 처리
         var filterItems = ['/wo', '/pm', '/inspection', '/report']
@@ -184,29 +192,43 @@ export default {
           return this.$_.includes(filterItems, _item.progPath)
         })
 
-        filter = this.$_.forEach(filter, (_item) => {
-          return _item.display = typeof this.$_.includes(filterItems, _item.progPath) === 'undefined' ? false : this.$_.includes(filterItems, _item.progPath)
-        })
+        var headerFilter = this.$_.filter(this.menus, (_item) => {
+          return _item.hasOwnProperty('header');
+        });
+        
+        // filter = this.$_.forEach(filter, (_item) => {
+        //   return _item.display = typeof this.$_.includes(filterItems, _item.progPath) === 'undefined' ? false : this.$_.includes(filterItems, _item.progPath)
+        // })
         /** 1level 메뉴 접근 권한 체크 end **/
 
         /** 2, 3level 메뉴 접근 권한 체크 **/
-        this.getMeusofLevel(filter)
+        this.getMeusofLevel(filter, headerFilter);
         /** 2, 3level 메뉴 접근 권한 체크 END **/
       })
     },
-    getMeusofLevel(_menuList) {
-      this.$_.forEach(_menuList, (_item) => {
+    getMeusofLevel(_webMenuList, headerFilter) {
+      this.$_.forEach(_webMenuList, (_item) => {
         if (_item.menuLevel >= 2) {
           var filter = this.$_.filter(this.menus, (__item) => {
-            if (_item.progPath === '/inspection/schedule/list') {
-              return __item.relatePath === _item.progPath
-            } else return __item.relatePath === _item.progPath
-          })
-          if (filter.length > 0) filter[0].editable = _item.writeYn
-          if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
+             if (this.$_.isArray(__item.relatePath)) return this.$_.includes(__item.relatePath, _item.progPath);
+            else return __item.relatePath === _item.progPath;
+          });
+
+          this.$_.forEach(filter, (_menu) => {
+            _menu.editable = _item.writeYn;
+            _menu.display = true;
+            
+            var header = this.$_.filter(headerFilter, (_header) => {
+              return _header.group === _menu.group;
+            });
+            if (header.length) header[0].display = true;
+          });
+          // if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
         }
-        else if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews)
-      })
+        
+        // 자식이 있으면 자식 노드 조회
+        if (_item.childMenuViews.length > 0) this.getMeusofLevel(_item.childMenuViews, headerFilter)
+      });
     }
   }
 };

@@ -52,7 +52,6 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
   ajax.url = ajax.url.charAt(0) === '/' ? ajax.url.substring(1, ajax.url.length) : ajax.url
   var url = ajax.isAuthCheck ? config.protocol + config.backEndAuthFullUrl + ajax.url : config.protocol + config.backEndFullUrl + ajax.url
 
-  console.log(':::::::::::::::::::::: ajax : ' + url)
   // TODO : array 파라미터를 처리하기 위해 traditional 설정(서버 상황에 맞게 설정해야 함)
   // true : `data` are sent as "a=1&a=2&a=3"
   // false : `data` are sent as "a[]=1&a[]=2&a[]=3"
@@ -101,6 +100,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         xhr.setRequestHeader('accept', ajax.accept)
       }
       xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+      if (!config.tenantId && token) config.tenantId = localStorage.tenantId;
       xhr.setRequestHeader('X-TenantID', config.tenantId)
     },
     success: function (xhr, status, req) {

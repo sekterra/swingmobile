@@ -414,6 +414,7 @@ export default {
     transactionCancel: transactionConfig.wo.cancel,
     popupTitle: '',
     noImage: noImage,
+    woStatusCd: 'WO_STATUS_R', // wo 상태 코드(기본값 : 요청)
     editableByAuth: false,  // 메뉴별 수정 권한 여부(가장 강력한 권한)
   }),
   watch: {
@@ -485,7 +486,7 @@ export default {
       var filter = this.$_.filter(_menus, (_item) => {
         return this.$route.name === _item.name
       })
-      if (filter.length > 0) this.editableByAuth = filter[0].editable
+      if (filter.length > 0) this.editableByAuth = filter[0].editable;
     },
     // 버그 있음 : 수정 필요
     btnClearClicked () {
@@ -527,15 +528,16 @@ export default {
       this.isOpenDialog = false
     },
     openSearchPopup() {
-      if (!this.editable) return
+      if (!this.editable) return;
       this.popupTitle = this.$t('title.equipmentSearchPopup')
       this.popupSearchItem = 'equipment'
       this.popupGridType = 'radio'
       this.isOpenPopup = true
       this.eventForReturn = 'bindEquipmentData'
+      console.log('openSearchPopup');
     },
     equipmentNameChanged() {
-      if (!this.editable) return
+      if (this.editable) return;
       this.equipment.equipNm = null
       this.equipment.equipPk = null
     },
@@ -596,6 +598,7 @@ export default {
     onSearch(_pk, _isWorkCopy) {
       this.$ajax.url = 'workorder/request/' + _pk
       this.$ajax.requestGet((_result) => {
+        console.log(JSON.stringify(_result));
         this.mappedWoData(_result, _isWorkCopy)
       })
     },

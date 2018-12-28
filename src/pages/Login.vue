@@ -102,6 +102,7 @@ export default {
     window.getApp.$off('NETWORK_STATUS_CHANGED')
  },
   mounted() {
+    window.getApp.isLogin = false;
     this.locale = localStorage.locale
     this.userInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
     this.isCloudAccess = localStorage.isCloudAccess ? localStorage.isCloudAccess : true
@@ -110,6 +111,8 @@ export default {
 
     if (this.isCloudAccess) config.settingForReleaseSite()
     else config.settingForDevSite()
+
+    localStorage.isCloudAccess = this.isCloudAccess;
 
     // App.vue에서 현재 연결 상태를 가져온다.
     this.isConnected = window.getApp.getNetworkConnection()

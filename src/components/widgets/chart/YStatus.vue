@@ -142,22 +142,17 @@ export default {
   },
   //* Vue lifecycle: created, mounted, destroyed, etc */
   beforeCreate() {
-    console.log('::::::::::::: YSTATUS beforeCreate :::::::::::::')
   },
   created() {
-    console.log('::::::::::::: YSTATUS created :::::::::::::')
   },
   beforeMount() {
     Object.assign(this.$data, this.$options.data());
-    console.log('::::::::::::: YSTATUS before mount ::::::::::::: ')
     window.getApp.$on('STATUS_METHOD_CALLBACK', this.setStatusData);
   },
   mounted() {
-    console.log('::::::::::::: YSTATUS mounted :::::::::::::')
     this.getStatusData()
   },
   beforeDestroy() {
-    console.log('::::::::::::::: YSTATUS beforeDestroy ::::::::::::::::::::')
     window.getApp.$off('STATUS_METHOD_CALLBACK', this.setStatusData);
   },
   //* methods */
@@ -189,7 +184,6 @@ export default {
       })
     },
     setStatusData(_statusData) {
-      console.log(':::::::::: call setStatusData :')
       this.$set(this.statusData, _statusData.key, _statusData.data);
     },
     dateChanged(_key) {
