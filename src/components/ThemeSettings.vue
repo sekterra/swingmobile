@@ -185,19 +185,20 @@ export default {
     }
   },
   beforeMount() {
-    
+    window.getApp.$on('USER_LOGIN', this.setUserInfo);
   },
   mounted() {
     // this.userInfo = window.getApp.getUserInfo()
-    window.getApp.$on('USER_INFO', this.setUserInfo)
+    // window.getApp.$on('USER_INFO', this.setUserInfo)
+    // TODO :  refresh 등으로 화면이 다시 렌더링 되었을 경우 처리
+    if (localStorage.userInfo) this.setUserInfo(JSON.parse(localStorage.userInfo));
   },
   beforeDestroy() {
-    window.getApp.$off('USER_INFO', this.setUserInfo)
+    window.getApp.$off('USER_LOGIN', this.setUserInfo)
   },
   methods: {
     setUserInfo(_userInfo) {
-      console.log('userInfo:' + JSON.stringify(_userInfo))
-      this.$set(this, 'userInfo', _userInfo)
+      this.userInfo = _userInfo;
     }
   }
 };

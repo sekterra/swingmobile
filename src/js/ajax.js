@@ -135,7 +135,7 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       var message = appVue.$t('error.requestError')
       var responseText = JSON.parse(xhr.responseText)
        if (responseText.hasOwnProperty('errorMessage')) message = responseText.errorMessage
-      // console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
+      console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
       // window.alert('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
 
       appVue.$emit('APP_REQUEST_ERROR', message)

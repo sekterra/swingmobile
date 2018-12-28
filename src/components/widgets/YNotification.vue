@@ -104,7 +104,7 @@ export default {
   },
   watch: {
     isLogin() {
-      this.onSearch()
+      // this.onSearch()
     },
     orgItems() {
       this.items = []
@@ -127,7 +127,8 @@ export default {
   },
   /* Vue lifecycle: created, mounted, destroyed, etc */
   mounted() {
-    if (this.isLogin) this.onSearch()
+    // if (this.isLogin) this.onSearch()
+    this.onSearch();
   },
   /* methods */
   methods: {

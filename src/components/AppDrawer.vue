@@ -74,7 +74,7 @@
               </v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>
-                  {{$t('menu.' + item.name)}} : {{item.display}}
+                  {{$t('menu.' + item.name)}}
                 </v-list-tile-title>
               </v-list-tile-content>
               <v-list-tile-action v-if="item.subAction">
@@ -114,6 +114,7 @@ export default {
       maxScrollbarLength: 160
     },
     routedPath: '',
+    userInfo: {},
     swingMenus: []  // swing web의 메뉴
   }),
   computed: {
@@ -136,18 +137,16 @@ export default {
     // }
   },
   beforeMount() {
-    console.log(':::::::::::::::: beforeMount ::::::::::::::::::::::')
     window.getApp.$on('REQUEST_MENU', this.sendMenus)
-    // this.menus = this.$_.clone(menu);
-    window.getApp.$on('USER_LOGIN', this.setMenuAuth);
-
+    window.getApp.$on('USER_LOGIN', this.setUserInfo);
     window.getApp.$on('APP_DRAWER_TOGGLED', () => {
       this.drawer = !this.drawer;
-      // this.drawer = true;
     });
   },
   mounted() {
-    this.setMenuAuth();
+    if (localStorage.userInfo) {
+      this.setUserInfo(JSON.parse(localStorage.userInfo));
+    }
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
@@ -155,7 +154,7 @@ export default {
     // window.getApp.$off('APP_DRAWER_TOGGLED');
     window.getApp.$off('REQUEST_MENU', this.sendMenus);
     window.getApp.$off('REQUEST_MENU', this.doAfterLogin);
-    window.getApp.$off('USER_LOGIN', this.setMenuAuth);
+    window.getApp.$off('USER_LOGIN', this.setUserInfo);
     Object.assign(this.$data, this.$options.data());
  },
   methods: {
@@ -170,6 +169,10 @@ export default {
         };
       }
       return { name: `${item.group}/${(subItem.name)}` };
+    },
+    setUserInfo(_userInfo) {
+      this.userInfo = _userInfo;
+      this.setMenuAuth();
     },
     linkClicked() {
       // if (this.routedPath === window.getApp.$route.fullPath) {
@@ -186,6 +189,9 @@ export default {
       this.$ajax.requestGet((_result) => {
         var swingMenus = this.$_.keyBy(_result, 'progPath');
         /** 1level 메뉴 접근 권한 체크 **/
+        // dashboard 표시여부 판단 : 오퍼레이터 이상의 권한을 가질 경우
+        this.menus[0].display = this.userInfo.hasOwnProperty('userTypeCd') && this.userInfo.userTypeCd !== 'UC';
+
         // 메뉴 표시 처리
         var filterItems = ['/wo', '/pm', '/inspection', '/report']
         var filter = this.$_.filter(swingMenus, (_item) => {

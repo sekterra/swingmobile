@@ -56,7 +56,11 @@
         {{isLogin}}
         </span> -->
         
-        <v-btn icon flat slot="activator">
+        <v-btn 
+          v-if="hasAuth"
+          icon 
+          flat 
+          slot="activator">
           <v-badge color="teal" overlap>
             <span slot="badge" v-if="wo.count > 10">9+</span>
             <span slot="badge" v-else-if="wo.count > 0">
@@ -66,8 +70,7 @@
           </v-badge>
         </v-btn>
         <y-notification
-          v-if="isLogin"
-          :is-login="isLogin"
+          v-if="hasAuth"
           :url="wo.url"
           :title="$t('title.recentWo')"
           :search-data="wo.searchData"
@@ -77,10 +80,12 @@
           @setCountBadge="setWoCountBadge"
         >
         </y-notification>
-        <!-- <notification-list></notification-list> -->
       </v-menu>
-      <v-menu offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
-        <v-btn icon flat slot="activator">
+      <v-menu v-if="hasAuth" offset-y origin="center center" class="elelvation-1" :nudge-bottom="14" transition="scale-transition">
+        <v-btn
+          icon 
+          flat 
+          slot="activator">
         <v-badge color="teal" overlap>
           <span slot="badge" v-if="inspection.count > 10">9+</span>
             <span slot="badge" v-else-if="inspection.count > 0">
@@ -90,8 +95,6 @@
         </v-badge>
         </v-btn>
         <y-notification
-          v-if="isLogin"
-          :is-login="isLogin"
           :url="inspection.url"
           :title="$t('title.recentInspection')"
           :search-data="inspection.searchData"
@@ -125,10 +128,6 @@ export default {
     YNotification
   },
   props: {
-    isLogin: {
-      type: Boolean,
-      default: false
-    },
     isConnected: {
       type: Boolean,
       default: true
@@ -207,8 +206,10 @@ export default {
         headline: 'chkStatusNm',
         subtitle: 'chkPlanDt',
         pk: 'chkPlanPk'
-      }
+      },
+      count: 0
     },
+    userInfo: {},
     items: [
       {
         icon: 'account_circle',
@@ -245,6 +246,9 @@ export default {
     },
     connectColor() {
       return this.isConnected ? '' : 'grey lighten-1'
+    },
+    hasAuth() {
+      return this.userInfo.hasOwnProperty('userTypeCd') && this.userInfo.userTypeCd !== 'UC';
     }
   },
   watch: {
@@ -261,16 +265,19 @@ export default {
     this.inspection.searchData.startDate = this.$comm.getPrevDate('1m')
     this.inspection.searchData.endDate = this.$comm.getToday()
     window.getApp.$on('APP_IMAGE_UPLOAD', this.handleFileUpload);
+    window.getApp.$on('USER_LOGIN', this.setUserInfo);
   },
   mounted() {
+    // TODO :  refresh 등으로 화면이 다시 렌더링 되었을 경우 처리
+    if (localStorage.userInfo) this.setUserInfo(JSON.parse(localStorage.userInfo));
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     window.getApp.$off('APP_IMAGE_UPLOAD', this.handleFileUpload);
+    window.getApp.$off('USER_LOGIN', this.setUserInfo);
  },
   methods: {
     handleDrawerToggle () {
-      console.log('handleDrawerToggle')
       window.getApp.$emit('APP_DRAWER_TOGGLED');
     },
     handleFullScreen () {
@@ -284,12 +291,15 @@ export default {
       this.$emit('openThemeSettings')
     },
     setWoCountBadge (_count) {
-      this.wo.count = _count
-      this.$forceUpdate()
+      this.$set(this.wo, 'count', _count);
+      // this.$forceUpdate()
     },
     setInspectionCountBadge (_count) {
-      this.inspection.count = _count
-      this.$forceUpdate()
+      this.$set(this.inspection, 'count', _count);
+      // this.$forceUpdate()
+    },
+    setUserInfo(_userInfo) {
+      this.userInfo = _userInfo;
     },
     uploadImages(_fileInfo, _isRetry) {
       if (!_fileInfo || !_fileInfo.hasOwnProperty('pk')) {

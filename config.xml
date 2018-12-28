@@ -17,8 +17,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <allow-navigation data-href="http://*/*" href="*" />
-    <allow-navigation data-href="http://*/*" href="*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="http://*/*" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="res/icon/android/ldpi.png" />

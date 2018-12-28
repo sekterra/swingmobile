@@ -116,8 +116,7 @@ export default {
     rightDrawer: false,  // right slide popup 오픈 여부
     isSearchPopup: false,  // rightDrawer 구분자, true : 검색용 팝업, false : Theme 설정
     locale: null, // 현재 설정된 언어 locale
-    userPk: null,
-    userInfo: null,
+    userInfo: {}, // 로그인 사용자 정보
     document: document,
     snackbar: {
       show: false,
@@ -139,9 +138,6 @@ export default {
     isLogin: false
   }),
   watch: {
-    userPk() {
-      this.setUserInfo(this.userPk)
-    },
     // 네트워크 상태가 변경되면 상황에 따라 백업 또는 복원처리 한다.
     'networkInfo.isConnected': function () {
       this.networkStatusIsChanged()
@@ -187,18 +183,24 @@ export default {
     this.$on('LOCALE_CHANGE', (_localeCode) => {
       this.changeLocale(_localeCode);
     });
-    this.$on('USER_LOGIN', (_userPk) => {
-      this.userPk = _userPk;
-      this.isLogin = this.$ajax.isLogin();
-      localStorage.userPk = _userPk;
-      this.setUserInfo(this.userPk)
-      // this.isLogin = true
-      // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
+
+    // TODO: discarded
+    // this.$on('USER_LOGIN', (_userPk) => {
+    //   this.userPk = _userPk;
+    //   this.setUserInfo(this.userPk)
+    //   // this.isLogin = true
+    // });
+
+    this.$on('USER_LOGIN', (_userInfo) => {
+      console.log(':::::::::::: USER_LOGIN event occur at App.vue ::::::::::::');
+      this.userInfo = _userInfo;
+       // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
       setTimeout(() => {
         // App.vue 자체적으로 사용자의 확인을 받기 위해 false
         this.checkRemainedRequest();
-      }, 1000)
+      }, 1000);
     });
+
     this.$on('APP_KEYBOARD_HIDE', this.hideKeyboard);
 
     // TODO : device가 준비되었다면, 모바일의 상태바를 숨긴다.
@@ -218,8 +220,6 @@ export default {
     // 새로고침시 설정한 정보에 따라 backend URL 설정
     if (localStorage.isCloudAccess) config.settingForReleaseSite()
     else config.settingForDevSite()
-
-    
   },
   mounted() {
     // TODO : 앱 실행하기 전에 android status bar 숨김, IOS는 xcode의 project 세팅과 info.plist에서 별도 수정줘야 함
@@ -229,14 +229,16 @@ export default {
 
     this.$nextTick(() => {
       this.$vuetify.goTo(0);
-    })
+    });
 
-    // 화면이 다시 렌더링 되었을 경우 로그인 유저 처리
-    console.log('localStorage.userPk' + localStorage.userPk);
-    if (localStorage.userPk) {
-      this.$emit('USER_LOGIN', localStorage.userPk)
-      this.setUserInfo(localStorage.userPk)
-    }
+    // TODO :  refresh 등으로 화면이 다시 렌더링 되었을 경우 처리
+    if (localStorage.userInfo) this.userInfo = JSON.parse(localStorage.userInfo);
+    
+    // TODO : discarded
+    // if (localStorage.userPk) {
+    //   this.$emit('USER_LOGIN', localStorage.userPk)
+    //   this.setUserInfo(localStorage.userPk)
+    // }
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
@@ -291,18 +293,16 @@ export default {
       // TODO : 반드시 추가할 것(추가하지 않으면 팝업창이 다시 활성화 되지 않음)
       this.dialog.show = false
     },
-    setUserPk(_userPk) {
-      this.userPk = _userPk
-    },
-    setUserInfo() {
-      if (!this.userPk) return
-      this.$ajax.url = selectConfig.userInfo.url + this.userPk
-      let self = this
-      this.$ajax.requestGet((_result) => {
-        self.$set(this, 'userInfo', _result);
-        self.$emit('USER_INFO', _result);
-      })
-    },
+    // TODO: discarded
+    // setUserInfo() {
+    //   if (!this.userPk) return
+    //   this.$ajax.url = selectConfig.userInfo.url + this.userPk
+    //   let self = this
+    //   this.$ajax.requestGet((_result) => {
+    //     self.$set(this, 'userInfo', _result);
+    //     self.$emit('USER_INFO', _result);
+    //   })
+    // },
     getUserInfo() {
       return this.userInfo
     },
@@ -357,7 +357,7 @@ export default {
         var test = (localStorage.ajaxRequestList || localStorage.ajaxFileRequestList)
         this.$emit('APP_REQUEST_SUCCESS', this.$t('message.internetConnected'));
         // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
-        if (this.userPk) {
+        if (this.userInfo.hasOwnProperty('userPk') && this.userInfo.userPk) {
           this.checkRemainedRequest();
           // App.vue 자체적으로 사용자의 확인을 받기 위해 false 처리
           // this.needToEmitForConfirm = false;

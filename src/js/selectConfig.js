@@ -325,6 +325,12 @@ var selectConfig = {
   },
   menu: {
     url: '/member/user/menu/tree/'
+  },
+  login: {
+    url: '/auth/login'
+  },
+  refresh: {
+    url: '/auth/refresh'
   }
 }
 
