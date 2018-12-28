@@ -20,7 +20,7 @@
                     persistent-hint
                     type="text" 
                     clearable
-                    v-model="userInfo.tenantId">
+                    v-model="loginInfo.tenantId">
                   </v-text-field>
                   <v-text-field 
                     append-icon="person" 
@@ -28,7 +28,7 @@
                     :label="$t('title.id')"
                     type="text" 
                     clearable
-                    v-model="userInfo.username">
+                    v-model="loginInfo.username">
                   </v-text-field>
                   <v-text-field 
                     append-icon="lock" 
@@ -37,7 +37,7 @@
                     id="password" 
                     type="password" 
                     clearable
-                    v-model="userInfo.password">
+                    v-model="loginInfo.password">
                   </v-text-field>
                   <v-switch
                     :label="cloudLabel"
@@ -83,7 +83,7 @@ export default {
   },
   data: () => ({
     loading: false,
-    userInfo: {
+    loginInfo: {
       tenantId: '',
       username: '',
       password: ''
@@ -105,7 +105,7 @@ export default {
   mounted() {
     window.getApp.isLogin = false;
     this.locale = localStorage.locale
-    this.userInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
+    this.loginInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
     this.isCloudAccess = localStorage.isCloudAccess ? localStorage.isCloudAccess : true
     if (localStorage.isCloudAccess) this.isCloudAccess = localStorage.isCloudAccess === 'true' ? true : false
     else this.isCloudAccess = true
@@ -119,10 +119,10 @@ export default {
     this.isConnected = window.getApp.getNetworkConnection();
   },
   watch: {
-    'userInfo.tenantId': function() {
-      if (!this.userInfo.tenantId) return
-      localStorage.tenantId = this.userInfo.tenantId
-      config.tenantId = this.userInfo.tenantId
+    'loginInfo.tenantId': function() {
+      if (!this.loginInfo.tenantId) return;
+      localStorage.tenantId = this.loginInfo.tenantId
+      config.tenantId = this.loginInfo.tenantId
     },
     isCloudAccess() {
       // this.cloudLabel = this.isCloudAccess ? 'cloud 접속' : '테스트 사이트 접속'
@@ -141,7 +141,7 @@ export default {
       this.$ajax.isSetHeader = false
       this.$ajax.url = selectConfig.login.url; // '/auth/login'
       this.$ajax.isAuthCheck = true
-      this.$ajax.param = this.userInfo
+      this.$ajax.param = this.loginInfo
       let self = this
       this.loading = true
       this.$ajax.requestPost((_result) => {
@@ -153,7 +153,8 @@ export default {
             comm.movePage('/');
             return;
           }
-          
+          // TODO : 로컬 스토리지에 로그인 사용자 정보 저장(snapshot)
+          localStorage.loginInfo = JSON.stringify(this.loginInfo);
           self.getUserInfo(data.userpk);
           // localStorage.userPk = data.userpk
           // window.getApp.$emit('USER_LOGIN', data.userpk)
@@ -173,13 +174,13 @@ export default {
     },
     btnAutoIdSet() {
       if (this.isCloudAccess) {
-        this.userInfo.tenantId = 'cmmstest'
-        this.userInfo.username = 'cmms1234'
-        this.userInfo.password = 'cmms1234'
+        this.loginInfo.tenantId = 'cmmstest'
+        this.loginInfo.username = 'cmms1234'
+        this.loginInfo.password = 'cmms1234'
       } else {
-        this.userInfo.tenantId = 'yullin'
-        this.userInfo.username = 'cmms'
-        this.userInfo.password = 'yullin@7033'
+        this.loginInfo.tenantId = 'yullin'
+        this.loginInfo.username = 'cmms'
+        this.loginInfo.password = 'yullin@7033'
       }
     },
     /**

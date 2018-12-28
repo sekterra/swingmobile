@@ -64,16 +64,14 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
   let isNeedBackup = (ajax.type === 'POST' || ajax.type === 'PUT') && !ajax.isRetry
 
   // 현재의 요청을 필요시 App.vue에 백업해둔다.(네트워크 오류가 발생하면 복원하기 위함)
-  var thisRequest = null
-  if (isNeedBackup) {
-    thisRequest = {
-      ajaxPid: ajaxPid,
-      url: ajax.url,
-      param: ajax.param,
-      type: ajax.type
-    };
-    appVue.addAjaxRequest(thisRequest)
-  }
+  var thisRequest = {};
+  thisRequest = {
+    ajaxPid: ajaxPid,
+    url: ajax.url,
+    param: ajax.param,
+    type: ajax.type
+  };
+  if (isNeedBackup) appVue.addAjaxRequest(thisRequest)
   
   var ajaxOptions = {
     type: ajax.type,
@@ -125,9 +123,6 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       //   appVue.addAjaxRequest(thisRequest)
       // }
 
-      // 네트워크 상태가 정상적이라면, 일반 오류로 판단하고 백업에서 제거한다.
-      if (appVue.getNetworkConnection()) appVue.removeAjaxRequest(ajaxPid)
-
       for(var key in orgAjax) {
         ajax[key] = orgAjax[key]
       }
@@ -138,8 +133,17 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       console.log('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
       // window.alert('error:' + errorCode + ':' + JSON.stringify(xhr) + ':' + status + ':' + err)
 
-      appVue.$emit('APP_REQUEST_ERROR', message)
-      if (errorCode >= 400 && errorCode < 500) {
+      // TODO : 접근 만료 또는 refresh token 만료시 처리
+      if (xhr.hasOwnProperty('responseJSON') && xhr.responseJSON.statusCode === 401) {
+        if (xhr.responseJSON.returnCode === 'ACCESS_EXPIRED' || xhr.responseJSON.returnCode === 'REFRESH_EXPIRED') {
+          appVue.$emit(xhr.responseJSON.returnCode, thisRequest);  
+        }
+      }
+      else if (errorCode >= 400 && errorCode < 500) {
+        // 네트워크 상태가 정상적이라면, 일반 오류로 판단하고 백업에서 제거한다.
+        if (appVue.getNetworkConnection()) appVue.removeAjaxRequest(ajaxPid)
+
+        appVue.$emit('APP_REQUEST_ERROR', message);
         // status code : 500 -> _fnFail 함수를 못 가져옴!
         if (xhr.hasOwnProperty('error') && xhr.error.needLogin) {
           console.log(':::::::::::: ajax :' + JSON.stringify(xhr))

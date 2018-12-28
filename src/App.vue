@@ -191,14 +191,54 @@ export default {
     //   // this.isLogin = true
     // });
 
+    // TODO : 사용자 로그인 처리
     this.$on('USER_LOGIN', (_userInfo) => {
-      console.log(':::::::::::: USER_LOGIN event occur at App.vue ::::::::::::');
       this.userInfo = _userInfo;
        // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
       setTimeout(() => {
         // App.vue 자체적으로 사용자의 확인을 받기 위해 false
         this.checkRemainedRequest();
       }, 1000);
+    });
+
+    var self = this;
+    // TODO : 접속 토큰 만료시 리프레쉬 토큰을 사용해서 토큰을 리프레쉬 하고, 재요청
+    this.$on('ACCESS_EXPIRED', (_requestInfo) => {
+      this.$ajax.isSetHeader = false;
+      this.$ajax.url = selectConfig.refresh.url; // '/auth/login'
+      this.$ajax.isAuthCheck = true;
+
+      this.$ajax.requestGet((_result) => {
+        if (_result.hasOwnProperty('refreshToken')) {
+          self.$ajax.isSetHeader = true;
+          jwt.setJwtToken(_result.refreshToken);
+          // 사용자 요청 재전송
+          self.requestRetry(_requestInfo);
+        } else {
+          window.alert('[개발자용] Refresh 토큰 정보에 오류가 있습니다:' + JSON.stringify(_result));
+          self.$comm.movePage(self.$router, '/');
+        }
+      });
+    });
+
+    // TODO : 리프레쉬 토큰만료시 자동 로그인 처리후 재요청
+    this.$on('REFRESH_EXPIRED', (_requestInfo) => {
+      this.$ajax.isSetHeader = false;
+      this.$ajax.url = selectConfig.login.url; // '/auth/login'
+      this.$ajax.isAuthCheck = true;
+
+      this.$ajax.requestPost((_result) => {
+        if (_result.hasOwnProperty('refreshToken')) {
+          self.$ajax.isSetHeader = true;
+          jwt.setJwtToken(_result.token);
+
+          // 사용자 요청 재전송
+          self.requestRetry(_requestInfo);
+        } else {
+          window.alert('[개발자용] Refresh 토큰 갱신정보에 오류가 있습니다:' + JSON.stringify(_result));
+          self.$comm.movePage(self.$router, '/');
+        }
+      });
     });
 
     this.$on('APP_KEYBOARD_HIDE', this.hideKeyboard);
@@ -472,6 +512,16 @@ export default {
      */
     beforeAppClose() {
       // localStorage.removeItem('userPk');
+    },
+    /**
+     * 요청 재전송
+     */
+    requestRetry(_requestInfo) {
+      this.$ajax.url = _requestInfo.url;
+      this.$ajax.param = _requestInfo.param;
+      if (_requestInfo.type === 'GET') this.$ajax.requestGet();
+      else if (_requestInfo.type === 'POST') this.$ajax.requestPost();
+      else if (_requestInfo.type === 'PUT') this.$ajax.requestPut();
     }
   },
 };
