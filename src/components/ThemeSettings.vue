@@ -24,9 +24,20 @@ examples:
           </span>
           <v-divider></v-divider>
           <v-subheader class="px-1">
-            {{$t('title.languageSetting')}}
+            {{$t('title.languageSetting')}} / {{$t('title.logout')}}
           </v-subheader>
           <y-i18n></y-i18n>
+          <v-btn 
+            small 
+            color="grey lighten-1" 
+            dark
+            @click.stop="logout"
+            >
+              <v-icon>
+                mobile_off
+              </v-icon>
+              {{$t('button.logout')}}
+            </v-btn>
           <v-divider></v-divider>
         </div>
         <v-subheader class="px-1">
@@ -72,6 +83,7 @@ examples:
 <script>
 import colors from 'vuetify/es5/util/colors';
 import YI18n from '@/components/widgets/YI18n';
+import selectConfig from '@/js/selectConfig';
 export default {
   components: {
     'y-i18n': YI18n
@@ -81,7 +93,7 @@ export default {
       themeColor: 'indigo',
       sideBarOption: 'light',
       colors: colors,
-      userInfo: {}
+      userInfo: {},
     };
   },
   computed: {
@@ -199,6 +211,9 @@ export default {
   methods: {
     setUserInfo(_userInfo) {
       this.userInfo = _userInfo;
+    },
+    logout () {
+      window.getApp.$emit('USER_LOGOUT');
     }
   }
 };

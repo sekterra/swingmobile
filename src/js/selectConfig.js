@@ -329,6 +329,9 @@ var selectConfig = {
   login: {
     url: '/auth/login'
   },
+  logout: {
+    url: '/auth/logout'
+  },
   refresh: {
     url: '/auth/refresh'
   }

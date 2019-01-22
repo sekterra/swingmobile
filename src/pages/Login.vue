@@ -18,9 +18,10 @@
                     :label="$t('title.tenantId')"
                     :hint="$t('message.tenantHint')"
                     persistent-hint
-                    type="text" 
+                    type="text"
                     clearable
-                    v-model="loginInfo.tenantId">
+                    v-model="loginInfo.tenantId"
+                    >
                   </v-text-field>
                   <v-text-field 
                     append-icon="person" 
@@ -37,7 +38,8 @@
                     id="password" 
                     type="password" 
                     clearable
-                    v-model="loginInfo.password">
+                    v-model="loginInfo.password"
+                    @keyup.enter="login">
                   </v-text-field>
                   <!-- 테스트 용
                   <v-switch
@@ -101,9 +103,10 @@ export default {
     rememberMe: true  // 로그인 정보 유지 여부
   }),
   beforeMount() {
+    // localStorage.clear();
     window.getApp.$on('NETWORK_STATUS_CHANGED', (_isConnected) => {
       this.isConnected = _isConnected
-    })
+    });
   },
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
@@ -112,10 +115,11 @@ export default {
   mounted() {
     window.getApp.isLogin = false;
     this.locale = localStorage.locale
-    // this.loginInfo.tenantId = localStorage.tenantId ? localStorage.tenantId : ''
-    this.isCloudAccess = localStorage.isCloudAccess ? localStorage.isCloudAccess : true
-    if (localStorage.isCloudAccess) this.isCloudAccess = localStorage.isCloudAccess === 'true' ? true : false
-    else this.isCloudAccess = true
+    
+    // TODO : 배포시 주석 제거
+    // this.isCloudAccess = localStorage.isCloudAccess ? localStorage.isCloudAccess : true
+    // if (localStorage.isCloudAccess) this.isCloudAccess = localStorage.isCloudAccess === 'true' ? true : false
+    // else this.isCloudAccess = true
 
     if (this.isCloudAccess) config.settingForReleaseSite()
     else config.settingForDevSite()
@@ -172,21 +176,16 @@ export default {
           // TODO : 로컬 스토리지에 로그인 사용자 정보 저장(snapshot)
           localStorage.loginInfo = JSON.stringify(this.loginInfo);
           self.getUserInfo(data.userpk);
-          // localStorage.userPk = data.userpk
-          // window.getApp.$emit('USER_LOGIN', data.userpk)
-          // window.getApp.setUserPk(data.userpk)
+        }, (_error) => {
+          this.loading = false
+          this.$ajax.isAuthCheck = true
+          this.$ajax.isSetHeader = false
         });
-        // setTimeout(() => { 
-        //   this.loading = false
-        //   this.$ajax.isAuthCheck = false
-        //   this.$ajax.isSetHeader = true
-        //   this.$comm.movePage(self.$router, '/dashboard')
-        // }, 1000);
       }, (_error) => {
         this.loading = false
         this.$ajax.isAuthCheck = true
         this.$ajax.isSetHeader = false
-      })
+      });
     },
     btnAutoIdSet() {
       if (this.isCloudAccess) {
@@ -218,6 +217,10 @@ export default {
           if (_result.userTypeCd === 'UC') this.$comm.movePage(self.$router, '/woList');
           else this.$comm.movePage(self.$router, '/dashboard');
         } else window.alert('[개발자용] 권한 정보가 정상적이지 않습니다. 관리자에게 문의바랍니다.');
+      }, (_error) => {
+        this.loading = false;
+        this.$ajax.isAuthCheck = true;
+        this.$ajax.isSetHeader = false;
       });
     },
   },

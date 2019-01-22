@@ -136,9 +136,10 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
       // TODO : 접근 만료 또는 refresh token 만료시 처리
       if (xhr.hasOwnProperty('responseJSON') && xhr.responseJSON.statusCode === 401) {
         if (xhr.responseJSON.returnCode === 'ACCESS_EXPIRED' || xhr.responseJSON.returnCode === 'REFRESH_EXPIRED') {
-          appVue.$emit(xhr.responseJSON.returnCode, thisRequest);  
+          appVue.$emit('APP_REQUEST_ERROR', message);  
           return;
         } else {
+          appVue.$emit('APP_REQUEST_ERROR', message);
           if (typeof _callbackFail === 'function') {
             _callbackFail(xhr, status, err);
           } else {
@@ -163,7 +164,9 @@ ajax.request = function (_callbackSuccess, _callbackFail) {
         } else {
           return xhr
         }
-      } else if (status === 'error') {
+      } 
+      else {
+        appVue.$emit('APP_REQUEST_ERROR', message);
         if (typeof _callbackFail === 'function') {
           _callbackFail(xhr, status, err)
         } 

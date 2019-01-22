@@ -186,7 +186,8 @@
       "woCompleteRateToday": "WO complete rate of today",
       "inspectionCompleteRateToday": "Inspection complete rate of today",
       "pmCompleteRateToday": "PM complete rate of today",
-      "imageUploadComplete": "Your image upload has been complete."
+      "imageUploadComplete": "Your image upload has been complete.",
+      "logout": "Log out"
     },
     "message": {
       "woNo": "Will be automatically generated.",
@@ -256,7 +257,8 @@
       "confirm": "Confirm",
       "close": "Close",
       "home": "Go Home",
-      "woCancel": "WO Cancel"
+      "woCancel": "WO Cancel",
+      "logout": "Log out"
     }
   }
 }

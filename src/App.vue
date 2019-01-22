@@ -177,7 +177,10 @@ export default {
     window.getApp = this;
     this.$ajax.isAuthCheck = false;
     // this.userPk = localStorage.userPk
-    window.addEventListener('beforeunload', this.beforeAppClose)
+    // window.addEventListener('beforeunload', this.beforeAppClose);
+
+    window.addEventListener('beforeunload', this.beforeUnload);
+    window.addEventListener('unload', this.unload);
   },
   beforeMount () {
     this.changeLocale(this.$i18n.locale);
@@ -194,6 +197,7 @@ export default {
 
     // TODO : 사용자 로그인 처리
     this.$on('USER_LOGIN', (_userInfo) => {
+      console.log(JSON.stringify(_userInfo));
       this.userInfo = _userInfo;
        // 재 전송할 정보(request 또는 파일)가 남아 있으면 사용자의 처리를 입력 받는다.
       setTimeout(() => {
@@ -201,6 +205,8 @@ export default {
         this.checkRemainedRequest();
       }, 1000);
     });
+
+    this.$on('USER_LOGOUT', this.logout);
 
     var self = this;
     // TODO : 접속 토큰 만료시 리프레쉬 토큰을 사용해서 토큰을 리프레쉬 하고, 재요청
@@ -210,7 +216,6 @@ export default {
       this.$ajax.isAuthCheck = true;
 
       this.$ajax.requestGet((_result) => {
-        console.log('ACCESS_EXPIRED:' + JSON.stringify(_result));
         if (_result.hasOwnProperty('token')) {
           jwt.setJwtToken(_result.token);
           // 사용자 요청 재전송
@@ -288,7 +293,7 @@ export default {
   beforeDestroy () {
     // TODO : remove event listener, 삭제 하지 않으면 이벤트가 중복 발생됨
     // 모든 이벤트 제거:확인필요
-    this.$off()
+    this.logout();
  },
   methods: {
     /**
@@ -517,6 +522,7 @@ export default {
      */
     beforeAppClose() {
       // localStorage.removeItem('userPk');
+      window.alert('browser closed');
     },
     /**
      * 요청 재전송
@@ -528,9 +534,31 @@ export default {
       if (_requestInfo.type === 'GET') this.$ajax.requestGet();
       else if (_requestInfo.type === 'POST') this.$ajax.requestPost();
       else if (_requestInfo.type === 'PUT') this.$ajax.requestPut();
+    },
+    beforeUnload (_event) {
+      _event.returnValue = 'There is pending work. Sure you want to leave?';
+    },
+    unload (_event) {
+      _event.returnValue = 'There is pending work. Sure you want to leave?';
+      this.$off();
+      this.logout();
+    },
+    logout () {
+      this.$ajax.url = selectConfig.logout.url;
+      let self = this;
+      this.loading = true;
+      this.$ajax.isAuthCheck = true
+      this.$ajax.requestPost((_result) => {
+        // 테마 설정 창 닫기
+        self.closeRightPopup();
+        localStorage.removeItem('userInfo');
+        // 로그인 페이지로 이동
+        self.$comm.movePage(self.$router, '/');
+      });
     }
   },
 };
+
 </script>
 
 <style lang="stylus" scoped>
